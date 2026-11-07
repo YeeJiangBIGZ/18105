@@ -119,6 +119,10 @@ Dubai RTA April 2026 release describes designated air-conditioned sections at ma
 
 Source: https://www.rta.ae/wps/portal/rta/ae/home/news-and-media/all-news/NewsDetails/completion-of-726-shelters-for-public-bus-riders
 
+## Duct heat transfer
+
+Reviewed 2026-11-07, John / general-chat agent. [EnergyPlus 26.2 engineering reference](https://energyplus.readthedocs.io/en/v26.2.0/guides/engineering-reference/13.1-airflownetwork-model.html), Node Temperature Calculations, equations 13.61–13.65, full passage read: steady segment outlet temperature is T_out=T_a+(T_in-T_a)*exp[-UA/(m_dot*c_p)]. A is perimeter times length, not cross-sectional area. Node temperatures form a linear system at given flows; this does not establish linearity when flow, geometry or mixing weights vary. Source describes a simplified distribution model, not validated outdoor stadium performance. [DOE duct guidance](https://bsesc.energy.gov/energy-basics/hvac-sealed-and-insulated-metal-ducts), What/Why, full page read: insulation limits heat transfer and sealing limits leakage; neither proves zero loss. No shelter coefficients or loss percentages obtained. Intended use: [optional duct model](design.md#optional-duct-network-and-installation-model). Check common-ambient path derivation and network flow consistency; test loss sensitivity before omitting it. No independent review or site validation.
+
 ## Stations and related technologies
 
 ### Evidence from public transport facilities

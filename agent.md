@@ -30,6 +30,10 @@ Any different teammate/agent can check a component; verification is not restrict
 - When publishing a result, record its section link, key change, checks, unresolved issues and next owner/action in the task row. Use a different reviewer where feasible for consequential equations or empirical claims. Unreviewed proposals may be committed but must stay labeled unreviewed.
 - Separate **decision state** (`proposed`, `accepted`, `superseded`) from **verification state** (`unchecked`, `checked with stated scope`, `failed`). Only explicit human decisions can promote a substantive assumption/weight/model choice to accepted; record who decided and when. Existing authorization remains valid—do not ask again for routine edits.
 
+## Model complexity and paper length
+
+Owner instruction, 2026-11-07: explore accuracy now, but keep the model mathematically simple and explainable. If the 25-page submission limit becomes binding, simplify the model and remove nonessential extensions while retaining required outputs. Discussion does not make every feature mandatory. Separate the core from optional extensions in design.md; do not silently drop consequential effects or label untested assumptions accurate. No particular feature or page allocation is fixed yet.
+
 ## File ownership and evidence
 
 - `README.md`: project entry point, requirements, task table, accepted decisions, blockers and next action.

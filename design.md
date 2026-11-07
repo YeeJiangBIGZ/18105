@@ -8,42 +8,25 @@ Updated: 2026-11-07. Working structure discussed with John, incorporating Tianyi
 
 ## Design contribution workflow
 
-Follow [agent.md](agent.md) and claim the exact heading in [README's task table](README.md#team-startup-and-task-table). This document is the technical specification, not a transcript. Patch the relevant component; do not rewrite another person's derivation or promote a proposal to accepted without the recorded human decision.
+Follow [agent.md](agent.md); claim exact headings in [README](README.md#team-startup-and-task-table). This is a current specification, not a transcript. Preserve concurrent work and distinguish proposed/accepted/superseded decisions from unchecked/checked/failed verification. Human acceptance is not physical validation.
 
-1. **Define the component.** State the problem requirement, purpose, owner and the next component consuming its output. Declare symbols, dimensions, units, coordinate system, time basis and comparison baseline before equations.
-2. **State assumptions and inputs.** Link source claims/parameters to research.md headings. Label measured, transferred, assumed and illustrative inputs separately. Explain simplifications, validity limits and what could change the result; missing calibration stays missing.
-3. **Specify the calculation.** Give equations/algorithm, constraints and initial/boundary conditions where applicable. State output meaning and format. Distinguish thermal cooling power from electrical input, temperature from comfort, and time-weighted exposure from path length. New symbols or changed interfaces must be flagged to affected components.
-4. **Check a small case.** Check units and relevant conservation/limits; trace one complete configuration through local conditions, occupant exposure, aggregate benefit and resources. Useful cases include zero occupancy, no intervention, overcooling, a stopped pedestrian and shared outlet capacity. For numerical methods, specify calibration, convergence and uncertainty checks before claiming validation. A surrogate's ranking must be checked against the interaction model, including some diverse alternatives.
-5. **Hand off.** Record results or a precise planned check, reviewer, limitations and next action. A different teammate/agent reviews consequential claims where feasible; if none has reviewed, say so. Implementation starts only under an explicit task. Accepted decisions go into README; detailed equations remain here. Preserve superseded reasoning only when needed to explain a trade-off; Git retains history.
-
-Use this compact component header for new or substantively revised components:
-
-> Component / owner / requirement: …
->
-> Decision: proposed | accepted (human/date) | superseded. Verification: unchecked | checked (scope/reviewer/date) | failed.
->
-> Inputs and units / assumptions / linked research: …
->
-> Equations and constraints / outputs and downstream dependency: …
->
-> Small-case checks and result / limits / next action: …
+For each component record: owner and requirement; input units, coordinates, time basis and baseline; measured/transferred/assumed inputs with research links; equations and outputs; assumptions/limits; small-case checks, reviewer and next action. Check conservation, zero intervention/occupancy, overcooling, stopped pedestrians and shared capacity as applicable. Declare calibration/convergence needs; compare surrogate rankings with interaction-aware calculations and diverse alternatives. No implementation without an explicit task; preserve AI provenance. Git retains superseded detail.
 
 ### Component handoffs to establish
 
-| Component | Inputs → outputs | Current status |
-|---|---|---|
-| Geometry, weather, cooler and outlets | Layout/settings and ambient conditions → feasible equipment boundary inputs | Proposed; dimensions and performance missing |
-| Airflow, heat and moisture | Boundary inputs → spatial velocity, temperature and humidity; radiant conditions separately specified | Proposed; solver and mixing/buoyancy treatment open |
-| People and benefit | Fields plus paths/dwell times and attributes → individual and aggregate comfort benefit; separate safety measure | Proposed; comfort/risk mapping open |
-| Screening and optimization | Validated response approximation, constraints and scenarios → candidate configurations → detailed checks | Proposed; coefficients, search and error tolerance open |
+Geometry/weather/equipment → feasible boundary inputs → airflow/temperature/moisture and radiant conditions → people/benefit → candidate optimization → verification. All interfaces remain proposed; use common units and scenarios and agree changes before another component relies on them. Geometry/performance, solver/closure, comfort mapping and screening coefficients remain unresolved; no named lane assignments or independent validation implied.
 
-These are dependency descriptions, not adopted numeric schemas or named assignments. Use common units/scenarios across components; agree changes at the interface before another component relies on them. No existing draft below has been independently validated merely because it appears in this document.
+## Complexity and the 25-page paper
+
+**Accepted instruction: John, 2026-11-07.** Develop enough detail to understand accuracy now, but do not let the model become unnecessarily complicated. If the paper cannot fit within 25 pages, simplify the model and remove nonessential extensions to favor mathematical elegance and clear explanation. Do not treat every discussed mechanism as mandatory implementation. Retain the contest's required comparisons and deliverables; the page limit covers the full counted submission, not just model derivations.
+
+Working reduction procedure (agent proposal): maintain a compact core and optional extensions; compare decision/benefit changes before dropping consequential physics. Use explicit assumptions where a simpler model is adequate. Routing optimization, detailed duct modes, body-resolved airflow and fine placement refinement are candidates for reduction, not automatic requirements. No particular feature has been approved for removal and no page allocation is fixed. A short explanation, valid units and one checked end-to-end case take priority over adding machinery.
 
 ## Purpose and comparison boundary
 
 Start with Problem B's three bus-shelter systems, then extend to a semi-open rail-station waiting area. Compare each configuration against the same shelter without active cooling, under matched weather, occupancy and observation period. Hold shade and geometry fixed unless deliberately evaluating changes to them. The freezer analogy motivates measuring useful service maintained, rather than treating low electricity consumption alone as efficiency.
 
-A configuration includes technology, number/capacity of units, placement or outlet layout, and operating schedule/settings. The first bus comparison can hold placement and schedule fixed to avoid an unnecessarily large optimization problem.
+A configuration specifies technology, capacity, layout and operation. The first bus comparison may hold placement/schedule fixed for simplicity.
 
 ## Physical conditions to comfort
 
@@ -107,35 +90,32 @@ Independent steady snapshots require airflow/thermal/moisture adjustment fast re
 
 ## Candidate screening before detailed verification
 
-John favors a structured search over exhaustive configuration enumeration. The discussed direction is to use a simplified response model to identify several promising designs, then evaluate them with a physical model that includes interactions. Weak outlet interaction is a proposed screening assumption, not established physics or permission to ignore interactions in the final assessment.
+John favors structured optimization over brute-force enumeration and clarified interest in MILP; mixed-integer convex optimization is also under consideration. These are working directions, not a final solver/formulation. The additive-response screening assumption remains unvalidated; finalists need interaction-aware assessment.
 
-For fixed candidate outlet positions and directions, a proposed approximation is:
+For fixed candidate positions/directions, let z_i be binary installation and x_i an operating level, with 0<=x_i<=x_i_max*z_i. Precomputed, consistently normalized responses can give:
 
 $$
-\theta_{jt}(\boldsymbol{x})\approx\theta^0_{jt}-\sum_i a_{jti}x_i.
+T_{jt}\approx T^0_{jt}-\sum_i a_{jti}x_i,\qquad
+\mathbf u_{jt}\approx\mathbf u^0_{jt}+\sum_i\mathbf b_{jti}x_i.
 $$
 
-Here x_i is an outlet operating level, a_jti its estimated influence at section j/time t, and theta an as-yet-unselected thermal-condition measure. Coefficients require simulations, data or justified physical estimates; they are weather/layout dependent. The expression does not replace the temperature PDE as an exact law or imply exact superposition of independent air jets. Interactions can arise without geometric stream intersections.
+Here a is the standalone temperature reduction per unit operating level; b is the velocity increment relative to the same ambient baseline, not an entire single-outlet field. Count ambient conditions once. Units of a/b depend on the chosen control normalization. Fixed on/off settings can instead use x_i=z_i. Temperature and vector increments add approximately; redirected jets, entrainment and turbulent interaction do not. Opposing contributions cancel only in this surrogate. Evaluate utility on combined conditions, not by summing independent outlet utilities. Moisture and radiant conditions remain separate; no calibrated coefficients exist.
 
-With affine predicted conditions, a convex squared comfort-band penalty, fixed occupancy and linear feasibility constraints, minimizing aggregate discomfort can be expressed as a convex quadratic program. Maximizing comfort benefit is equivalent only when the baseline is fixed. This statement concerns the proposed surrogate; nonlinear equipment performance, a benefit/energy ratio or other constraints may change the optimization class. Binary outlet-installation choices make the corresponding problem mixed-integer, without a general fast-solution guarantee. Arbitrary positions/directions require discretization or a further optimization method.
+An alternative affine thermal-condition surrogate is theta_jt≈theta^0_jt-sum_i h_jti*x_i. It requires calibration, not merely substituting air temperature for equivalent comfort. With fixed baseline/occupancy, nonnegative exposure weights and affine theta, minimizing the convex discomfort penalty above is equivalent to maximizing benefit. Squared penalties yield a convex quadratic problem (MIQP with binary installation); suitable piecewise-linear penalties can yield MILP. Other convex objectives with convex continuous constraints give mixed-integer convex optimization. Maximized benefit must be concave, not convex. Linear constraints alone and diminishing returns in one argument do not establish joint convexity; a benefit/energy ratio can change the problem class.
 
-Workflow: calibrate/validate an approximation, search for candidates, evaluate with interactions, and refine if rankings change. Check a few diverse alternatives outside the surrogate's best set because model bias can exclude good designs. No solver, coefficients, candidate spacing, numerical objective weights or validity tolerance has been selected.
+Wind speed ||u|| is nonlinear even if velocity components are affine. Concave benefit versus speed need not be concave versus vector components: opposite useful breezes average to zero velocity. Preferred nonzero speed ranges can be nonconvex. Any wind approximation preserving convexity must be explicit and tested. Mixed-integer convex models still have combinatorial search; no universal speed ordering or runtime guarantee. A solver bound/optimality gap concerns the encoded candidate model, not real airflow or all continuous placements.
+
+### Adaptive outlet placement search
+
+John proposed repeated optimization on a coarse candidate grid, shrinking promising intervals/regions and refining spacing. Example: retain 10 of 100 equal intervals, then retain 10% of that retained length, reducing coverage to 10% then 1%. This is a search proposal, not binary search or a guarantee that the optimum survives. The retention fractions, spacing, number of retained configurations and stopping tolerances are illustrative/unselected. Candidate sites are alternatives, not installed outlets; outlet count and shared capacity remain constrained.
+
+Rank joint configurations rather than standalone outlet scores: independently strong locations may redundantly serve the same people. Agent safeguard proposal: retain several spatially different good configurations, keep their previous candidates, and preserve coarse exploration outside refined regions. Re-optimize all outlet choices jointly; refine spacing and neighborhood radius, stopping after location/objective stabilization and a broader-grid check. An exact solve of a nested candidate set cannot worsen the same objective, but time-limited solves, shrinking sets or changed coefficients invalidate that guarantee. Grid refinement fixes placement resolution, not surrogate physics; periodically verify interactions and check diverse alternatives. No candidate grid or optimization has been run.
 
 ## Bus-stop installation compatibility
 
-John's question; proposed, not adopted. Binary logic checked algebraically by this agent; site validation and independent review pending. No solver run or actual conflict list.
+John's question; proposed, not site-validated. For incompatible installation options (i,j), impose z_i+z_j<=1. This permits neither or either, never both. Conflicts are not transitive: B conflicting with A and C does not prohibit A+C. Actual edges need footprint/access/mounting evidence; overlapping jets alone are not exclusions. At an exclusive slot S, sum_{i in S}z_i<=1; resource demands obey budgets/capacity limits, including groups whose pairs individually fit. Adjustable controls obey 0<=x_i<=x_i_max*z_i; shared outlets do not create extra plant capacity.
 
-For technology/location/size/orientation option i, let z_i in {0,1} indicate installation. Incompatible pairs E obey:
-
-$$
-z_i+z_j\leq1\quad\text{for each }(i,j)\in E.
-$$
-
-This allows (0,0), (1,0), (0,1), but excludes (1,1). Hypothetical example: left compact A, rear large B, right compact C. If B conflicts with both, impose z_A+z_B<=1 and z_B+z_C<=1. A and C remain compatible: conflicts are not transitive. Actual edges require footprint, access, mounting or equipment evidence. Crossing jets/overlapping coverage alone are not prohibitions.
-
-At one exclusive mounting slot S, sum_{i in S} z_i<=1. Independent units with fixed demands P_i obey sum_i P_i*z_i<=P_available; costs have an analogous budget limit. A group can overload a resource even if each pair fits. Shared outlets need plant-capacity accounting. Adjustable settings obey 0<=x_i<=x_i_max*z_i.
-
-With additive benefit max sum_i b_i*z_i, these are binary/mixed-integer linear constraints and objective. Benefit additivity is an unvalidated screening assumption, not exact airflow physics. The earlier squared discomfort objective gives a mixed-integer quadratic model under affine response assumptions; exclusions work there too. No general speed guarantee. Keep the required fan/two-evaporative comparison. Next define sites, clearances, capacities and justified conflicts.
+These linear constraints work with MILP or the convex quadratic screening objective. Additive benefit is not exact airflow physics. Binary pair logic was checked algebraically by this agent; no actual conflict list, solver run or independent/site validation. Next define sites, clearances, capacities and conflicts while retaining the three required bus-shelter devices.
 
 ## Safety and overall effectiveness
 
@@ -163,24 +143,22 @@ Sources read 2026-11-07: [NASA fluid equations](https://www1.grc.nasa.gov/beginn
 
 ## Rail-station extension and missing inputs
 
-Behavior, geometry and outdoor exposure are separate inputs. Stationary occupants need not have assigned seats; circulation can be broad, bidirectional or crossing. Narrow shelters/queues, broad plazas and covered markets are counterexamples to treating stationary areas as broad seated spaces and walking areas as narrow one-way passages. A location can change use over time. [Network Rail guidance](https://www.networkrail.co.uk/wp-content/uploads/2023/12/NR-GN-CIV-100-03-Station-Capacity-Planning-guidance.pdf), sections 3.5/3.7, treats concourse waiting/circulation and one-/two-way passages; [NYC DOT plazas](https://www.nyc.gov/html/dot/html/pedestrians/nyc-plaza-program.shtml) combine circulation, seats, markets and events. Read 2026-11-06; these are mixed-use evidence, not cooling measurements.
+Behavior, geometry and outdoor exposure are independent inputs: stationary queues can be narrow, circulation broad/bidirectional, and uses can change over time. Model mixed waiting/movement in one benefit framework. Evidence, read 2026-11-06: [Network Rail sections 3.5/3.7](https://www.networkrail.co.uk/wp-content/uploads/2023/12/NR-GN-CIV-100-03-Station-Capacity-Planning-guidance.pdf), [NYC mixed-use plazas](https://www.nyc.gov/html/dot/html/pedestrians/nyc-plaza-program.shtml); neither is cooling-performance evidence.
 
-Use distinct occupancy/movement rules within one thermal/benefit framework. Sections exchange people, air, heat and moisture; independently optimizing them requires negligible coupling or explicit treatment of shared plant/budget. Fixed occupancy across alternatives is a proposed simplification; test sensitivity to people gathering near cooling when relevant. Do not double count visitors. Representative counts/paths may suffice; detailed pedestrian simulation is not required. Individual histories may matter for safety.
+Connected sections exchange people, air, heat and moisture; account for coupling/shared plant before optimizing separately. Representative counts/paths can suffice; test fixed occupancy if people may gather near coolers, and retain histories where safety needs them. Avoid double counting. Deep mall interiors and enclosed refuges cannot replace significant-outdoor-exchange venues.
 
-Extend to connected occupied sections with calibrated or physical performance estimates. Deep mall interiors with little outdoor exchange and fully enclosed refuge rooms cannot replace the required semi-open case. Before numbers: choose a defensible comfort mapping, geometry, weather, occupancy/dwell times, coverage and equipment performance. The listed fan effect is perceived, evaporative effects are air-temperature changes, and all are maxima. Treating the source's kW/hr figures as average kW remains an explicit unresolved assumption; dividing the listed temperature numbers by power is not a justified ranking.
-
-Source: original Problem B, repeatedly reread through 2026-11-07. AI assistance includes notation, equations, interpretation, limiting checks and drafting; this does not imply independent team derivation.
+Before ranking: select comfort mapping, geometry, weather, occupancy/dwell, coverage and equipment performance. The fan's listed effect is perceived; evaporative figures are air-temperature maxima. kW/hr remains unresolved; ratios of listed temperature maxima to power are not justified comparisons. Original Problem B repeatedly read through 2026-11-07; AI assisted interpretation, notation, checks and drafting.
 
 ## Candidate measures within the four agreed categories
 
-These are options for selection, not adopted weights or a final score.
+Options, not adopted weights:
 
-- **Human benefit:** comfort improvement from a matched baseline, including diminishing benefit and overcooling; separate heat-exposure/risk reduction; actual coverage and person-time; differences in vulnerability, activity and clothing; noise, drafts, dampness, hygiene, visual intrusion and obstruction. Avoid counting the same dissatisfaction twice. Outages reduce benefit, and their timing matters.
-- **All financial costs:** equipment, delivery, installation, wiring/plumbing and site preparation; electricity, water, treatment, consumables and staff; cleaning, servicing, inspection, repairs and parts; replacement, removal, disposal and residual value over a common horizon. Include lost space/revenue, closures or backup rental only where relevant. Count each expense once; low energy bills during failure are not success.
-- **Environmental effects:** operational and embodied emissions, local water scarcity, refrigerant leakage, materials, manufacture/transport/replacement, wastewater, consumables and end-of-life waste; external heat discharge and environmental noise. Separate physical impacts from their monetary prices; count refrigerant climate impacts once. Premature failures add resource use and waste.
-- **Nonfinancial practicality:** footprint, mounting, structure, utilities/drainage, access routes, seating, signs and emergency exits; supervision, refill/cleaning/storage and seasonal burden; equipment safety, wet surfaces and sanitation; parts/service access, recovery, relocation and scaling. Some conditions are feasibility constraints. Do not rescore cooling performance or monetary labor cost here.
+- **Human benefit:** matched-baseline comfort, diminishing benefit/overcooling; distinct heat risk; coverage/person-time and vulnerable groups; activity/clothing; noise, drafts, wetting, hygiene, visual intrusion and obstruction. Avoid double counting dissatisfaction; outage timing matters.
+- **Financial:** purchase/delivery/installation/utilities/site work; electricity, water/treatment, consumables, staff/cleaning/inspection/repair; replacement/removal/disposal less residual value over a common horizon. Lost space/revenue, closures and backup rental only when relevant. Count each expense once; failure's low bills are not success.
+- **Environmental:** operational/embodied emissions, water scarcity, refrigerant leakage, materials/transport/replacement/waste, wastewater, heat discharge and environmental noise. Separate physical burdens from monetary prices; avoid duplicate climate impacts. Failures add resource use.
+- **Nonfinancial practicality:** footprint/structure/mounting/utilities/drainage; seating/signs/access/exits; supervision/refill/storage, equipment safety/sanitation; service/recovery/relocation/scaling. Some are feasibility constraints; do not rescore benefit or labor cost.
 
-Reliability affects these outcomes rather than adding a fifth category. A comfort range, safety threshold, response curve and priority weighting remain open. Severe health protection must not be inferred from a temperature reduction alone. [WHO heat and health](https://www.who.int/news-room/fact-sheets/detail/climate-change-heat-and-health) supports separating vulnerability and health from comfort; [CBE](https://cbe-berkeley.gitbook.io/fans-guidebook/practitioner-summary/elevated-air-speed-and-thermal-comfort) identifies environmental/personal comfort factors, with an outdoor applicability check still required.
+Reliability is integrated, not a fifth category. Comfort/risk thresholds and priorities remain open. [WHO heat/health](https://www.who.int/news-room/fact-sheets/detail/climate-change-heat-and-health) supports separate vulnerability/risk; [CBE comfort factors](https://cbe-berkeley.gitbook.io/fans-guidebook/practitioner-summary/elevated-air-speed-and-thermal-comfort) needs outdoor applicability checks. Temperature reduction alone does not establish heatstroke prevention.
 
 ## Technology and installation options
 
@@ -203,54 +181,67 @@ Direct/indirect evaporation: [UK Energy Technology List](https://etl.energysecur
 
 ### Layouts and supporting choices
 
-Compare overhead grids, side/column mounting, localized rest areas, remote-plant outlets and portable units. Specify position, height, direction and settings. Compare large versus multiple small units and targeted versus broad coverage using occupancy, obstacles and wind, not nominal area alone. No layout is selected.
-
-Shade needs sun-angle checks ([EPA](https://www.epa.gov/heatislands/guide-reducing-heat-islands)); screens need ventilation/accessibility checks. Ducts separate plant noise but add pressure loss, heat gain/leakage. Chilled-water loops need pumps, insulation and condensation control; refrigerant lines differ from heat pipes. Keep heat rejection away from occupants/intakes; check recirculation. Include water treatment/drainage, safe wiring, portable hoses/cables and service access. Test scheduling, occupancy, flow and climate/zone controls. Storage shifts production but adds charging losses; energy savings are not automatic ([DOE](https://betterbuildingssolutioncenter.energy.gov/resources/combined-heat-and-power-technology-fact-sheet-series-thermal-energy-storage)).
+Compare overhead, column, rest-area, remote-plant and portable layouts using occupancy/obstacles/wind, not nominal coverage. Check [shade sun angles](https://www.epa.gov/heatislands/guide-reducing-heat-islands), screen ventilation/access, heat-rejection recirculation, pumps/insulation/condensation, water treatment/drainage, wiring/hoses and service access. Ducts add pressure and thermal/leakage losses. Schedule or modulate flow by climate/occupancy where controllable. [Thermal storage](https://betterbuildingssolutioncenter.energy.gov/resources/combined-heat-and-power-technology-fact-sheet-series-thermal-energy-storage) shifts production but adds losses; savings are not automatic. No layout selected.
 
 ### Heat pipes
 
-A conventional heat pipe is a sealed device using evaporation and condensation to transport heat from a warmer end to a cooler end. It requires a suitable heat sink and does not independently create a cold source or pump heat uphill in temperature. [NASA thermal control, heat pipes](https://www.nasa.gov/smallsat-institute/sst-soa/thermal-control/)
-
-Possible uses to investigate include transferring heat from a component or surface to a cooler sink, and heat recovery around an air-conditioning coil for humidity control. A dehumidification heat pipe can precool incoming air and reheat outgoing air; this is not automatically an increase in delivered cooling or overall efficiency. [DOE technical discussion](https://www.energy.gov/eere/buildings/articles/2014-08-28-issuance-energy-conservation-standards-packaged-terminal-air)
-
-Do not specify an outdoor heat-pipe cooling scheme without identifying the sink temperature, heat-transfer capacity and how the sink rejects the received heat. If the intended meaning of heat pipes is pipes distributing chilled water or refrigerant, model those distribution systems under their actual names.
+Heat pipes transfer heat by evaporation/condensation from a warmer end to a cooler sink; they do not independently create refrigeration. Identify sink temperature/capacity and heat rejection before proposing a scheme. [NASA thermal control](https://www.nasa.gov/smallsat-institute/sst-soa/thermal-control/). Precooling/reheating around a dehumidifying coil is another use, not automatically higher overall efficiency ([DOE discussion](https://www.energy.gov/eere/buildings/articles/2014-08-28-issuance-energy-conservation-standards-packaged-terminal-air)). Distinguish heat pipes from chilled-water and refrigerant distribution pipes.
 
 ### Cooling source versus delivery arrangement
 
-Clarification for the design model: under-seat ports deliver ordinary conditioned air to spectators; refrigerant stays in its equipment circuit. The reviewed examples do not establish that most open stadiums use under-seat cooling.
+Separate plant, air-handler and outlet locations. Options: central air handling with ducts; chilled-water plant feeding distributed air handlers; independent units. A chilled-water schematic is chiller → water pipes → coil/fan → ducts → spectator outlets, plus water return and plant heat rejection. Under-seat ports supply ordinary air, not refrigerant or sprayed chilled water. No evidence establishes that most open stadiums use them.
 
-Two independent choices must be represented:
-
-1. Production and distribution architecture: a central air-handling arrangement feeding ducts; a central chilled-water plant feeding several local air-handling units; or independent local cooling units. A central plant can contain multiple chillers. Chilled water exchanges heat with air through coils and returns warmer to the plant; the water is not sprayed through the spectator outlets.
-2. Delivery position: under/beside seats, large pitch-side jets, wall/column/overhead outlets, or local rest-area units. Fans, misting and radiant panels are additional mechanisms with different requirements; they should not be labeled equivalent forms of refrigerated-air delivery.
-
-A generic chilled-water system can be represented as: chiller -> chilled-water pipes -> local coil and fan -> air ducts -> spectator outlets, with a water return loop and heat rejection at the plant. This is an engineering schematic, not an as-built diagram of any named stadium.
-
-[ASHRAE air handling and distribution](https://handbook.ashrae.org/handbooks/S20/IP/s20_ch04/s20_ch04_ip.aspx) describes central refrigeration plants, distributed air handlers, chilled-water and direct-expansion alternatives. [NLR air-handling-unit reference](https://hvacresourcemap.nlr.gov/commercial-hvac/all-systems/air-water-distribution/ahu) explains water/refrigerant-to-air heat exchange through coils.
-
-The modeled design should distinguish plant location, air-handler location and final outlet location; they need not coincide. These options remain proposals for comparison, with no layout selected.
+Delivery may be under/beside seats, pitch-side, wall/column/overhead or local rest areas. Fans, mist and radiant systems are distinct mechanisms. These are options, not selected layouts or as-built diagrams. Sources: [ASHRAE air handling/distribution](https://handbook.ashrae.org/handbooks/S20/IP/s20_ch04/s20_ch04_ip.aspx); [NLR air-handler reference](https://hvacresourcemap.nlr.gov/commercial-hvac/all-systems/air-water-distribution/ahu).
 
 ### Ducted evaporative cooling proposal
 
-Discussed 2026-11-06; not selected. The owner asks whether mist-bearing air can be distributed through ducts. Engineered spray sections can evaporatively cool air inside an air handler. Provide evaporation distance, droplet capture where required, drainage, water treatment and humidity control; supply cooler humid air through downstream ducts rather than assuming liquid droplets can travel through arbitrary ductwork without depositing. Water vapor and suspended liquid mist are different phases. Another candidate is piping water to mist nozzles at the final delivery locations, so evaporation occurs near the occupied zone. The latter needs wind, wetting and exposure evaluation.
+Discussed 2026-11-06; not selected. Engineered spray sections need evaporation distance, droplet capture, drainage, water treatment and humidity control. Deliver humid air downstream, not arbitrarily transported liquid mist. Alternatively deliver water to final mist nozzles and assess wind/wetting. Include duct pressure/heat/leakage losses, fan/pump electricity and water. Standalone cooler power figures do not establish ducted-system power.
 
-For the model, include added fan power from duct resistance, water/pump use, heat gain and leakage, supply humidity, and useful benefit at occupants. The problem's standalone cooler power figures do not establish the power of a redesigned ducted installation.
+Sources: [UK definitions](https://etl.energysecurity.gov.uk/products/heating-ventilation-air-conditioning-hvac/evaporative-air-coolers); [Condair carry-over guidance](https://www.condair.de/downloads/10-point-guides/10-point-guide-to-specifying-humidifiers-en-rt.pdf); [CAREL separators](https://www.carelparts.com/amfile/file/download/file/2230/category/2205/). Manufacturer dimensions are equipment-specific.
 
-Sources: [UK evaporative cooler definitions](https://etl.energysecurity.gov.uk/products/heating-ventilation-air-conditioning-hvac/evaporative-air-coolers); [Condair duct absorption and carry-over guidance](https://www.condair.de/downloads/10-point-guides/10-point-guide-to-specifying-humidifiers-en-rt.pdf); [CAREL droplet-separator description](https://www.carelparts.com/amfile/file/download/file/2230/category/2205/). Manufacturer dimensions apply to their specified equipment, not as universal design rules.
+## Optional duct network and installation model
+
+Discussion recorded 2026-11-07, John / general-chat agent. **Accepted conceptual clarification:** temperatures are stored at nodes; each segment has inlet/outlet temperatures, airflow and heat-transfer properties. John acknowledged this representation. Network optimization and specific loss assumptions remain proposals, not mandatory core features. Algebra/unit checks only; no site calibration, pressure solution or independent validation. Applies to ducted options, not automatically to the problem's standalone devices.
+
+### Construction and routing
+
+Keep existing-duct retrofit and new construction as distinct scenarios. Existing usable ducts have no new construction charge, but modifications/capacity upgrades cost money. Do not assume existing infrastructure without evidence. For a new system, fewer outlets save a shared segment only if no remaining outlet needs it.
+
+Use binary plant y_k, duct b_e and outlet z_i decisions:
+
+$$
+C_{\rm install}=\sum_kF_ky_k+\sum_eD_eb_e+\sum_iO_iz_i.
+$$
+
+Costs use one currency/horizon and include relevant labor, supports and site access; charge shared segments once. Benefit can be maximized under a cost budget rather than converting comfort into money. A weighted cost penalty is another unselected option; capital cost is distinct from operating/lifecycle costs.
+
+Agent proposal: define feasible corridors and candidate junctions/segments; jointly select network and outlets. Fixed routes are a simpler fallback. Continuous obstacle-avoiding routing is optional harder scope; refinement cannot prove a globally optimal physical layout. For a fixed supply path P_i, z_i<=b_e for each e in P_i. For selectable routes, use root supply, node flow conservation and 0<=f_e<=f_e_max*b_e, with outlet delivery limited by installation. If using a tree, explicitly enforce connected root-to-served-outlet paths, one parent and no cycles; conservation alone does not enforce a tree. Multiple independent plants give a forest. Discrete size choices change segment costs/capacities. Capacity/conservation do not establish adequate fan pressure; check pressure losses and fan electricity separately.
+
+### Node temperatures and accumulated heat gain
+
+Assume steady sensible heat transfer, constant properties, prescribed surrounding temperatures, and sealed insulated ducts; all are proposed simplifications. Define gamma_e=U_e*A_e/(m_dot_e*c_p), alpha_e=exp(-gamma_e). U is W/(m² K), A is duct heat-transfer surface area (perimeter times length), m_dot is kg/s, c_p is J/(kg K); gamma is dimensionless. On a constructed active segment e=(u,v):
+
+$$
+T_v=\alpha_eT_u+(1-\alpha_e)T_{a,e}.
+$$
+
+At a branch, outgoing ducts initially share the junction temperature, then warm differently. Trunk airflow is the sum of downstream deliveries. For a unique root-to-outlet path and common surrounding temperature:
+
+$$
+T_i=T_a+(T_r-T_a)\exp\left(-\sum_{e\in P_i}\gamma_e\right).
+$$
+
+Different surrounding temperatures require segment recurrence; no single common-ambient exponential applies. For variable paths, binary path indicators can replace membership in the sum, but decision variables inside the exponential do not automatically preserve convexity/MILP.
+
+Prefer conditional segment equations with precomputed alpha values for fixed flow or discrete duct/insulation/flow modes; linear implications can be encoded with indicators or justified bounded big-M constraints. Modes must conserve shared airflow. Freely variable flow changes alpha; fixed coefficients then become approximations. Avoid merging different-temperature streams in the first tree model; variable-flow mixing introduces additional nonlinearities. The resulting duct constraints can be linear, but utility and other physics still determine the overall optimization class.
+
+Source: [duct heat-transfer evidence](research.md#duct-heat-transfer). Zero gain is an idealized comparison, not an adopted fact; neglect it only after sensitivity shows small benefit/ranking changes. Startup storage, leakage, detailed moisture and pressure treatment are possible extensions, subject to the simplicity rule. Checks: alpha=1 gives T_v=T_u; 0<=alpha<=1 keeps T_v between inlet and surroundings. Illustrative alpha=.95, T_u=20°C, T_a=35°C gives 20.75°C. No coefficient, flow mode, duct size, route, budget or tolerance selected.
 
 ## Station comparison planning
 
 ### Proposed comparison for requirement 2b
 
-Retain the significant outdoor exchange of a roofed, partly enclosed waiting area. Define the same weather, occupancy and waiting-time scenarios for each candidate. The following is a proposal for selection:
-
-1. Reference: existing shelter/shade and ventilation with no added active cooler; use measured or justified baseline conditions.
-2. Local refrigerated cooling: several spot units serving benches or queues, with specified heat rejection and drainage.
-3. Distributed ducted cooling: centralized or sectional AHUs supplying selected occupied zones; model losses through openings rather than assuming indoor performance.
-4. Evaporative cooling: retain the problem's technology family and evaluate climate sensitivity; mist is an optional separate variant.
-5. Optional extension: radiant cooling around a resting zone, clearly identified as a research-based design.
-
-Fan-assisted or hybrid options can be evaluated if selected; they are documented station practice and are not automatically uncomfortable. Enclosed refuges are supplementary scenarios, not substitutes for modeling the semi-open waiting area. Roof/shade changes and air-exchange controls should be explicit modifications relative to the baseline.
+Under matched weather/occupancy, compare a roofed, partly enclosed waiting-area reference with local refrigerated spot units, distributed ducted cooling and climate-dependent evaporation. Specify heat rejection/drainage and losses through openings. Fan-assisted/hybrid systems are documented possibilities; radiant cooling is optional research-based scope. Enclosed refuges supplement, not replace, significant-outdoor-exchange modeling. Shade/enclosure changes must be explicit baseline modifications. No station design selected.
 
 ### How the bus model would need to change
 

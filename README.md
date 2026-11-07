@@ -25,7 +25,7 @@ Use the four lanes in [agent.md](agent.md#four-work-lanes); no personal assignme
 
 | Task | Human / agent | File and section | Starting main SHA | State | Deliverable / checks / handoff |
 |---|---|---|---|---|---|
-| Record search, optimization, duct model and simplicity rule | John / general-chat agent | agent.md workflow; README decisions/handoff; design.md screening/new duct component and condensation of workflow/compatibility/technology/station prose; research.md duct evidence | 652b285 | claimed | Preserve accepted versus proposed status; record node temperatures, tractability conditions and 25-page simplification rule; check equations and publish. |
+| Record search, optimization, duct model and simplicity rule | John / general-chat agent | agent.md workflow; README decisions/handoff; design.md screening/new duct component and condensation of workflow/compatibility/technology/station prose; research.md duct evidence | 652b285 | done | Complexity rule accepted; search/solver/network choices recorded as proposals, node-temperature concept acknowledged. Equations/units and document consistency checked; no physical validation or solver run. Next choose a compact core and one complete small case. |
 
 Next technical tasks remain unclaimed: define bus-shelter geometry/scenarios; choose airflow and temperature interfaces; define occupant exposure/benefit; verify candidate inputs and the screening approximation. Teammates should claim concrete sections before starting those edits.
 
@@ -34,6 +34,8 @@ Next technical tasks remain unclaimed: define bus-shelter geometry/scenarios; ch
 Start with a simple **open-sided bus shelter**, comparing the required fan and two evaporative coolers. Enclosure changes are set aside for now. Shade is not explicitly named as a system in the problem, although facility design and solar exposure are; holding the shelter's shade fixed is a proposed comparison condition. No specific cooler or outlet arrangement has been selected.
 
 Use four categories: **benefit to people, all financial costs, environmental effects, and nonfinancial practicality**. Reliability affects each rather than receiving a separate score. Comfort can improve toward an optimum and worsen with overcooling; health protection is distinct and needs its own justified measure. Final metrics, weights, comfort functions and safety thresholds remain undecided.
+
+**Complexity rule — John, 2026-11-07:** explore accuracy now, then simplify and remove nonessential extensions if needed to fit the 25-page paper. Favor mathematical elegance, clear explanation and required results over accumulating mechanisms. No particular feature has been selected for removal. See [design reduction rule](design.md#complexity-and-the-25-page-paper).
 
 The general chat coordinates the work; verification/ideas may use separate chats. Explain models before code, verify one complete small case before scaling, and preserve actual AI-assistance provenance.
 
@@ -64,7 +66,8 @@ Discussed structure, not a validated implementation:
 3. Represent occupants as points with arrival/departure times and paths. Constant-position paths represent stationary occupants. Integrate benefit over exposure time; distance integrals require inverse-speed weighting and separate waiting contributions.
 4. John supports sampling occupancy moments/segments and averaging. The proposed time-snapshot method computes benefit first and duration-weights it; sampling and steady-state validity remain open. See [walking flow and snapshots](design.md#walking-flow-and-snapshot-averaging).
 5. Sum benefits over actual or representative occupants, then compare with configuration-level electricity, financial cost, environmental effects and practicality. Shared costs are counted once.
-6. Explore a simplified additive response model to choose candidates, then verify them with interactions included. The weak-interaction approximation is unvalidated; refine if it changes rankings. Brute-force enumeration is not the preferred general search.
+6. Use additive-response screening as a proposed approximation, then verify interactions. John proposed coarse-to-fine interval refinement; fractions/spacings and exploration safeguards remain unselected. MILP and mixed-integer convex formulations are under consideration, with no general speed or continuous-global-optimum guarantee. See [screening and refinement](design.md#candidate-screening-before-detailed-verification).
+7. For optional ducted systems, John acknowledged node temperatures and segment inlet/outlet relations. Selectable routing, shared installation costs and thermal-loss modes are [recorded proposals](design.md#optional-duct-network-and-installation-model), not mandatory bus-model features or validated engineering. Fixed/precomputed coefficients are needed for the discussed linear duct equations.
 
 Tianyi's proposed temperature advection–diffusion equation is recorded in [design.md](design.md). It requires an airflow field; it does not calculate that field itself. Initial/boundary conditions, moisture transport and mixing assumptions remain unresolved. No final solver, coefficients, comfort function, weights or numerical result exists.
 
@@ -82,4 +85,4 @@ On 2026-11-07, the remote had only the initial Overleaf import (`cc664d5`): a ti
 
 ## Next action
 
-Specify a small shelter geometry, weather/occupancy scenarios and feasible equipment choices. Choose how to estimate airflow and calibrate the candidate-screening response; validate the weak-interaction approximation before relying on it. Resolve the problem's power-unit ambiguity. No numerical implementation or manuscript editing is requested yet.
+Choose a compact core and optional extensions under the 25-page rule. Specify shelter geometry/scenarios, equipment and a defensible utility; check whether its screening formulation is MILP, MIQP or another class. Verify one complete small case and interaction sensitivity before scaling; add duct routing/heat gain only where material. Resolve the power-unit ambiguity. No numerical solver implementation or manuscript edit is requested by this recording task.
