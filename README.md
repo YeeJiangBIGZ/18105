@@ -25,8 +25,7 @@ Use the four lanes in [agent.md](agent.md#four-work-lanes); no personal assignme
 
 | Task | Human / agent | File and section | Starting main SHA | State | Deliverable / checks / handoff |
 |---|---|---|---|---|---|
-| Bus-stop installation incompatibilities | John / this agent | design.md: proposed compatibility constraints; condense repeated station-extension checklist | c8b9c12 | done | [Proposed exclusions](design.md#bus-stop-installation-compatibility) and capacity constraints recorded; binary logic checked algebraically, no site validation/independent review or solver run. Next define actual sites and conflicts. |
-| Define four-person collaboration workflow | John / this agent | agent.md; contribution workflow in design.md and research.md; this startup/table | 70a6d65 | done | Workflow and design/research templates documented; local links/anchors, retained sources and manuscript preservation checked. Read agent.md before claiming the next task; no scientific model validation claimed. |
+| Occupant disturbance of airflow | John / this agent | research.md: body obstruction and thermal plumes; README handoff | 9e2ee79 | claimed | Review primary evidence and propose a sensitivity check; no negligible-effect assumption adopted |
 
 Next technical tasks remain unclaimed: define bus-shelter geometry/scenarios; choose airflow and temperature interfaces; define occupant exposure/benefit; verify candidate inputs and the screening approximation. Teammates should claim concrete sections before starting those edits.
 
