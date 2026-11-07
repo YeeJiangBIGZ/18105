@@ -25,7 +25,7 @@ Use the four lanes in [agent.md](agent.md#four-work-lanes); no personal assignme
 
 | Task | Human / agent | File and section | Starting main SHA | State | Deliverable / checks / handoff |
 |---|---|---|---|---|---|
-| Occupant disturbance of airflow | John / this agent | research.md: body obstruction and thermal plumes; README handoff | 9e2ee79 | claimed | Review primary evidence and propose a sensitivity check; no negligible-effect assumption adopted |
+| Occupant disturbance of airflow | John / this agent | research.md: body obstruction and thermal plumes; README handoff | 9e2ee79 | done | [Evidence and proposed sensitivity check](research.md#occupant-obstruction-and-thermal-plumes) recorded; indoor abstracts only, no outdoor validation or independent review. Next compare passive points with simplified obstacles and heat sources. |
 
 Next technical tasks remain unclaimed: define bus-shelter geometry/scenarios; choose airflow and temperature interfaces; define occupant exposure/benefit; verify candidate inputs and the screening approximation. Teammates should claim concrete sections before starting those edits.
 
