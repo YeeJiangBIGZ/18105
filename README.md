@@ -25,7 +25,7 @@ Use the four lanes in [agent.md](agent.md#four-work-lanes); no personal assignme
 
 | Task | Human / agent | File and section | Starting main SHA | State | Deliverable / checks / handoff |
 |---|---|---|---|---|---|
-| Research interacting airflows and comfort | John / general-chat agent | README; research.md interacting jets plus condensed geometry/stadium records; design.md interaction interface/surrogate plus condensed technology options | 2da1415 | done | Six primary studies reviewed at stated access levels; mean velocity/RMS distinction and finite-mode pairwise MILP proposal recorded. Units/identity/AND algebra checked; no CFD, calibration or adoption. Next validate one shelter case and held-out interactions. |
+| Record mean-flow/RMS and MILP choice | John / general-chat agent | README decisions/model/next action; design.md airflow statistics and finite-mode surrogate; research.md adoption status/link | 45173d1 | claimed | Record accepted working approach, define RMS deviations precisely and preserve unvalidated physical/utility coefficients and higher-order limits. |
 
 Next technical tasks remain unclaimed: define bus-shelter geometry/scenarios; choose airflow and temperature interfaces; define occupant exposure/benefit; verify candidate inputs and the screening approximation. Teammates should claim concrete sections before starting those edits.
 
