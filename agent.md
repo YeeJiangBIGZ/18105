@@ -34,6 +34,8 @@ Any different teammate/agent can check a component; verification is not restrict
 
 Owner instruction, 2026-11-07: explore accuracy now, but keep the model mathematically simple and explainable. If the 25-page submission limit becomes binding, simplify the model and remove nonessential extensions while retaining required outputs. Discussion does not make every feature mandatory. Separate the core from optional extensions in design.md; do not silently drop consequential effects or label untested assumptions accurate. No particular feature or page allocation is fixed yet.
 
+Owner clarification, 2026-11-07: aim for convex continuous structure even with mixed-integer installation choices. Do not force it with piecewise-linear segmentation or an artificial personal wind-direction preference. Stronger assumptions need explicit justification; distinguish spatial candidate refinement from utility approximation. Convex excessive-wind penalties do not by themselves represent useful fan cooling.
+
 ## File ownership and evidence
 
 - `README.md`: project entry point, requirements, task table, accepted decisions, blockers and next action.

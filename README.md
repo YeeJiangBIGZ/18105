@@ -25,7 +25,7 @@ Use the four lanes in [agent.md](agent.md#four-work-lanes); no personal assignme
 
 | Task | Human / agent | File and section | Starting main SHA | State | Deliverable / checks / handoff |
 |---|---|---|---|---|---|
-| Record convexity requirement and wind utility proposal | John / general-chat agent | README decisions; agent.md complexity rule; design.md screening | 10e5d62 | claimed | Record direction-independent comfort and convexity requirement; propose aligned-flow scalar model without piecewise-linear fitting. |
+| Record convexity requirement and wind utility proposal | John / general-chat agent | README decisions; agent.md complexity rule; design.md screening | 10e5d62 | done | Convexity/direction-independent preference recorded; preferred-speed nonconvexity and convex ceiling alternatives checked algebraically. Fan cooling benefit remains unresolved; no threshold or aligned-flow assumption adopted. |
 
 Next technical tasks remain unclaimed: define bus-shelter geometry/scenarios; choose airflow and temperature interfaces; define occupant exposure/benefit; verify candidate inputs and the screening approximation. Teammates should claim concrete sections before starting those edits.
 
@@ -36,6 +36,8 @@ Start with a simple **open-sided bus shelter**, comparing the required fan and t
 Use four categories: **benefit to people, all financial costs, environmental effects, and nonfinancial practicality**. Reliability affects each rather than receiving a separate score. Comfort can improve toward an optimum and worsen with overcooling; health protection is distinct and needs its own justified measure. Final metrics, weights, comfort functions and safety thresholds remain undecided.
 
 **Complexity rule — John, 2026-11-07:** explore accuracy now, then simplify and remove nonessential extensions if needed to fit the 25-page paper. Favor mathematical elegance, clear explanation and required results over accumulating mechanisms. No particular feature has been selected for removal. See [design reduction rule](design.md#complexity-and-the-25-page-paper).
+
+**Wind/convexity clarification — John, 2026-11-07:** retain convex continuous structure with binary installation choices as needed; do not impose a preferred wind direction or use segmentation merely to force convexity. John proposed an excessive-speed ceiling with no penalty below it. The convex ceiling penalty is recorded; its threshold and positive fan-cooling benefit remain unresolved. This does not cancel spatial candidate refinement. See [wind formulation](design.md#convexity-and-direction-independent-wind-penalty).
 
 The general chat coordinates the work; verification/ideas may use separate chats. Explain models before code, verify one complete small case before scaling, and preserve actual AI-assistance provenance.
 

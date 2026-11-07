@@ -90,7 +90,7 @@ Independent steady snapshots require airflow/thermal/moisture adjustment fast re
 
 ## Candidate screening before detailed verification
 
-John favors structured optimization over brute-force enumeration and clarified interest in MILP; mixed-integer convex optimization is also under consideration. These are working directions, not a final solver/formulation. The additive-response screening assumption remains unvalidated; finalists need interaction-aware assessment.
+**Owner requirements, 2026-11-07:** preserve convex continuous optimization structure (binary installation remains mixed-integer); comfort has no preferred wind direction. Avoid piecewise-linear segmentation merely to force that structure. Spatial outlet-grid refinement is a separate, still-discussed method. Stronger physical assumptions may be considered but are not automatically accepted. No solver or calibrated utility selected; additive-response screening remains unvalidated.
 
 For fixed candidate positions/directions, let z_i be binary installation and x_i an operating level, with 0<=x_i<=x_i_max*z_i. Precomputed, consistently normalized responses can give:
 
@@ -99,17 +99,31 @@ T_{jt}\approx T^0_{jt}-\sum_i a_{jti}x_i,\qquad
 \mathbf u_{jt}\approx\mathbf u^0_{jt}+\sum_i\mathbf b_{jti}x_i.
 $$
 
-Here a is the standalone temperature reduction per unit operating level; b is the velocity increment relative to the same ambient baseline, not an entire single-outlet field. Count ambient conditions once. Units of a/b depend on the chosen control normalization. Fixed on/off settings can instead use x_i=z_i. Temperature and vector increments add approximately; redirected jets, entrainment and turbulent interaction do not. Opposing contributions cancel only in this surrogate. Evaluate utility on combined conditions, not by summing independent outlet utilities. Moisture and radiant conditions remain separate; no calibrated coefficients exist.
+Here a is temperature reduction per unit control and b the velocity increment over the same ambient baseline; count ambient once. On/off operation can use x_i=z_i. Coefficients depend on normalization, weather and geometry. Sum vector increments before evaluating comfort; this neglects redirected jets/mixing interactions. Moisture/radiation remain separate.
 
-An alternative affine thermal-condition surrogate is theta_jt≈theta^0_jt-sum_i h_jti*x_i. It requires calibration, not merely substituting air temperature for equivalent comfort. With fixed baseline/occupancy, nonnegative exposure weights and affine theta, minimizing the convex discomfort penalty above is equivalent to maximizing benefit. Squared penalties yield a convex quadratic problem (MIQP with binary installation); suitable piecewise-linear penalties can yield MILP. Other convex objectives with convex continuous constraints give mixed-integer convex optimization. Maximized benefit must be concave, not convex. Linear constraints alone and diminishing returns in one argument do not establish joint convexity; a benefit/energy ratio can change the problem class.
+### Convexity and direction-independent wind penalty
 
-Wind speed ||u|| is nonlinear even if velocity components are affine. Concave benefit versus speed need not be concave versus vector components: opposite useful breezes average to zero velocity. Preferred nonzero speed ranges can be nonconvex. Any wind approximation preserving convexity must be explicit and tested. Mixed-integer convex models still have combinatorial search; no universal speed ordering or runtime guarantee. A solver bound/optimality gap concerns the encoded candidate model, not real airflow or all continuous placements.
+Affine conditions and convex discomfort give concave benefit against a fixed baseline. Depending on constraints, quadratic penalties yield MIQP or mixed-integer conic models. Nonlinear comfort/efficiency ratios can change the class; binaries preclude runtime guarantees.
+
+Preferred-vector penalty ||u-u*||² is superseded: it imposes directional comfort. Preferred-speed penalty (||u||-v*)² is nonconvex for v*>0: u=±v*d both give zero, their midpoint gives positive penalty. Scalar-speed convexity does not survive this norm composition. A symmetric convex penalty cannot favor both opposite velocities over zero.
+
+**John's ceiling proposal; formulation below proposed, uncalibrated:** no wind penalty up to v_max, then a continuous increasing penalty. Two convex choices are:
+
+$$
+P_w(\mathbf u)=\lambda[\|\mathbf u\|_2^2-v_{\max}^2]_+,
+\qquad\text{or}\qquad
+P_w(\mathbf u)=\lambda[\|\mathbf u\|_2-v_{\max}]_+^2.
+$$
+
+Each needs lambda>=0 and v_max>=0, with units/scales chosen consistently. They have different growth above the ceiling; neither is a piecewise-linear fit or awards preferred-direction comfort. First form uses an epigraph p>=0, p>=sum_c u_c²-v_max² and penalty lambda*p in minimized discomfort. This is convex quadratic/conic representable, not MILP. No new binary variables are needed for this penalty. Subtracting v_max² avoids a jump at the threshold. The second form is squared excess speed. Neither threshold/shape/weight is chosen.
+
+This penalty does not reward fan cooling; temperature-only discomfort plus this term misses that benefit. Resolve a supported thermal-comfort treatment before finalizing utility. Fixed local direction/nonnegative scalar speed is an unadopted physical simplification needing layout/weather justification. A norm upper-bound auxiliary works for minimized increasing penalties, but can inflate if reused to award speed benefits. Exact direction-independent speed rewards generally break convexity in unrestricted velocity components.
 
 ### Adaptive outlet placement search
 
-John proposed repeated optimization on a coarse candidate grid, shrinking promising intervals/regions and refining spacing. Example: retain 10 of 100 equal intervals, then retain 10% of that retained length, reducing coverage to 10% then 1%. This is a search proposal, not binary search or a guarantee that the optimum survives. The retention fractions, spacing, number of retained configurations and stopping tolerances are illustrative/unselected. Candidate sites are alternatives, not installed outlets; outlet count and shared capacity remain constrained.
+John proposed coarse-grid optimization followed by smaller promising regions and finer spacing. Retaining 10 of 100 equal intervals then 10% of that length leaves 10% then 1%; these fractions are illustrative. Rank joint configurations, not standalone outlets. This is heuristic refinement, not binary search or a global guarantee. Candidate positions are alternatives, not installed hardware.
 
-Rank joint configurations rather than standalone outlet scores: independently strong locations may redundantly serve the same people. Agent safeguard proposal: retain several spatially different good configurations, keep their previous candidates, and preserve coarse exploration outside refined regions. Re-optimize all outlet choices jointly; refine spacing and neighborhood radius, stopping after location/objective stabilization and a broader-grid check. An exact solve of a nested candidate set cannot worsen the same objective, but time-limited solves, shrinking sets or changed coefficients invalidate that guarantee. Grid refinement fixes placement resolution, not surrogate physics; periodically verify interactions and check diverse alternatives. No candidate grid or optimization has been run.
+Agent safeguards: retain diverse good configurations and previous candidates, preserve coarse exploration elsewhere, jointly re-optimize, then check broader-grid and interaction sensitivity. A globally solved nested candidate set cannot worsen the same objective; shrinking sets, changed coefficients or time limits remove that guarantee. Stop after placement/benefit stabilization under a chosen tolerance. No grid, fractions, tolerance or solver run selected; spatial refinement does not fix surrogate physics.
 
 ## Bus-stop installation compatibility
 
