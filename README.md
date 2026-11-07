@@ -25,7 +25,7 @@ Use the four lanes in [agent.md](agent.md#four-work-lanes); no personal assignme
 
 | Task | Human / agent | File and section | Starting main SHA | State | Deliverable / checks / handoff |
 |---|---|---|---|---|---|
-| Record mean-flow/RMS and MILP choice | John / general-chat agent | README; design.md airflow statistics/MILP; research.md status/link | 45173d1 | done | Accepted approach recorded; RMS deviations distinguished from total RMS. Algebra/units/status links checked. No physical model or numerical coefficients validated; next evaluate a fixed shelter case and interaction errors. |
+| Record newly clarified PDE/optimization direction | John / general-chat agent | README decisions/model/next action; design.md mean-flow and PDE integration; research.md status/verification plan | 05bd62c | claimed | Preserve accepted RMS representation; withdraw pairwise sufficiency and all-configuration lookup; record direct discretized PDE as unvalidated proposal with binary-product conditions. |
 
 Next technical tasks remain unclaimed: define bus-shelter geometry/scenarios; choose airflow and temperature interfaces; define occupant exposure/benefit; verify candidate inputs and the screening approximation. Teammates should claim concrete sections before starting those edits.
 
