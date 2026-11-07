@@ -25,7 +25,7 @@ Use the four lanes in [agent.md](agent.md#four-work-lanes); no personal assignme
 
 | Task | Human / agent | File and section | Starting main SHA | State | Deliverable / checks / handoff |
 |---|---|---|---|---|---|
-| Record walking flow and snapshot averaging | John / this agent | design.md: people/exposure; condense repeated installation guidance; README decision summary | 20b4ead | done | [Walking/snapshot notes](design.md#walking-flow-and-snapshot-averaging) recorded; units and illustrative arithmetic checked. Next test weighting, transient assumptions and sampling convergence; no physical validation. |
+| Research a data-rich bus-shelter baseline | John / this agent | research.md: Bus shelters / Candidate geometry and data; README task handoff | 34e9349 | claimed | Compare documented shelter geometry and weather/occupancy sources; keep location and mounting choices proposed. |
 
 Next technical tasks remain unclaimed: define bus-shelter geometry/scenarios; choose airflow and temperature interfaces; define occupant exposure/benefit; verify candidate inputs and the screening approximation. Teammates should claim concrete sections before starting those edits.
 
