@@ -25,7 +25,7 @@ Use the four lanes in [agent.md](agent.md#four-work-lanes); no personal assignme
 
 | Task | Human / agent | File and section | Starting main SHA | State | Deliverable / checks / handoff |
 |---|---|---|---|---|---|
-| Record accepted noise penalty and open decisions | John / general-chat agent | README decisions/next action; design.md noise component and condensation of repeated field/station notes | ce8c65b | done | Noise form accepted and algebraically checked; no parameter calibration. Main unresolved issue: useful wind cooling in a defensible convex comfort model; next fix thermal mapping, scales/weights and one finite benchmark. |
+| Research interacting airflows and comfort | John / general-chat agent | README task/next action; research.md new airflow evidence plus condensation of bus geometry/stadium precedents; design.md airflow interface/interaction surrogate plus condensation of technology options | 2da1415 | claimed | Review primary jet/comfort studies; distinguish mean velocity, RMS and turbulence; propose a bounded tractable model without adopting it. Preserve prior decisions and source limitations. |
 
 Next technical tasks remain unclaimed: define bus-shelter geometry/scenarios; choose airflow and temperature interfaces; define occupant exposure/benefit; verify candidate inputs and the screening approximation. Teammates should claim concrete sections before starting those edits.
 
