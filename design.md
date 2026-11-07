@@ -1,10 +1,10 @@
 ---
-length_reason: Maintains the mathematical definitions, assumptions, sourced physical-model limitations and candidate-search proposal needed for team implementation in one document.
+length_reason: Consolidates equations, candidate evaluation factors, installation choices and the station extension as the single team design reference.
 ---
 
-# Cooling model formulation under discussion
+# Model and design
 
-Updated: 2026-11-07. Status: working structure discussed with John, incorporating Tianyi's temperature-equation proposal and assistant-proposed details. No numerical calibration, rankings, technology selection or implementation. Agreed scope and decisions remain in progress.md.
+Updated: 2026-11-07. Working structure discussed with John, incorporating Tianyi's temperature-equation proposal and assistant-proposed details. No calibrated implementation, chosen solver or numerical optimum. [README.md](README.md) holds agreed scope and decisions; [research.md](research.md) holds evidence; [agent.md](agent.md) holds collaboration rules.
 
 ## Purpose and comparison boundary
 
@@ -110,3 +110,114 @@ Replace one served zone with occupied zones connected to each other and outdoors
 Before calculation: select a defensible comfort mapping; specify shelter geometry, weather, occupancy/dwell time and coverage; estimate actual equipment performance and power. The problem's fan reduction is perceived, evaporative reductions are air-temperature changes, all are maxima, and the printed kW/hr energy label remains ambiguous. Treating 0.25, 1.2 and 2.5 as average kW requires an explicit team assumption. No ranking follows directly from dividing the supplied temperature numbers by those power numbers.
 
 Source: 2026_HiMCM_Problem_B.pdf, reread in full 2026-11-06. This file records actual AI assistance: proposed notation, equations, interpretation, limiting-case checks and drafting. It is not evidence of independent team derivation.
+
+## Candidate measures within the four agreed categories
+
+These are options for selection, not adopted weights or a final score.
+
+- **Human benefit:** comfort improvement from a matched baseline, including diminishing benefit and overcooling; separate heat-exposure/risk reduction; actual coverage and person-time; differences in vulnerability, activity and clothing; noise, drafts, dampness, hygiene, visual intrusion and obstruction. Avoid counting the same dissatisfaction twice. Outages reduce benefit, and their timing matters.
+- **All financial costs:** equipment, delivery, installation, wiring/plumbing and site preparation; electricity, water, treatment, consumables and staff; cleaning, servicing, inspection, repairs and parts; replacement, removal, disposal and residual value over a common horizon. Include lost space/revenue, closures or backup rental only where relevant. Count each expense once; low energy bills during failure are not success.
+- **Environmental effects:** operational and embodied emissions, local water scarcity, refrigerant leakage, materials, manufacture/transport/replacement, wastewater, consumables and end-of-life waste; external heat discharge and environmental noise. Separate physical impacts from their monetary prices; count refrigerant climate impacts once. Premature failures add resource use and waste.
+- **Nonfinancial practicality:** footprint, mounting, structure, utilities/drainage, access routes, seating, signs and emergency exits; supervision, refill/cleaning/storage and seasonal burden; equipment safety, wet surfaces and sanitation; parts/service access, recovery, relocation and scaling. Some conditions are feasibility constraints. Do not rescore cooling performance or monetary labor cost here.
+
+Reliability affects these outcomes rather than adding a fifth category. A comfort range, safety threshold, response curve and priority weighting remain open. Severe health protection must not be inferred from a temperature reduction alone. [WHO heat and health](https://www.who.int/news-room/fact-sheets/detail/climate-change-heat-and-health) supports separating vulnerability and health from comfort; [CBE](https://cbe-berkeley.gitbook.io/fans-guidebook/practitioner-summary/elevated-air-speed-and-thermal-comfort) identifies environmental/personal comfort factors, with an outdoor applicability check still required.
+
+## Technology and installation options
+
+### Definition of a system
+
+A design specifies cooling technology, number and size of units, supply outlet locations and directions, supporting site modifications, utility and distribution connections, heat rejection where applicable, and operating rules. The cooling plant and the outlets delivering cooling need not be at the same location.
+
+### Technology candidates
+
+| Technology | Mechanism and implementation | Main design issue |
+|---|---|---|
+| Fans | Ceiling, wall, column or pedestal fans move air over occupants | Airspeed at occupied locations, coverage and draft/noise effects; fan output is not an air-temperature reduction |
+| Direct evaporative coolers | Fan blows air through wetted media | Climate-dependent evaporation, added moisture, water supply and cleaning |
+| Indirect evaporative coolers | Separate wet air stream cools supply air through a heat exchanger | Does not directly add moisture to supply air; requires more equipment and a separate exhaust path |
+| Mist systems | Overhead or perimeter nozzles disperse water for evaporation, optionally with fans | Wind drift, evaporation conditions, hygiene and avoiding unwanted wetting |
+| Refrigerated air cooling | Split units, ducted outlets or fan coils supplied by a chiller | Electricity, cooled-air escape, condensate drainage and placement of heat rejection |
+| Radiant cooling | Chilled panels above or beside occupied areas exchange radiant heat with people | Chilled-water source, panel exposure to occupants and condensation management; outdoor membrane systems are a research-backed extension |
+
+Direct/indirect evaporation: [UK Energy Technology List](https://etl.energysecurity.gov.uk/products/heating-ventilation-air-conditioning-hvac/evaporative-air-coolers). Fans: [CBE guidebook](https://cbe-berkeley.gitbook.io/fans-guidebook). Mist: [University of Melbourne demonstration](https://research.unimelb.edu.au/strengths/updates/impact/mist-demonstrates-a-context-aware-outdoor-urban-cooling-system). Refrigeration: [PNNL](https://basc.pnnl.gov/resource-guides/air-conditioning). Outdoor radiant cooling: [UBC Cold Tube](https://sala.ubc.ca/research/the-cold-tube/).
+
+### Layouts to compare
+
+- Overhead row or grid: fans, diffusers or panels distributed over benches, queues or waiting zones.
+- Side or column mounting: directional units aimed into occupied areas; compare heights and angles.
+- Local cooling stations: small cooled islands at benches or designated rest areas.
+- Distributed outlets: one remote plant feeding several outlets through ducts or water pipes.
+- Mobile units: portable devices for varying crowd locations, with routes for cables, hoses and hot exhaust if applicable.
+
+Specify each unit or outlet by horizontal position, mounting height, direction and output setting. Compare one large unit with multiple smaller units and targeted coverage with broad coverage. Nominal floor coverage alone is insufficient: airflow, obstacles, prevailing wind and actual occupancy must be considered. Layouts are proposals, not established rankings.
+
+### Supporting design choices
+
+- Shade roofs, screens, trees and suitable roof treatments to reduce solar exposure; check sun angle and occupied locations. [EPA heat-island guidance](https://www.epa.gov/heatislands/guide-reducing-heat-islands)
+- Partial wind screens to test whether cooled air remains useful longer without unacceptable loss of ventilation or accessibility; effects are site-dependent.
+- Ducts and adjustable diffusers to place air outlets near intended users while locating noisy equipment elsewhere; include fan pressure losses and duct heat gains.
+- Chilled-water pipes to serve fan coils or radiant panels; include pumps, pipe insulation, heat gains and condensation management.
+- Refrigerant lines between the cooling coil and condensing equipment; these are distinct from heat pipes.
+- Heat rejection: place condenser discharge away from occupied zones and supply-air intakes; assess actual exhaust recirculation rather than assuming all outdoor positions are equivalent.
+- Water supply, treatment, drainage, safe electricity routing and maintenance access.
+- Operating choices: schedules, occupancy detection, adjustable airflow, climate-dependent enable/disable rules and separate settings for occupied zones.
+- Optional thermal storage: ice or chilled water can move some cooling production to other hours; include charging energy and losses rather than assuming energy savings. [DOE thermal storage overview](https://betterbuildingssolutioncenter.energy.gov/resources/combined-heat-and-power-technology-fact-sheet-series-thermal-energy-storage)
+
+### Heat pipes
+
+A conventional heat pipe is a sealed device using evaporation and condensation to transport heat from a warmer end to a cooler end. It requires a suitable heat sink and does not independently create a cold source or pump heat uphill in temperature. [NASA thermal control, heat pipes](https://www.nasa.gov/smallsat-institute/sst-soa/thermal-control/)
+
+Possible uses to investigate include transferring heat from a component or surface to a cooler sink, and heat recovery around an air-conditioning coil for humidity control. A dehumidification heat pipe can precool incoming air and reheat outgoing air; this is not automatically an increase in delivered cooling or overall efficiency. [DOE technical discussion](https://www.energy.gov/eere/buildings/articles/2014-08-28-issuance-energy-conservation-standards-packaged-terminal-air)
+
+Do not specify an outdoor heat-pipe cooling scheme without identifying the sink temperature, heat-transfer capacity and how the sink rejects the received heat. If the intended meaning of heat pipes is pipes distributing chilled water or refrigerant, model those distribution systems under their actual names.
+
+### Cooling source versus delivery arrangement
+
+Clarification for the design model: under-seat ports deliver ordinary conditioned air to spectators; refrigerant stays in its equipment circuit. The reviewed examples do not establish that most open stadiums use under-seat cooling.
+
+Two independent choices must be represented:
+
+1. Production and distribution architecture: a central air-handling arrangement feeding ducts; a central chilled-water plant feeding several local air-handling units; or independent local cooling units. A central plant can contain multiple chillers. Chilled water exchanges heat with air through coils and returns warmer to the plant; the water is not sprayed through the spectator outlets.
+2. Delivery position: under/beside seats, large pitch-side jets, wall/column/overhead outlets, or local rest-area units. Fans, misting and radiant panels are additional mechanisms with different requirements; they should not be labeled equivalent forms of refrigerated-air delivery.
+
+A generic chilled-water system can be represented as: chiller -> chilled-water pipes -> local coil and fan -> air ducts -> spectator outlets, with a water return loop and heat rejection at the plant. This is an engineering schematic, not an as-built diagram of any named stadium.
+
+[ASHRAE air handling and distribution](https://handbook.ashrae.org/handbooks/S20/IP/s20_ch04/s20_ch04_ip.aspx) describes central refrigeration plants, distributed air handlers, chilled-water and direct-expansion alternatives. [NLR air-handling-unit reference](https://hvacresourcemap.nlr.gov/commercial-hvac/all-systems/air-water-distribution/ahu) explains water/refrigerant-to-air heat exchange through coils.
+
+The modeled design should distinguish plant location, air-handler location and final outlet location; they need not coincide. These options remain proposals for comparison, with no layout selected.
+
+### Ducted evaporative cooling proposal
+
+Discussed 2026-11-06; not selected. The owner asks whether mist-bearing air can be distributed through ducts. Engineered spray sections can evaporatively cool air inside an air handler. Provide evaporation distance, droplet capture where required, drainage, water treatment and humidity control; supply cooler humid air through downstream ducts rather than assuming liquid droplets can travel through arbitrary ductwork without depositing. Water vapor and suspended liquid mist are different phases. Another candidate is piping water to mist nozzles at the final delivery locations, so evaporation occurs near the occupied zone. The latter needs wind, wetting and exposure evaluation.
+
+For the model, include added fan power from duct resistance, water/pump use, heat gain and leakage, supply humidity, and useful benefit at occupants. The problem's standalone cooler power figures do not establish the power of a redesigned ducted installation.
+
+Sources: [UK evaporative cooler definitions](https://etl.energysecurity.gov.uk/products/heating-ventilation-air-conditioning-hvac/evaporative-air-coolers); [Condair duct absorption and carry-over guidance](https://www.condair.de/downloads/10-point-guides/10-point-guide-to-specifying-humidifiers-en-rt.pdf); [CAREL droplet-separator description](https://www.carelparts.com/amfile/file/download/file/2230/category/2205/). Manufacturer dimensions apply to their specified equipment, not as universal design rules.
+
+## Station comparison planning
+
+### Proposed comparison for requirement 2b
+
+Retain the significant outdoor exchange of a roofed, partly enclosed waiting area. Define the same weather, occupancy and waiting-time scenarios for each candidate. The following is a proposal for selection:
+
+1. Reference: existing shelter/shade and ventilation with no added active cooler; use measured or justified baseline conditions.
+2. Local refrigerated cooling: several spot units serving benches or queues, with specified heat rejection and drainage.
+3. Distributed ducted cooling: centralized or sectional AHUs supplying selected occupied zones; model losses through openings rather than assuming indoor performance.
+4. Evaporative cooling: retain the problem's technology family and evaluate climate sensitivity; mist is an optional separate variant.
+5. Optional extension: radiant cooling around a resting zone, clearly identified as a research-based design.
+
+Fan-assisted or hybrid options can be evaluated if selected; they are documented station practice and are not automatically uncomfortable. Enclosed refuges are supplementary scenarios, not substitutes for modeling the semi-open waiting area. Roof/shade changes and air-exchange controls should be explicit modifications relative to the baseline.
+
+### How the bus model would need to change
+
+These are proposed model needs inferred from the problem and evidence:
+
+- Spatial variation: benches, queues and paths receive different cooling, and one local temperature cannot represent the whole station.
+- Air exchange: geometry, wind, openings and train-induced movement where relevant alter cooling retention.
+- Occupancy and dwell time: passenger surges and changing locations affect delivered benefit.
+- Multiple heat-transfer mechanisms: air temperature, humidity, air movement and radiant exposure should map to a common human outcome; equipment heat removal alone does not measure visitor benefit.
+- System energy boundary: account for chillers/compressors, fans, pumps and controls serving the modeled area; allocate shared plant energy transparently.
+- Comfort and safety: overcooling and drafts may reduce comfort, while health protection needs its own justified exposure/risk treatment.
+- Sensitivity and uncertainty: distinguish measured performance, reported installation, research prototype, transferred estimates and proposed designs.
+
+No numerical ranking is justified yet: the source does not supply a station layout, local weather, occupancy, performance curves, prices or a chosen benefit measure. The next step is to select a small candidate set and specify a reference waiting area before building the comparison.

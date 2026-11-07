@@ -1,34 +1,70 @@
 # HiMCM 2026 — Team 18105
 
-Working repository for **Problem B: Air Conditioning the Environment: Modeling Energy Waste in Public Cooling**.
+Problem B: **Air Conditioning the Environment: Modeling Energy Waste in Public Cooling**. Updated 2026-11-07.
 
-This is the **planning branch**, `codex/model-planning`. The current authorization is to record plans, decisions and research; the `main` branch and manuscript are unchanged, and this branch is not to be merged yet.
+## Workspace and records
 
-## Start here
+All collaboration uses the **main branch** of [YeeJiangBIGZ/18105](https://github.com/YeeJiangBIGZ/18105), synchronized with the local HiMCM workspace. Do not create separate branches. Current work is planning, decisions and research; this does not authorize changing the manuscript or implementing the model yet.
 
-- [Progress and decisions](progress.md): agreed scope, evaluation categories, current direction and unresolved choices.
-- [Model formulation](model-formulation.md): mathematical definitions, teammate's temperature-equation proposal, path integrals and proposed optimization approach.
+- [agent.md](agent.md): agent workflow, synchronization and collaboration rules.
+- [README.md](README.md): agreed scope, current decisions, requirements and next action.
+- [design.md](design.md): equations, candidate objectives, configuration choices and unresolved modeling assumptions.
+- [research.md](research.md): source evidence, venue precedents and limitations.
 - [Original problem](2026_HiMCM_Problem_B.pdf): authoritative requirements.
-- [Bus-stop research](bus-stop-cooling-research.md): real-world evidence and limits for our first case.
-- [File guide](package-info.md): remaining research and project files.
-- [Paper](main.tex): teammate's initial Overleaf import; currently a title and empty Introduction.
+- [main.tex](main.tex): teammate's manuscript; currently the initial Overleaf skeleton.
 
-## Current direction
+Keep these four Markdown records consolidated. Other project artifacts such as the PDF, manuscript, data or code may exist when needed; this is not a four-file cap. `package-info.md` is a local-only, Git-ignored inventory. Record agreed decisions on GitHub as well as locally, and check teammate changes before editing. GitHub delivery alone does not establish Overleaf synchronization.
 
-Start with the **open-sided bus shelter** and compare the required fan, evaporative cooler and large evaporative cooler. Enclosure changes are set aside for now. Then extend to the semi-open rail waiting area and at least two specific venues differing in climate or technology.
+## Agreed scope and decisions
 
-The discussed modeling pipeline is:
+Start with a simple **open-sided bus shelter**, comparing the required fan and two evaporative coolers. Enclosure changes are set aside for now. Shade is not explicitly named as a system in the problem, although facility design and solar exposure are; holding the shelter's shade fixed is a proposed comparison condition. No specific cooler or outlet arrangement has been selected.
 
-**Cooler/outlet configuration + weather + geometry → airflow, temperature and humidity → conditions along people's paths → aggregate benefit and resource use → configuration comparison.**
+Use four categories: **benefit to people, all financial costs, environmental effects, and nonfinancial practicality**. Reliability affects each rather than receiving a separate score. Comfort can improve toward an optimum and worsen with overcooling; health protection is distinct and needs its own justified measure. Final metrics, weights, comfort functions and safety thresholds remain undecided.
 
-People are points with positions that change over time; stationary occupants are constant-position paths with arrival and departure times. The temperature advection–diffusion equation proposed by Tianyi is a candidate physical component, not an airflow solver by itself. A simplified additive response model is being considered for candidate selection, followed by checking with a model that accounts for interactions. Neither the weak-interaction assumption nor the physical/comfort model has been validated.
+The general chat coordinates the work; verification/ideas may use separate chats. Explain models before code, verify one complete small case before scaling, and preserve actual AI-assistance provenance.
 
-The four agreed evaluation categories are **benefit to people, all financial costs, environmental effects, and nonfinancial practicality**. Reliability affects these outcomes rather than receiving a separate score. Heat safety remains distinct from ordinary comfort.
+## Required outputs from the source
 
-No final cooler, venue, numerical utility function, weights, solver or optimum has been selected. Proposed equations and research estimates must not be reported as measured results.
+1. Use an open freezer case to justify what cooling efficiency should measure.
+2. Develop an efficiency measure for an open bus shelter comparing fan, evaporative cooler and large evaporative cooler.
+3. Revise it for a semi-open rail-station waiting area and explain what changed and why.
+4. Apply it to at least two specific venues differing in climate or cooling system; assess scaling and drivers of efficiency. Real data or justified estimates are allowed.
+5. Extend the analysis to balance performance, visitor experience, energy and cost.
+6. Recommend operating strategies including during extreme heat; produce a 1–2 page COO memo for one venue and a public blog post.
+7. PDF of at most 25 pages including summary sheet, contents, solution, memo and references. The required AI-use report, if applicable, is excluded from that limit. Include the required blog even though it is omitted from the final PDF checklist.
 
-## Collaboration
+## Source details and unresolved interpretation
 
-The local HiMCM workspace is a working copy of this repository. Record agreed decisions on this planning branch as work proceeds, check teammate changes before editing, and preserve their manuscript contributions. See [project agent guidance](AGENTS.md). A GitHub update alone does not verify synchronization back into Overleaf.
+- Fan: makes the space feel up to 3°C cooler; listed energy use 0.25 kW/hr.
+- Evaporative cooler: lowers air temperature up to 5°C; 1.2 kW/hr.
+- Large evaporative cooler: lowers air temperature up to 8°C; 2.5 kW/hr.
+- Perceived and air-temperature reductions are different quantities. The stated maxima are not established performance under every condition.
+- The source's kW/hr label is dimensionally ambiguous. Interpreting the figures as average kW is a possible assumption, not a confirmed correction.
 
-Research and formulation notes include AI assistance; retain that provenance for the eventual disclosure.
+## Current working model
+
+Discussed structure, not a validated implementation:
+
+1. Describe coolers and outlets by technology, capacity, position, direction, area and flow; shared outlets remain subject to equipment limits.
+2. Predict local airflow, temperature and humidity for the configuration, weather and venue geometry. A side-mounted outlet was an example, not a chosen installation.
+3. Represent occupants as points with arrival/departure times and paths. Constant-position paths represent stationary occupants. Integrate benefit over exposure time; distance integrals require inverse-speed weighting and separate waiting contributions.
+4. Sum benefits over actual or representative occupants, then compare with configuration-level electricity, financial cost, environmental effects and practicality. Shared costs are counted once.
+5. Explore a simplified additive response model to choose candidates, then verify them with interactions included. The weak-interaction approximation is unvalidated; refine if it changes rankings. Brute-force enumeration is not the preferred general search.
+
+Tianyi's proposed temperature advection–diffusion equation is recorded in [design.md](design.md). It requires an airflow field; it does not calculate that field itself. Initial/boundary conditions, moisture transport and mixing assumptions remain unresolved. No final solver, coefficients, comfort function, weights or numerical result exists.
+
+## Scope and research boundaries
+
+- Begin with the required open-sided bus shelter; enclosure changes are set aside for now. Shade is not explicitly named as a system in the question, but solar exposure and facility design are. Holding shade fixed is a comparison proposal, not a new contest requirement.
+- Do not equate stationary occupants with assigned seating or walking with narrow one-way passages. Behavior, geometry and outdoor exposure are separate inputs. Mixed and time-varying occupancy can share one framework.
+- [Bus-stop research](research.md) supports climate-dependent testing rather than a universal winner. Mist prototypes differ from the source's wet-pad coolers; the latter intentionally deliver humid air, not liquid spray onto people. Singapore's ended cooled-air trial highlights placement and maintenance costs.
+- [Semi-open research](research.md) retains the significant-outdoor-exchange requirement. Enclosed rooms cannot replace the required semi-open case. Documented deployments, transferable equipment principles and prototypes are distinguished.
+- [Design options](design.md) retains stadium and ducted-system research. The owner's earlier exclusion of stand-alone stadium fans does not remove the required bus-shelter fan comparison. No technology or venue has been selected.
+
+## Teammate update at first inspection
+
+On 2026-11-07, the remote had only the initial Overleaf import (`cc664d5`): a title and empty Introduction in `main.tex`. Tianyi's PDE proposal came through chat, not that commit. Recheck remote updates before subsequent work; this is an inspection baseline, not a perpetual claim about the repository.
+
+## Next action
+
+Specify a small shelter geometry, weather/occupancy scenarios and feasible equipment choices. Choose how to estimate airflow and calibrate the candidate-screening response; validate the weak-interaction approximation before relying on it. Resolve the problem's power-unit ambiguity. No numerical implementation or manuscript editing is requested yet.
