@@ -25,7 +25,7 @@ Use the four lanes in [agent.md](agent.md#four-work-lanes); no personal assignme
 
 | Task | Human / agent | File and section | Starting main SHA | State | Deliverable / checks / handoff |
 |---|---|---|---|---|---|
-| Record small-case enumeration and body blockage | John / general-chat agent | README decisions; design.md people and screening | 8f223c3 | done | Small-case enumeration/large-case approximation and simple body obstacles recorded; search versus physics limits checked. Next define one finite benchmark, occupancy scenario and evaluation model; no solver run. |
+| Record accepted noise penalty and open decisions | John / general-chat agent | README decisions/next action; design.md noise component and condensation of repeated field/station notes | ce8c65b | claimed | Save noise functional form without adopting thresholds; identify unresolved thermal benefit, calibration and benchmark inputs. |
 
 Next technical tasks remain unclaimed: define bus-shelter geometry/scenarios; choose airflow and temperature interfaces; define occupant exposure/benefit; verify candidate inputs and the screening approximation. Teammates should claim concrete sections before starting those edits.
 
