@@ -25,7 +25,7 @@ Use the four lanes in [agent.md](agent.md#four-work-lanes); no personal assignme
 
 | Task | Human / agent | File and section | Starting main SHA | State | Deliverable / checks / handoff |
 |---|---|---|---|---|---|
-| Record convexity requirement and wind utility proposal | John / general-chat agent | README decisions; agent.md complexity rule; design.md screening | 10e5d62 | done | Convexity/direction-independent preference recorded; preferred-speed nonconvexity and convex ceiling alternatives checked algebraically. Fan cooling benefit remains unresolved; no threshold or aligned-flow assumption adopted. |
+| Record small-case enumeration and body blockage | John / general-chat agent | README decisions; design.md people and screening | 8f223c3 | claimed | Record exhaustive small-case benchmarks and approximate larger-case search; simple-body treatment, with physical accuracy distinguished from search coverage. |
 
 Next technical tasks remain unclaimed: define bus-shelter geometry/scenarios; choose airflow and temperature interfaces; define occupant exposure/benefit; verify candidate inputs and the screening approximation. Teammates should claim concrete sections before starting those edits.
 
