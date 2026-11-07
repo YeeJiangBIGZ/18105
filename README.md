@@ -25,7 +25,7 @@ Use the four lanes in [agent.md](agent.md#four-work-lanes); no personal assignme
 
 | Task | Human / agent | File and section | Starting main SHA | State | Deliverable / checks / handoff |
 |---|---|---|---|---|---|
-| Record mean-flow/RMS and MILP choice | John / general-chat agent | README decisions/model/next action; design.md airflow statistics and finite-mode surrogate; research.md adoption status/link | 45173d1 | claimed | Record accepted working approach, define RMS deviations precisely and preserve unvalidated physical/utility coefficients and higher-order limits. |
+| Record mean-flow/RMS and MILP choice | John / general-chat agent | README; design.md airflow statistics/MILP; research.md status/link | 45173d1 | done | Accepted approach recorded; RMS deviations distinguished from total RMS. Algebra/units/status links checked. No physical model or numerical coefficients validated; next evaluate a fixed shelter case and interaction errors. |
 
 Next technical tasks remain unclaimed: define bus-shelter geometry/scenarios; choose airflow and temperature interfaces; define occupant exposure/benefit; verify candidate inputs and the screening approximation. Teammates should claim concrete sections before starting those edits.
 
@@ -42,6 +42,8 @@ Use four categories: **benefit to people, all financial costs, environmental eff
 **Complexity-dependent computation — John, 2026-11-07:** use exhaustive enumeration for small candidate sets and approximation at larger complexity, benchmarking against small cases. Simple body obstacles and surrounding exposure samples are the accepted working direction; physical coefficients and accuracy remain unvalidated. Enumeration is exhaustive only over its finite options, not exact physics or all continuous placements.
 
 **Noise form accepted — John, 2026-11-07:** use a zero-below-threshold, linear-above-threshold penalty in normalized sound energy, with source contributions added before scoring and ambient noise included once. See [noise equation](design.md#noise-penalty). Comfort threshold, penalty weight, source levels and independent-source validity remain uncalibrated.
+
+**Airflow/MILP choice — John, 2026-11-07:** retain mean velocity and the RMS of velocity deviations from that mean; use pre-evaluated finite-mode pairwise utility interactions in MILP. Total RMS speed combines the squared mean magnitude and squared fluctuation RMS. This accepts the working approach, not physical linearity or validated coefficients. Higher-order interactions and useful fan comfort still need validation. See [definitions and MILP](design.md#mean-flow-and-rms-fluctuations).
 
 The general chat coordinates the work; verification/ideas may use separate chats. Explain models before code, verify one complete small case before scaling, and preserve actual AI-assistance provenance.
 
@@ -72,7 +74,7 @@ Discussed structure, not a validated implementation:
 3. Represent occupants as points with arrival/departure times and paths. Constant-position paths represent stationary occupants. Integrate benefit over exposure time; distance integrals require inverse-speed weighting and separate waiting contributions.
 4. John supports sampling occupancy moments/segments and averaging. The proposed time-snapshot method computes benefit first and duration-weights it; sampling and steady-state validity remain open. See [walking flow and snapshots](design.md#walking-flow-and-snapshot-averaging).
 5. Sum benefits over actual or representative occupants, then compare with configuration-level electricity, financial cost, environmental effects and practicality. Shared costs are counted once.
-6. Use additive-response screening as a proposed approximation, then verify interactions. John proposed coarse-to-fine interval refinement; fractions/spacings and exploration safeguards remain unselected. MILP and mixed-integer convex formulations are under consideration, with no general speed or continuous-global-optimum guarantee. See [screening and refinement](design.md#candidate-screening-before-detailed-verification).
+6. Use the accepted finite-mode pairwise utility MILP approach, with joint-configuration evaluations and higher-order validation; isolated additive-response fields remain only an unvalidated physical approximation. John proposed coarse-to-fine interval refinement; fractions/spacings and exploration safeguards remain unselected. The finite-mode MILP has no general speed or continuous-global-optimum guarantee. See [screening and refinement](design.md#candidate-screening-before-detailed-verification).
 7. For optional ducted systems, John acknowledged node temperatures and segment inlet/outlet relations. Selectable routing, shared installation costs and thermal-loss modes are [recorded proposals](design.md#optional-duct-network-and-installation-model), not mandatory bus-model features or validated engineering. Fixed/precomputed coefficients are needed for the discussed linear duct equations.
 
 Tianyi's proposed temperature advection–diffusion equation is recorded in [design.md](design.md). It requires an airflow field; it does not calculate that field itself. Initial/boundary conditions, moisture transport and mixing assumptions remain unresolved. No final solver, coefficients, comfort function, weights or numerical result exists.
@@ -91,6 +93,6 @@ On 2026-11-07, the remote had only the initial Overleaf import (`cc664d5`): a ti
 
 ## Next action
 
-[Interacting-airflow research](research.md#interacting-jets-and-wind-comfort) now distinguishes mean flow, fluctuation energy and scalar airspeed. Multiplying a resultant by incoming RMS does not resolve cancellation. A [finite-mode pairwise utility surrogate](design.md#interacting-airflow-research-recommendation-not-adopted) is proposed for MILP; it requires joint-configuration evaluations and higher-order validation, and is not an adopted physical closure.
+[Interacting-airflow research](research.md#interacting-jets-and-wind-comfort) now distinguishes mean flow, fluctuation energy and scalar airspeed. Multiplying a resultant by incoming RMS does not resolve cancellation. The [mean-flow/RMS representation and finite-mode pairwise MILP](design.md#mean-flow-and-rms-fluctuations) are accepted working directions; joint-flow prediction, utility coefficients and higher-order validation remain unresolved.
 
 First resolve positive airflow cooling and temperature/humidity/radiation in a defensible convex thermal-comfort model; excessive-wind and noise penalties alone are insufficient. Then choose scales, weights and thresholds; fix one shelter/occupancy/weather benchmark, equipment response/noise data, resource constraints and the power-unit interpretation. Compare exhaustive and approximate search on that finite case, test interactions and refinement, and retain only material extensions within 25 pages. No numerical solver or manuscript edit is requested by this recording task.

@@ -39,7 +39,7 @@ Existing entries retain their original access limits and have not all been upgra
 
 ## Interacting jets and wind comfort
 
-John / general-chat agent, 2026-11-07. Question: can isolated outlet vectors be combined simply while capturing opposing-flow turbulence and maintaining tractable optimization? Primary-source review and algebra only; no shelter measurements, calibrated closure, simulation or independent reviewer. [Design proposal](design.md#interacting-airflow-research-recommendation-not-adopted) is not adopted.
+John / general-chat agent, 2026-11-07. Question: can isolated outlet vectors be combined simply while capturing opposing-flow turbulence and maintaining tractable optimization? Primary-source review and algebra only; no shelter measurements, calibrated closure, simulation or independent reviewer. John accepted the [mean-flow/RMS representation and finite-mode MILP route](design.md#mean-flow-and-rms-fluctuations) on 2026-11-07; physical prediction and numerical coefficients remain unvalidated.
 
 | Primary source / locator / access | Bounded finding and applicability |
 |---|---|
@@ -54,7 +54,7 @@ John / general-chat agent, 2026-11-07. Question: can isolated outlet vectors be 
 
 **Mathematical checks, not new empirical laws:** for actual velocity w, E||w||²=||Ew||²+E||w-Ew||². Thus a vector plus fluctuation energy can represent a zero-mean/nonzero-RMS state. Input-weighted RMS is instead direction-blind; splitting one stream with conserved weights leaves it unchanged, but that property cannot validate it as downstream speed. Multiplying a resultant by a finite factor leaves exact cancellation unchanged; assigning its direction to a finite RMS is undefined at cancellation and unstable nearby. No reviewed source supplies a universal algebraic merge function of isolated source vectors alone.
 
-**Recommended next test, not a decision:** one fixed shelter/weather/occupancy case; baseline, isolated devices, aligned/opposed/angled pairs; assess actual mean scalar speed, fluctuations, temperature/moisture and person-time utility. Use a checked physical model or measurements, not arbitrary additive samples. Tabulate joint-configuration benefit corrections for finite modes; binary product linearization keeps a pairwise utility surrogate MILP without claiming fluid linearity. Test held-out triples and whether rankings change; unmodeled higher-order interactions, body effects, coefficients and positive fan benefit remain open. Full CFD for every optimizer iteration is unnecessary, but offline evaluations still require validation. No numerical tolerance or candidate count selected.
+**Verification plan for the accepted approach; test settings unselected:** one fixed shelter/weather/occupancy case; baseline, isolated devices, aligned/opposed/angled pairs; assess actual mean scalar speed, fluctuations, temperature/moisture and person-time utility. Use a checked physical model or measurements, not arbitrary additive samples. Tabulate joint-configuration benefit corrections for finite modes; binary product linearization keeps a pairwise utility surrogate MILP without claiming fluid linearity. Test held-out triples and whether rankings change; unmodeled higher-order interactions, body effects, coefficients and positive fan benefit remain open. Full CFD for every optimizer iteration is unnecessary, but offline evaluations still require validation. No numerical tolerance or candidate count selected.
 
 ## Occupant obstruction and thermal plumes
 

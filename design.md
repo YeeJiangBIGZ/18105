@@ -164,31 +164,33 @@ Outdoor wind is a scenario, not a control. Keep one installation across calm and
 
 Sources read 2026-11-07: [NASA fluid equations](https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/navier-strokes-equation/) and [NIST local CFD versus uniform zones](https://www.nist.gov/publications/using-cfd-capabilities-contam-30-simulating-airflow-and-contaminant-transport-and). These establish method distinctions, not validated shelter predictions.
 
-### Interacting airflow: research recommendation, not adopted
+### Mean flow and RMS fluctuations
 
-Proposed 2026-11-07; [evidence](research.md#interacting-jets-and-wind-comfort). Isolated-outlet fields are alternative solutions, not simultaneous velocities. Geometry, pressure, entrainment and bodies prevent a universal algebraic merge.
+**Accepted — John, 2026-11-07:** mean flow, RMS fluctuations and finite-mode interaction MILP; physical/comfort calibration remains open. [Evidence](research.md#interacting-jets-and-wind-comfort).
 
-For the actual local time-varying velocity w, define mean m=E[w] and fluctuation energy k=E[||w-m||²]/2 (m²/s²). Then exactly:
+For local velocity w(t), mean m=E[w], deviation w'=w-m and fluctuation RMS sigma (m/s):
 
 $$
- s_{\rm rms}^2=E[\|\mathbf w\|^2]=\|\mathbf m\|^2+2k,
- \qquad \|\mathbf m\|\le E[\|\mathbf w\|]\le s_{\rm rms}.
+ \mathbf w(t)=\mathbf m+\mathbf w'(t),\quad E[\mathbf w']=0,\quad
+ \sigma=\sqrt{E[\|\mathbf w'\|^2]}=\sqrt{2k},\qquad
+ s_{\rm rms}=\sqrt{\|\mathbf m\|^2+\sigma^2}.
 $$
 
-A proposed RMS ceiling lambda*[||m||²+2k-s_max²]_+ is convex in (m,k); retaining convexity in controls needs affine surrogates. Its threshold requires separate calibration.
+Here k=E[||w'||²]/2 is fluctuation energy per mass (m²/s²). Add vectors in the instantaneous decomposition, not scalar sigma to vector m. The combined RMS uses squared contributions, not ||m||+sigma. Also ||m||<=E[||w||]<=s_rms; none is automatically a calibrated comfort index. Walking uses body-relative velocity. Predicting m,sigma still requires a checked joint-flow model or measurements; isolated outlet fields and spatial samples alone do not create collision turbulence. Zero mean permits weak or strong fluctuations.
 
-This identity does not predict m,k from outlets. Zero mean permits either weak or strong fluctuations. Keep (m,k); RMS differs from mean scalar speed and is not validated comfort. Walking uses body-relative velocity. Spatial samples cannot create missing temporal fluctuations. A finite multiplier leaves a zero resultant zero; normalization is undefined there; velocity times speed has wrong units.
+Optional ceiling lambda*[||m||²+sigma²-s_max²]_+ is convex in (m,sigma) for lambda>=0, not linear; control dependence and threshold need justification. Pre-evaluate nonlinear comfort outside the MILP.
 
-Equal-density proxy sqrt(sum Q_i||v_i||²/sum Q_i) is direction-blind for equal speeds. With nonnegative conserved weights it is split-invariant and continuous as added Q tends to zero at bounded speed (existing total>0). Tiny speed with finite Q need not have tiny effect. Incoming energy is not downstream RMS or local k; no collision coefficient adopted.
+Incoming-flow RMS does not predict downstream RMS; multiplying a resultant cannot repair cancellation. See research for continuity, weighting and unit limitations. No universal merge law adopted.
 
-**Proposed finite-mode interaction surrogate:** fix positions, operating modes, weather and occupancy. Evaluate total person-time utility F(S) from a joint physical/comfort model for empty, single and selected pair configurations. Define a_i=F({i})-F(empty), b_ij=F({i,j})-F({i})-F({j})+F(empty). Then:
+**Finite-mode interaction MILP — accepted approach, unvalidated coefficients:** fix candidate positions, operating modes, weather and occupancy. Pre-evaluate person-time utility F(S) for empty, single and feasible pair configurations, using joint airflow statistics and temperature/moisture. Define a_i=F({i})-F(empty), b_ij=F({i,j})-F({i})-F({j})+F(empty). Optimize:
 
 $$
  \widehat F(z)=F(\varnothing)+\sum_i a_i z_i+\sum_{i<j}b_{ij}y_{ij},\quad
- 0\le y_{ij}\le z_i,z_j,\quad y_{ij}\ge z_i+z_j-1,\quad z_i\in\{0,1\}.
+ y_{ij}\ge0,\quad y_{ij}\le z_i,\quad y_{ij}\le z_j,\quad
+ y_{ij}\ge z_i+z_j-1,\quad z_i\in\{0,1\}.
 $$
 
-AND gives y_ij=z_i*z_j. Signed coefficients plus linear resource constraints yield MILP without utility segmentation. Exact relative to F for at most two active modes when every feasible pair is included; approximate beyond that. Enforce equipment-mode exclusivity and shared capacities consistent with evaluations. N modes need 1+N+N(N-1)/2 evaluations per scenario; omitting pairs requires evidence. Validate triples and rankings. No simulations, coefficients, tolerance, adoption or runtime guarantee. F still needs useful fan benefit; this is a utility surrogate, not fluid mechanics.
+AND constraints give y_ij=z_i*z_j; linear resources yield MILP without utility segmentation. Exact relative to F for <=2 active modes with every feasible pair; otherwise approximate. Enforce mode exclusivity and consistent shared capacities. All-pairs evaluation costs 1+N+N(N-1)/2 runs per scenario. Validate omitted interactions/triples and rankings. No simulations, coefficients, tolerance or runtime guarantee. Useful fan benefit remains unresolved; fluid mechanics is not linearized by this construction.
 
 ## Rail-station extension and missing inputs
 
