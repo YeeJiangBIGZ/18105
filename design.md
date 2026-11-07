@@ -158,7 +158,7 @@ $$
 
 This predicts T given u, not airflow. Specify initial/inlet/outdoor/surface conditions. S has temperature/time units (q'''/(rho*c_p) for volumetric heat). Avoid double-counting inlet cooling as a distributed source. Effective turbulent mixing, moisture transport for evaporation and possible buoyancy coupling need justification; no solver/closure selected.
 
-Outlet i: position r_i, unit direction d_i, area A_i, shape/spread and volume flow Q_i; uniform normal speed U_i=Q_i/A_i. Cooler constraints couple outlet temperatures/moisture and flow/cooling capacity. Duct pressure/heat/leakage losses and auxiliaries affect power; extra outlets create no extra capacity. Ducting changes standalone-device assumptions. No side-mounted layout selected.
+Outlet i: position r_i, unit direction d_i, area A_i, shape/spread and volume flow Q_i; uniform normal speed U_i=Q_i/A_i. Cooler constraints couple outlet temperatures/moisture and flow/cooling capacity. Duct pressure/heat/leakage losses and auxiliaries affect power; extra outlets create no extra capacity. Ducting changes standalone-device assumptions.
 
 Outdoor wind is a scenario, not a control. Keep one installation across calm and directional/speed scenarios; probabilities and adaptive controls need justification. Independent jets are not exactly additive: pressure, entrainment, turbulence and obstacles interact without visible crossings; opposing jets can redirect/mix. Uniform zones cannot resolve jets. Start with few layouts; retain 3D for height comparisons. Empirical screening and CFD both need validation (boundaries, turbulence, mesh); writing a field symbol does not solve it.
 
