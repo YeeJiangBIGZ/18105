@@ -74,7 +74,7 @@ Illustrative arithmetic only: ten people present for one hour, each receiving a 
 
 ## People as points, exposure along paths
 
-The working representation discussed with John is a cooler, its outlets and occupants. For cooler k use technology, position, capacity and a performance map linking weather/settings to supply conditions, electricity and water. Outlet i has a supplying-cooler index, position, direction, area, shape and volume flow. These are constrained physical quantities, not independent free sources of cooling.
+Occupants sample the conditions produced by constrained coolers/outlets; equipment definitions are below.
 
 Person p has arrival/departure times and trajectory r_p(t); their speed is ||d r_p/dt||. A stationary person has constant position during the stay. With matched baseline and intervention paths, benefit is:
 
@@ -87,6 +87,23 @@ $$
 Here X is the configuration; D is discomfort based on local conditions and personal attributes. Weight w_p is one for an individual, or the number of people represented by a representative path. The time integral captures stops and movement. For moving segments parameterized by distance s, dt=ds/v_p(s) and the equivalent line integral is integral of Delta D_p(s,t_p(s))/v_p(s) over ds. Use separate time contributions for stops; never divide by zero speed. An unweighted distance integral does not measure exposure duration.
 
 Zone occupancy and path integration are alternative aggregation methods and should not both be counted for the same occupants. Path-history dependence may be needed for transient comfort or health; adding instantaneous discomfort reductions is a starting assumption. Actual tracking of every visitor is not required if representative locations/paths and dwell times adequately capture the comparison.
+
+### Walking flow and snapshot averaging
+
+Recorded 2026-11-07: John supports sampling multiple segments/moments and averaging. The time-snapshot interpretation below was explained by the assistant; sampling frequency and independent steady-state validity remain unverified.
+
+For steady arrival flow lambda, path length L and speed v>0, mean occupancy is N_bar=lambda*L/v; in section j, N_bar_j=lambda_j*Delta_s_j/v_j under steady flow and uniform section speed. Branches need local flows; pauses/queues and bus-arrival pulses need dwell-time/time-varying treatment. Fractional occupancy is an expectation, not a fractional solid obstacle. Illustrative: 6 people/minute crossing 12 m at 1.2 m/s gives one person on average.
+
+Calculate total benefit rate R_k for each snapshot and its represented duration Delta_t_k:
+
+$$
+B\approx\sum_kR_k\Delta t_k,\qquad
+\bar R=\frac{\sum_kR_k\Delta t_k}{\sum_k\Delta t_k}.
+$$
+
+Equal durations allow an arithmetic mean. Sample quiet/busy states with correct time/probability weights and matched scenarios across designs. Calculate utility before averaging; nonlinear utility and obstruction generally prevent averaging positions/fields first. Do not double count path and snapshot person-time.
+
+Independent steady snapshots require airflow/thermal/moisture adjustment fast relative to changing inputs; otherwise use transient evolution. Test sampling convergence, pulses and ranking stability. Utility points can coexist with simple airflow obstacles/heat sources; see [occupant evidence](research.md#occupant-obstruction-and-thermal-plumes). No negligible-obstruction conclusion or numerical tolerance is adopted.
 
 ## Candidate screening before detailed verification
 
@@ -184,27 +201,11 @@ A design specifies cooling technology, number and size of units, supply outlet l
 
 Direct/indirect evaporation: [UK Energy Technology List](https://etl.energysecurity.gov.uk/products/heating-ventilation-air-conditioning-hvac/evaporative-air-coolers). Fans: [CBE guidebook](https://cbe-berkeley.gitbook.io/fans-guidebook). Mist: [University of Melbourne demonstration](https://research.unimelb.edu.au/strengths/updates/impact/mist-demonstrates-a-context-aware-outdoor-urban-cooling-system). Refrigeration: [PNNL](https://basc.pnnl.gov/resource-guides/air-conditioning). Outdoor radiant cooling: [UBC Cold Tube](https://sala.ubc.ca/research/the-cold-tube/).
 
-### Layouts to compare
+### Layouts and supporting choices
 
-- Overhead row or grid: fans, diffusers or panels distributed over benches, queues or waiting zones.
-- Side or column mounting: directional units aimed into occupied areas; compare heights and angles.
-- Local cooling stations: small cooled islands at benches or designated rest areas.
-- Distributed outlets: one remote plant feeding several outlets through ducts or water pipes.
-- Mobile units: portable devices for varying crowd locations, with routes for cables, hoses and hot exhaust if applicable.
+Compare overhead grids, side/column mounting, localized rest areas, remote-plant outlets and portable units. Specify position, height, direction and settings. Compare large versus multiple small units and targeted versus broad coverage using occupancy, obstacles and wind, not nominal area alone. No layout is selected.
 
-Specify each unit or outlet by horizontal position, mounting height, direction and output setting. Compare one large unit with multiple smaller units and targeted coverage with broad coverage. Nominal floor coverage alone is insufficient: airflow, obstacles, prevailing wind and actual occupancy must be considered. Layouts are proposals, not established rankings.
-
-### Supporting design choices
-
-- Shade roofs, screens, trees and suitable roof treatments to reduce solar exposure; check sun angle and occupied locations. [EPA heat-island guidance](https://www.epa.gov/heatislands/guide-reducing-heat-islands)
-- Partial wind screens to test whether cooled air remains useful longer without unacceptable loss of ventilation or accessibility; effects are site-dependent.
-- Ducts and adjustable diffusers to place air outlets near intended users while locating noisy equipment elsewhere; include fan pressure losses and duct heat gains.
-- Chilled-water pipes to serve fan coils or radiant panels; include pumps, pipe insulation, heat gains and condensation management.
-- Refrigerant lines between the cooling coil and condensing equipment; these are distinct from heat pipes.
-- Heat rejection: place condenser discharge away from occupied zones and supply-air intakes; assess actual exhaust recirculation rather than assuming all outdoor positions are equivalent.
-- Water supply, treatment, drainage, safe electricity routing and maintenance access.
-- Operating choices: schedules, occupancy detection, adjustable airflow, climate-dependent enable/disable rules and separate settings for occupied zones.
-- Optional thermal storage: ice or chilled water can move some cooling production to other hours; include charging energy and losses rather than assuming energy savings. [DOE thermal storage overview](https://betterbuildingssolutioncenter.energy.gov/resources/combined-heat-and-power-technology-fact-sheet-series-thermal-energy-storage)
+Shade needs sun-angle checks ([EPA](https://www.epa.gov/heatislands/guide-reducing-heat-islands)); screens need ventilation/accessibility checks. Ducts separate plant noise but add pressure loss, heat gain/leakage. Chilled-water loops need pumps, insulation and condensation control; refrigerant lines differ from heat pipes. Keep heat rejection away from occupants/intakes; check recirculation. Include water treatment/drainage, safe wiring, portable hoses/cables and service access. Test scheduling, occupancy, flow and climate/zone controls. Storage shifts production but adds charging losses; energy savings are not automatic ([DOE](https://betterbuildingssolutioncenter.energy.gov/resources/combined-heat-and-power-technology-fact-sheet-series-thermal-energy-storage)).
 
 ### Heat pipes
 

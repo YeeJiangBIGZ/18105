@@ -25,7 +25,7 @@ Use the four lanes in [agent.md](agent.md#four-work-lanes); no personal assignme
 
 | Task | Human / agent | File and section | Starting main SHA | State | Deliverable / checks / handoff |
 |---|---|---|---|---|---|
-| Record walking flow and snapshot averaging | John / this agent | design.md: people/exposure; condense repeated installation guidance; README decision summary | 20b4ead | claimed | Record average occupancy, weighted snapshots and validity limits without claiming validation |
+| Record walking flow and snapshot averaging | John / this agent | design.md: people/exposure; condense repeated installation guidance; README decision summary | 20b4ead | done | [Walking/snapshot notes](design.md#walking-flow-and-snapshot-averaging) recorded; units and illustrative arithmetic checked. Next test weighting, transient assumptions and sampling convergence; no physical validation. |
 
 Next technical tasks remain unclaimed: define bus-shelter geometry/scenarios; choose airflow and temperature interfaces; define occupant exposure/benefit; verify candidate inputs and the screening approximation. Teammates should claim concrete sections before starting those edits.
 
@@ -62,8 +62,9 @@ Discussed structure, not a validated implementation:
 1. Describe coolers and outlets by technology, capacity, position, direction, area and flow; shared outlets remain subject to equipment limits.
 2. Predict local airflow, temperature and humidity for the configuration, weather and venue geometry. A side-mounted outlet was an example, not a chosen installation.
 3. Represent occupants as points with arrival/departure times and paths. Constant-position paths represent stationary occupants. Integrate benefit over exposure time; distance integrals require inverse-speed weighting and separate waiting contributions.
-4. Sum benefits over actual or representative occupants, then compare with configuration-level electricity, financial cost, environmental effects and practicality. Shared costs are counted once.
-5. Explore a simplified additive response model to choose candidates, then verify them with interactions included. The weak-interaction approximation is unvalidated; refine if it changes rankings. Brute-force enumeration is not the preferred general search.
+4. John supports sampling occupancy moments/segments and averaging. The proposed time-snapshot method computes benefit first and duration-weights it; sampling and steady-state validity remain open. See [walking flow and snapshots](design.md#walking-flow-and-snapshot-averaging).
+5. Sum benefits over actual or representative occupants, then compare with configuration-level electricity, financial cost, environmental effects and practicality. Shared costs are counted once.
+6. Explore a simplified additive response model to choose candidates, then verify them with interactions included. The weak-interaction approximation is unvalidated; refine if it changes rankings. Brute-force enumeration is not the preferred general search.
 
 Tianyi's proposed temperature advection–diffusion equation is recorded in [design.md](design.md). It requires an airflow field; it does not calculate that field itself. Initial/boundary conditions, moisture transport and mixing assumptions remain unresolved. No final solver, coefficients, comfort function, weights or numerical result exists.
 
