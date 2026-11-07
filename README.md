@@ -25,7 +25,7 @@ Use the four lanes in [agent.md](agent.md#four-work-lanes); no personal assignme
 
 | Task | Human / agent | File and section | Starting main SHA | State | Deliverable / checks / handoff |
 |---|---|---|---|---|---|
-| Research a data-rich bus-shelter baseline | John / this agent | research.md: Bus shelters / Candidate geometry and data; README task handoff | 34e9349 | claimed | Compare documented shelter geometry and weather/occupancy sources; keep location and mounting choices proposed. |
+| Research a data-rich bus-shelter baseline | John / this agent | research.md: Bus shelters / Candidate geometry and data; README task handoff | 34e9349 | done | [Geometry/data comparison](research.md#candidate-geometry-and-data): LTA drawings and official data catalogues checked; Singapore standard shelter proposed, Phoenix alternative retained. No site adopted, dataset downloaded or mounting feasibility certified. Next choose baseline and verify geometry/access. |
 
 Next technical tasks remain unclaimed: define bus-shelter geometry/scenarios; choose airflow and temperature interfaces; define occupant exposure/benefit; verify candidate inputs and the screening approximation. Teammates should claim concrete sections before starting those edits.
 
