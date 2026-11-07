@@ -25,7 +25,7 @@ Use the four lanes in [agent.md](agent.md#four-work-lanes); no personal assignme
 
 | Task | Human / agent | File and section | Starting main SHA | State | Deliverable / checks / handoff |
 |---|---|---|---|---|---|
-| Record accepted noise penalty and open decisions | John / general-chat agent | README decisions/next action; design.md noise component and condensation of repeated field/station notes | ce8c65b | claimed | Save noise functional form without adopting thresholds; identify unresolved thermal benefit, calibration and benchmark inputs. |
+| Record accepted noise penalty and open decisions | John / general-chat agent | README decisions/next action; design.md noise component and condensation of repeated field/station notes | ce8c65b | done | Noise form accepted and algebraically checked; no parameter calibration. Main unresolved issue: useful wind cooling in a defensible convex comfort model; next fix thermal mapping, scales/weights and one finite benchmark. |
 
 Next technical tasks remain unclaimed: define bus-shelter geometry/scenarios; choose airflow and temperature interfaces; define occupant exposure/benefit; verify candidate inputs and the screening approximation. Teammates should claim concrete sections before starting those edits.
 
@@ -40,6 +40,8 @@ Use four categories: **benefit to people, all financial costs, environmental eff
 **Wind/convexity clarification — John, 2026-11-07:** retain convex continuous structure with binary installation choices as needed; do not impose a preferred wind direction or use segmentation merely to force convexity. John proposed an excessive-speed ceiling with no penalty below it. The convex ceiling penalty is recorded; its threshold and positive fan-cooling benefit remain unresolved. This does not cancel spatial candidate refinement. See [wind formulation](design.md#convexity-and-direction-independent-wind-penalty).
 
 **Complexity-dependent computation — John, 2026-11-07:** use exhaustive enumeration for small candidate sets and approximation at larger complexity, benchmarking against small cases. Simple body obstacles and surrounding exposure samples are the accepted working direction; physical coefficients and accuracy remain unvalidated. Enumeration is exhaustive only over its finite options, not exact physics or all continuous placements.
+
+**Noise form accepted — John, 2026-11-07:** use a zero-below-threshold, linear-above-threshold penalty in normalized sound energy, with source contributions added before scoring and ambient noise included once. See [noise equation](design.md#noise-penalty). Comfort threshold, penalty weight, source levels and independent-source validity remain uncalibrated.
 
 The general chat coordinates the work; verification/ideas may use separate chats. Explain models before code, verify one complete small case before scaling, and preserve actual AI-assistance provenance.
 
@@ -89,4 +91,4 @@ On 2026-11-07, the remote had only the initial Overleaf import (`cc664d5`): a ti
 
 ## Next action
 
-Choose a compact core and optional extensions under the 25-page rule. Specify shelter geometry/scenarios, equipment and a defensible utility; check whether its screening formulation is MILP, MIQP or another class. Verify one complete small case and interaction sensitivity before scaling; add duct routing/heat gain only where material. Resolve the power-unit ambiguity. No numerical solver implementation or manuscript edit is requested by this recording task.
+First resolve positive airflow cooling and temperature/humidity/radiation in a defensible convex thermal-comfort model; excessive-wind and noise penalties alone are insufficient. Then choose scales, weights and thresholds; fix one shelter/occupancy/weather benchmark, equipment response/noise data, resource constraints and the power-unit interpretation. Compare exhaustive and approximate search on that finite case, test interactions and refinement, and retain only material extensions within 25 pages. No numerical solver or manuscript edit is requested by this recording task.

@@ -119,6 +119,17 @@ Both require lambda,v_max>=0 with consistent units. First form: p>=0, p>=sum_c u
 
 Fan cooling benefit remains unresolved. Fixed local direction/scalar speed is unadopted. A norm upper bound works for minimized penalties but can inflate speed rewards. Exact direction-independent speed rewards generally break convexity in unrestricted vectors.
 
+### Noise penalty
+
+**Form accepted by John, 2026-11-07; uncalibrated.** For person-time sample j and fixed equipment operating modes z_i:
+
+$$
+q_j=10^{(L_j^0-L_j^{lim})/10}+\sum_i10^{(L_{ji}-L_j^{lim})/10}z_i,
+\qquad P_{N,j}=\lambda_N[q_j-1]_+.
+$$
+
+L^0 is ambient noise, L_ji the source-only level at the receiver, and L^lim a comfort threshold (dBA). q is normalized mean-square sound pressure; approximately uncorrelated sources are assumed. Do not add dB values or count ambient noise twice. Coefficients are precomputed, not exponentials of decisions. Minimized penalty uses p_j>=0, p_j>=q_j-1 and lambda_N*p_j: linear constraints, no extra binaries. Aggregate baseline-minus-intervention penalties with person-time weights. This energy-based annoyance surrogate is not a perception law or hearing-risk measure; calibrate source levels, threshold and nonnegative weight and check ranking sensitivity. [FHWA acoustical guidance](https://www.fhwa.dot.gov/ENVIRonment/noise/noise_barriers/design_construction/design/design03.cfm), decibel addition, read 2026-11-07, supports energy addition, not this utility choice. No equipment noise data selected.
+
 ### Adaptive outlet placement search
 
 **Accepted strategy — John, 2026-11-07:** enumerate configurations when the candidate set/allowed outlet count and evaluation cost are small; use approximations at larger complexity. Use small cases as benchmarks for surrogate ranking and search quality. Enumeration covers only the defined finite options and does not make approximate airflow exact; continuous controls/routes also need a defined treatment. No crossover size or runtime budget chosen.
@@ -145,13 +156,11 @@ $$
 \frac{\partial T}{\partial t}+\mathbf u\cdot\nabla T=\alpha\nabla^2T+S.
 $$
 
-It predicts temperature given an airflow field; it is not an airflow solver. Initial temperature, inlet/outdoor conditions and surface heat transfer must be specified. S has temperature/time units; volumetric heat input q'''/(rho*c_p) gives that form. Represent supply air through inlet temperature/flow, or justify a distributed approximation without double counting. Molecular diffusivity alone does not capture turbulent mixing; any effective diffusivity or closure needs justification. Evaporative systems also require moisture inputs/transport. Buoyancy can require coupled airflow/temperature calculation; neglecting it must be explicit. No solver or closure is adopted.
+This predicts T given u, not airflow. Specify initial/inlet/outdoor/surface conditions. S has temperature/time units (q'''/(rho*c_p) for volumetric heat). Avoid double-counting inlet cooling as a distributed source. Effective turbulent mixing, moisture transport for evaporation and possible buoyancy coupling need justification; no solver/closure selected.
 
-Outlet i has position r_i=(x_i,y_i,z_i), unit direction d_i, area A_i, shape/spread and volume flow Q_i, with discharge speed U_i=Q_i/A_i for uniform normal discharge. Supply temperature/moisture and shared flow/cooling capacity are constrained by the cooler. Duct resistance, heat gain/leakage and auxiliaries affect power and performance. Adding outlets is not free capacity; redesigning a standalone cooler into ducts changes the original device assumptions. The previous side-mounted example is not a selected layout.
+Outlet i: position r_i, unit direction d_i, area A_i, shape/spread and volume flow Q_i; uniform normal speed U_i=Q_i/A_i. Cooler constraints couple outlet temperatures/moisture and flow/cooling capacity. Duct pressure/heat/leakage losses and auxiliaries affect power; extra outlets create no extra capacity. Ducting changes standalone-device assumptions. No side-mounted layout selected.
 
-Outdoor wind is a scenario input, not a design control. Test calm and several directions/speeds, assigning probabilities only with justification. Keep one fixed installation across scenarios; adaptable settings require actual control capability. The resulting local fields include a single velocity vector, temperature and moisture. Independent jets or temperature reductions generally cannot be summed exactly: entrainment, pressure, turbulence, obstacles and deflection cause interactions, even without visible intersections. Opposing streams can redirect and mix. A well-mixed section alone cannot resolve directional jets.
-
-Start with a few layouts and mean-wind scenarios. Retain three dimensions when comparing outlet heights. A justified empirical jet approximation may screen weak interactions; stronger interactions require more detailed checks or CFD. CFD itself needs boundary-condition, turbulence and mesh validation. Writing a predictor symbol is not solving the physical model.
+Outdoor wind is a scenario, not a control. Keep one installation across calm and directional/speed scenarios; probabilities and adaptive controls need justification. Independent jets are not exactly additive: pressure, entrainment, turbulence and obstacles interact without visible crossings; opposing jets can redirect/mix. Uniform zones cannot resolve jets. Start with few layouts; retain 3D for height comparisons. Empirical screening and CFD both need validation (boundaries, turbulence, mesh); writing a field symbol does not solve it.
 
 Sources read 2026-11-07: [NASA fluid equations](https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/navier-strokes-equation/) and [NIST local CFD versus uniform zones](https://www.nist.gov/publications/using-cfd-capabilities-contam-30-simulating-airflow-and-contaminant-transport-and). These establish method distinctions, not validated shelter predictions.
 
@@ -159,9 +168,7 @@ Sources read 2026-11-07: [NASA fluid equations](https://www1.grc.nasa.gov/beginn
 
 Behavior, geometry and outdoor exposure are independent inputs: stationary queues can be narrow, circulation broad/bidirectional, and uses can change over time. Model mixed waiting/movement in one benefit framework. Evidence, read 2026-11-06: [Network Rail sections 3.5/3.7](https://www.networkrail.co.uk/wp-content/uploads/2023/12/NR-GN-CIV-100-03-Station-Capacity-Planning-guidance.pdf), [NYC mixed-use plazas](https://www.nyc.gov/html/dot/html/pedestrians/nyc-plaza-program.shtml); neither is cooling-performance evidence.
 
-Connected sections exchange people, air, heat and moisture; account for coupling/shared plant before optimizing separately. Representative counts/paths can suffice; test fixed occupancy if people may gather near coolers, and retain histories where safety needs them. Avoid double counting. Deep mall interiors and enclosed refuges cannot replace significant-outdoor-exchange venues.
-
-Before ranking: select comfort mapping, geometry, weather, occupancy/dwell, coverage and equipment performance. The fan's listed effect is perceived; evaporative figures are air-temperature maxima. kW/hr remains unresolved; ratios of listed temperature maxima to power are not justified comparisons. Original Problem B repeatedly read through 2026-11-07; AI assisted interpretation, notation, checks and drafting.
+Sections exchange people/air/heat/moisture and share plant; independent optimization needs justification. Representative paths suffice when adequate; test occupancy redistribution near cooling and retain histories for safety. Avoid double counting. Deep interiors/enclosed refuges cannot replace semi-open venues. Before ranking choose comfort, geometry, weather, occupancy and performance. Fan cooling is perceived; evaporative figures are air-temperature maxima; kW/hr remains unresolved. Original Problem B read through 2026-11-07; AI assisted interpretation/equations/checks/drafting.
 
 ## Candidate measures within the four agreed categories
 
