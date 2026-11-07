@@ -6,6 +6,39 @@ length_reason: Consolidates equations, candidate evaluation factors, installatio
 
 Updated: 2026-11-07. Working structure discussed with John, incorporating Tianyi's temperature-equation proposal and assistant-proposed details. No calibrated implementation, chosen solver or numerical optimum. [README.md](README.md) holds agreed scope and decisions; [research.md](research.md) holds evidence; [agent.md](agent.md) holds collaboration rules.
 
+## Design contribution workflow
+
+Follow [agent.md](agent.md) and claim the exact heading in [README's task table](README.md#team-startup-and-task-table). This document is the technical specification, not a transcript. Patch the relevant component; do not rewrite another person's derivation or promote a proposal to accepted without the recorded human decision.
+
+1. **Define the component.** State the problem requirement, purpose, owner and the next component consuming its output. Declare symbols, dimensions, units, coordinate system, time basis and comparison baseline before equations.
+2. **State assumptions and inputs.** Link source claims/parameters to research.md headings. Label measured, transferred, assumed and illustrative inputs separately. Explain simplifications, validity limits and what could change the result; missing calibration stays missing.
+3. **Specify the calculation.** Give equations/algorithm, constraints and initial/boundary conditions where applicable. State output meaning and format. Distinguish thermal cooling power from electrical input, temperature from comfort, and time-weighted exposure from path length. New symbols or changed interfaces must be flagged to affected components.
+4. **Check a small case.** Check units and relevant conservation/limits; trace one complete configuration through local conditions, occupant exposure, aggregate benefit and resources. Useful cases include zero occupancy, no intervention, overcooling, a stopped pedestrian and shared outlet capacity. For numerical methods, specify calibration, convergence and uncertainty checks before claiming validation. A surrogate's ranking must be checked against the interaction model, including some diverse alternatives.
+5. **Hand off.** Record results or a precise planned check, reviewer, limitations and next action. A different teammate/agent reviews consequential claims where feasible; if none has reviewed, say so. Implementation starts only under an explicit task. Accepted decisions go into README; detailed equations remain here. Preserve superseded reasoning only when needed to explain a trade-off; Git retains history.
+
+Use this compact component header for new or substantively revised components:
+
+> Component / owner / requirement: …
+>
+> Decision: proposed | accepted (human/date) | superseded. Verification: unchecked | checked (scope/reviewer/date) | failed.
+>
+> Inputs and units / assumptions / linked research: …
+>
+> Equations and constraints / outputs and downstream dependency: …
+>
+> Small-case checks and result / limits / next action: …
+
+### Component handoffs to establish
+
+| Component | Inputs → outputs | Current status |
+|---|---|---|
+| Geometry, weather, cooler and outlets | Layout/settings and ambient conditions → feasible equipment boundary inputs | Proposed; dimensions and performance missing |
+| Airflow, heat and moisture | Boundary inputs → spatial velocity, temperature and humidity; radiant conditions separately specified | Proposed; solver and mixing/buoyancy treatment open |
+| People and benefit | Fields plus paths/dwell times and attributes → individual and aggregate comfort benefit; separate safety measure | Proposed; comfort/risk mapping open |
+| Screening and optimization | Validated response approximation, constraints and scenarios → candidate configurations → detailed checks | Proposed; coefficients, search and error tolerance open |
+
+These are dependency descriptions, not adopted numeric schemas or named assignments. Use common units/scenarios across components; agree changes at the interface before another component relies on them. No existing draft below has been independently validated merely because it appears in this document.
+
 ## Purpose and comparison boundary
 
 Start with Problem B's three bus-shelter systems, then extend to a semi-open rail-station waiting area. Compare each configuration against the same shelter without active cooling, under matched weather, occupancy and observation period. Hold shade and geometry fixed unless deliberately evaluating changes to them. The freezer analogy motivates measuring useful service maintained, rather than treating low electricity consumption alone as efficiency.
@@ -79,37 +112,31 @@ For the later effectiveness extension, compare human benefit/safety/visitor draw
 
 ## Multiple outlets and outdoor wind: formulation proposal
 
-Teammate proposal, supplied by the owner as a screenshot on 2026-11-07: use the temperature advection-diffusion equation, dT/dt + u dot grad(T) = alpha Laplacian(T) + S (with the time derivative partial), to represent wind transporting cooled air. This supplies a candidate temperature component of the predictor, not the airflow solution or optimization itself. T varies in space and time; u must be prescribed, measured or computed separately. Constant-alpha form assumes an appropriate simplified transport model; molecular diffusivity alone generally does not represent turbulent mixing, so an effective diffusivity/closure may be needed and justified. S has temperature/time units; volumetric heat input q''' would enter as q'''/(rho c_p). Supply air is normally represented by inlet temperature and airflow boundary conditions; a distributed source is an alternative approximation and must not double count inlet cooling. Initial temperature, open-boundary conditions and shelter-surface heat transfer remain needed. Evaporative cooling additionally requires supply moisture information and moisture transport if local humidity is to be predicted. This is under discussion, not an adopted or validated solver.
+Tianyi proposed the temperature advection–diffusion equation in a screenshot shared by John on 2026-11-07:
 
-Owner asks how arbitrary outlet locations, number, directions and speeds can interact with variable outdoor wind. Do not treat the previously suggested single side-mounted outlet as adopted. Separate the airflow predictor from the optimizer: a proposed installation plus weather produces local velocity, temperature and moisture; occupants sample those conditions; the optimizer compares the resulting benefit/resources.
+$$
+\frac{\partial T}{\partial t}+\mathbf u\cdot\nabla T=\alpha\nabla^2T+S.
+$$
 
-For outlet i specify position r_i=(x_i,y_i,z_i), unit direction d_i, outlet area A_i, volume flow Q_i, shape/spread and supply temperature/moisture state. For an approximately uniform discharge normal to its area, exit speed U_i=Q_i/A_i; these three quantities are not independent. Supply thermal state is constrained by cooler technology and weather. Use finite feasible mounting positions/directions and optional installation indicators for an initial search. Common-plant outlets share available flow/cooling capacity; duct resistance and extra auxiliaries affect achievable flow and power. Outlet count cannot provide unlimited free capacity. Splitting a cooler into ducts changes the supplied baseline device unless explicitly modeled as an extension.
+It predicts temperature given an airflow field; it is not an airflow solver. Initial temperature, inlet/outdoor conditions and surface heat transfer must be specified. S has temperature/time units; volumetric heat input q'''/(rho*c_p) gives that form. Represent supply air through inlet temperature/flow, or justify a distributed approximation without double counting. Molecular diffusivity alone does not capture turbulent mixing; any effective diffusivity or closure needs justification. Evaporative systems also require moisture inputs/transport. Buoyancy can require coupled airflow/temperature calculation; neglecting it must be explicit. No solver or closure is adopted.
 
-Represent outdoor wind as scenario inputs, including direction/speed and turbulence assumptions where needed, not controllable design variables. Use calm and multiple wind scenarios, with probabilities only if justified. Evaluate one fixed installation across scenarios; any adjustable settings are constrained by actual control capabilities.
+Outlet i has position r_i=(x_i,y_i,z_i), unit direction d_i, area A_i, shape/spread and volume flow Q_i, with discharge speed U_i=Q_i/A_i for uniform normal discharge. Supply temperature/moisture and shared flow/cooling capacity are constrained by the cooler. Duct resistance, heat gain/leakage and auxiliaries affect power and performance. Adding outlets is not free capacity; redesigning a standalone cooler into ducts changes the original device assumptions. The previous side-mounted example is not a selected layout.
 
-The resulting field has one local velocity vector u(x,y,z,t), plus temperature and moisture. Independent single-outlet velocity solutions generally cannot be added exactly: pressure, entrainment, deflection, turbulence and obstructions cause interaction. Opposing jets do not simply cancel everywhere; they can redirect air and mix. Temperature drops also cannot be added as independent bonuses. Coupled mass/momentum/heat/moisture balances, or validated approximations of them, are needed. A simple well-mixed occupancy zone model cannot by itself resolve local outlet direction.
+Outdoor wind is a scenario input, not a design control. Test calm and several directions/speeds, assigning probabilities only with justification. Keep one fixed installation across scenarios; adaptable settings require actual control capability. The resulting local fields include a single velocity vector, temperature and moisture. Independent jets or temperature reductions generally cannot be summed exactly: entrainment, pressure, turbulence, obstacles and deflection cause interactions, even without visible intersections. Opposing streams can redirect and mix. A well-mixed section alone cannot resolve directional jets.
 
-A few candidate layouts and steady mean-wind scenarios are a proposed first reduction; retain three-dimensional geometry when comparing overhead versus low outlets. A justified empirical jet approximation may screen weakly interacting layouts; strongly interacting jets require more detailed validation or CFD. CFD has its own boundary-condition, turbulence and mesh uncertainties. No solver or empirical spreading/decay coefficients selected. Do not write a black-box predictor symbol as if the physical problem were solved.
+Start with a few layouts and mean-wind scenarios. Retain three dimensions when comparing outlet heights. A justified empirical jet approximation may screen weak interactions; stronger interactions require more detailed checks or CFD. CFD itself needs boundary-condition, turbulence and mesh validation. Writing a predictor symbol is not solving the physical model.
 
-Sources read 2026-11-07: [NASA fluid equations overview](https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/navier-strokes-equation/) for coupled velocity/pressure/energy and numerical fluid modeling; [NIST local CFD versus well-mixed zones](https://www.nist.gov/publications/using-cfd-capabilities-contam-30-simulating-airflow-and-contaminant-transport-and) for limitations of uniform-zone representations. These support method distinctions, not a validated bus-shelter prediction.
+Sources read 2026-11-07: [NASA fluid equations](https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/navier-strokes-equation/) and [NIST local CFD versus uniform zones](https://www.nist.gov/publications/using-cfd-capabilities-contam-30-simulating-airflow-and-contaminant-transport-and). These establish method distinctions, not validated shelter predictions.
 
 ## Rail-station extension and missing inputs
 
-### Occupant behavior versus physical layout: proposal under discussion
+Behavior, geometry and outdoor exposure are separate inputs. Stationary occupants need not have assigned seats; circulation can be broad, bidirectional or crossing. Narrow shelters/queues, broad plazas and covered markets are counterexamples to treating stationary areas as broad seated spaces and walking areas as narrow one-way passages. A location can change use over time. [Network Rail guidance](https://www.networkrail.co.uk/wp-content/uploads/2023/12/NR-GN-CIV-100-03-Station-Capacity-Planning-guidance.pdf), sections 3.5/3.7, treats concourse waiting/circulation and one-/two-way passages; [NYC DOT plazas](https://www.nyc.gov/html/dot/html/pedestrians/nyc-plaza-program.shtml) combine circulation, seats, markets and events. Read 2026-11-06; these are mixed-use evidence, not cooling measurements.
 
-The owner proposes subdividing walking areas and tracking airflow, density and speed, with stationary occupants represented at positions and cooling configurations optimized. The subsequent question challenges whether stationary areas can universally be treated as broad seated spaces and moving areas as narrow one-way passages. No such classification has been adopted.
+Use distinct occupancy/movement rules within one thermal/benefit framework. Sections exchange people, air, heat and moisture; independently optimizing them requires negligible coupling or explicit treatment of shared plant/budget. Fixed occupancy across alternatives is a proposed simplification; test sensitivity to people gathering near cooling when relevant. Do not double count visitors. Representative counts/paths may suffice; detailed pedestrian simulation is not required. Individual histories may matter for safety.
 
-Recommended distinction: specify behavior (dwelling, walking, queuing/browsing), geometry (width, length, branching, obstacles), and environmental exposure (roof/walls/openings, solar exposure and outdoor exchange) separately. These properties may be associated at a selected venue but do not determine one another. Stationary does not mean seated or assigned a seat; circulation can be broad, bidirectional or crossing. Both groups have entry/exit patterns. A single location can change behavior over time; physical cooling/airflow interactions can cross behavioral-zone boundaries. Fully enclosed spaces can inform boundary comparisons but do not replace the required semi-open case.
+Extend to connected occupied sections with calibrated or physical performance estimates. Deep mall interiors with little outdoor exchange and fully enclosed refuge rooms cannot replace the required semi-open case. Before numbers: choose a defensible comfort mapping, geometry, weather, occupancy/dwell times, coverage and equipment performance. The listed fan effect is perceived, evaporative effects are air-temperature changes, and all are maxima. Treating the source's kW/hr figures as average kW remains an explicit unresolved assumption; dividing the listed temperature numbers by power is not a justified ranking.
 
-Counterexamples to test the proposed simplification include narrow bus shelters or queues with stationary occupants, broad plazas with crossing pedestrians, and covered markets combining browsing, walking, queues and stationary vendors. These are illustrative configurations, not claims about a selected venue. Network Rail's [Station Capacity Planning manual](https://www.networkrail.co.uk/wp-content/uploads/2023/12/NR-GN-CIV-100-03-Station-Capacity-Planning-guidance.pdf), December 2023, sections 3.5 and 3.7, explicitly treats concourse waiting and circulation together and distinguishes one-way and two-way passages. [NYC DOT's plaza program](https://www.nyc.gov/html/dot/html/pedestrians/nyc-plaza-program.shtml) describes pedestrian public spaces with seating, markets and events. Sources read 2026-11-06; evidence of mixed use, not measured cooling performance.
-
-Use distinct occupancy/movement rules within a shared thermal and benefit framework. Separate zone calculations or optimizations are defensible approximations only when relevant people/air transfers and shared plant/budget constraints are negligible or explicitly accounted for. For a first simplified scenario, keep occupancy fixed across cooling alternatives and state this assumption; sensitivity to people gathering near cooling can be considered later. Decide whether individual trajectories are necessary after checking whether zone counts and dwell times capture the comparison. Detailed crowd simulation is not required by the problem.
-
-Replace one served zone with occupied zones connected to each other and outdoors; model airflow/heat/moisture transfer where needed. Zone division alone does not predict performance: a physical or empirically calibrated mapping from equipment, weather, layout and operation to local conditions is still required. Count moving people by zone and time without double counting; individual exposure histories may be needed for safety. Deep mall interiors with little outdoor exchange are weaker primary cases than exposed passages and waiting zones.
-
-Before calculation: select a defensible comfort mapping; specify shelter geometry, weather, occupancy/dwell time and coverage; estimate actual equipment performance and power. The problem's fan reduction is perceived, evaporative reductions are air-temperature changes, all are maxima, and the printed kW/hr energy label remains ambiguous. Treating 0.25, 1.2 and 2.5 as average kW requires an explicit team assumption. No ranking follows directly from dividing the supplied temperature numbers by those power numbers.
-
-Source: 2026_HiMCM_Problem_B.pdf, reread in full 2026-11-06. This file records actual AI assistance: proposed notation, equations, interpretation, limiting-case checks and drafting. It is not evidence of independent team derivation.
+Source: original Problem B, repeatedly reread through 2026-11-07. AI assistance includes notation, equations, interpretation, limiting checks and drafting; this does not imply independent team derivation.
 
 ## Candidate measures within the four agreed categories
 
