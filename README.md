@@ -15,6 +15,20 @@ All collaboration uses the **main branch** of [YeeJiangBIGZ/18105](https://githu
 
 Keep these four Markdown records consolidated. Other project artifacts such as the PDF, manuscript, data or code may exist when needed; this is not a four-file cap. `package-info.md` is a local-only, Git-ignored inventory. Record agreed decisions on GitHub as well as locally, and check teammate changes before editing. GitHub delivery alone does not establish Overleaf synchronization.
 
+## Team startup and task table
+
+Each of the four teammates should give their agent this startup instruction:
+
+> Read agent.md and README.md, fetch current main, then read the relevant design.md and research.md sections. Follow the shared task-claim and synchronization workflow. Work only on main, preserve teammate work, and distinguish proposed assumptions from accepted decisions. My task for you is: [specific task].
+
+Use the four lanes in [agent.md](agent.md#four-work-lanes); no personal assignments have been made here. The table records active work and pending handoffs, not a transcript. Keep completed rows only while they are useful, then fold their durable outcomes into the relevant document. An agent's unverified proposal is not an accepted team decision.
+
+| Task | Human / agent | File and section | Starting main SHA | State | Deliverable / checks / handoff |
+|---|---|---|---|---|---|
+| Define four-person collaboration workflow | John / this agent | agent.md; contribution workflow in design.md and research.md; this startup/table | 70a6d65 | working | Document coordination, evidence and review rules; check links, scope and remote delivery |
+
+Next technical tasks remain unclaimed: define bus-shelter geometry/scenarios; choose airflow and temperature interfaces; define occupant exposure/benefit; verify candidate inputs and the screening approximation. Teammates should claim concrete sections before starting those edits.
+
 ## Agreed scope and decisions
 
 Start with a simple **open-sided bus shelter**, comparing the required fan and two evaporative coolers. Enclosure changes are set aside for now. Shade is not explicitly named as a system in the problem, although facility design and solar exposure are; holding the shelter's shade fixed is a proposed comparison condition. No specific cooler or outlet arrangement has been selected.
