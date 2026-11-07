@@ -25,7 +25,7 @@ Use the four lanes in [agent.md](agent.md#four-work-lanes); no personal assignme
 
 | Task | Human / agent | File and section | Starting main SHA | State | Deliverable / checks / handoff |
 |---|---|---|---|---|---|
-| Record search, optimization, duct model and simplicity rule | John / general-chat agent | agent.md workflow; README decisions/handoff; design.md screening/new duct component and condensation of workflow/compatibility/technology/station prose; research.md duct evidence | 652b285 | done | Complexity rule accepted; search/solver/network choices recorded as proposals, node-temperature concept acknowledged. Equations/units and document consistency checked; no physical validation or solver run. Next choose a compact core and one complete small case. |
+| Record convexity requirement and wind utility proposal | John / general-chat agent | README decisions; agent.md complexity rule; design.md screening | 10e5d62 | claimed | Record direction-independent comfort and convexity requirement; propose aligned-flow scalar model without piecewise-linear fitting. |
 
 Next technical tasks remain unclaimed: define bus-shelter geometry/scenarios; choose airflow and temperature interfaces; define occupant exposure/benefit; verify candidate inputs and the screening approximation. Teammates should claim concrete sections before starting those edits.
 
