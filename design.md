@@ -104,6 +104,22 @@ With affine predicted conditions, a convex squared comfort-band penalty, fixed o
 
 Workflow: calibrate/validate an approximation, search for candidates, evaluate with interactions, and refine if rankings change. Check a few diverse alternatives outside the surrogate's best set because model bias can exclude good designs. No solver, coefficients, candidate spacing, numerical objective weights or validity tolerance has been selected.
 
+## Bus-stop installation compatibility
+
+John's question; proposed, not adopted. Binary logic checked algebraically by this agent; site validation and independent review pending. No solver run or actual conflict list.
+
+For technology/location/size/orientation option i, let z_i in {0,1} indicate installation. Incompatible pairs E obey:
+
+$$
+z_i+z_j\leq1\quad\text{for each }(i,j)\in E.
+$$
+
+This allows (0,0), (1,0), (0,1), but excludes (1,1). Hypothetical example: left compact A, rear large B, right compact C. If B conflicts with both, impose z_A+z_B<=1 and z_B+z_C<=1. A and C remain compatible: conflicts are not transitive. Actual edges require footprint, access, mounting or equipment evidence. Crossing jets/overlapping coverage alone are not prohibitions.
+
+At one exclusive mounting slot S, sum_{i in S} z_i<=1. Independent units with fixed demands P_i obey sum_i P_i*z_i<=P_available; costs have an analogous budget limit. A group can overload a resource even if each pair fits. Shared outlets need plant-capacity accounting. Adjustable settings obey 0<=x_i<=x_i_max*z_i.
+
+With additive benefit max sum_i b_i*z_i, these are binary/mixed-integer linear constraints and objective. Benefit additivity is an unvalidated screening assumption, not exact airflow physics. The earlier squared discomfort objective gives a mixed-integer quadratic model under affine response assumptions; exclusions work there too. No general speed guarantee. Keep the required fan/two-evaporative comparison. Next define sites, clearances, capacities and justified conflicts.
+
 ## Safety and overall effectiveness
 
 Report total B alongside eta: high benefit per kWh need not mean enough benefit. Keep a separate justified heat-exposure measure or risk model; discomfort is not a medical risk estimator. Thresholds, duration effects and vulnerable groups require evidence. Do not claim heatstroke prevention from D or temperature reduction alone.
@@ -237,14 +253,4 @@ Fan-assisted or hybrid options can be evaluated if selected; they are documented
 
 ### How the bus model would need to change
 
-These are proposed model needs inferred from the problem and evidence:
-
-- Spatial variation: benches, queues and paths receive different cooling, and one local temperature cannot represent the whole station.
-- Air exchange: geometry, wind, openings and train-induced movement where relevant alter cooling retention.
-- Occupancy and dwell time: passenger surges and changing locations affect delivered benefit.
-- Multiple heat-transfer mechanisms: air temperature, humidity, air movement and radiant exposure should map to a common human outcome; equipment heat removal alone does not measure visitor benefit.
-- System energy boundary: account for chillers/compressors, fans, pumps and controls serving the modeled area; allocate shared plant energy transparently.
-- Comfort and safety: overcooling and drafts may reduce comfort, while health protection needs its own justified exposure/risk treatment.
-- Sensitivity and uncertainty: distinguish measured performance, reported installation, research prototype, transferred estimates and proposed designs.
-
-No numerical ranking is justified yet: the source does not supply a station layout, local weather, occupancy, performance curves, prices or a chosen benefit measure. The next step is to select a small candidate set and specify a reference waiting area before building the comparison.
+Add spatially varying occupancy/paths, outdoor and relevant train-induced exchange, surges/dwell times and shared plant energy (compressors, fans, pumps, controls). Combine temperature, radiation, humidity and airflow into human outcomes, separating comfort from safety. Distinguish measurements, deployments, prototypes, estimates and proposals. No station ranking follows without geometry, weather, occupancy, performance, prices and a benefit measure.
