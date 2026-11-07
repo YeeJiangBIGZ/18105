@@ -25,7 +25,7 @@ Use the four lanes in [agent.md](agent.md#four-work-lanes); no personal assignme
 
 | Task | Human / agent | File and section | Starting main SHA | State | Deliverable / checks / handoff |
 |---|---|---|---|---|---|
-| Record small-case enumeration and body blockage | John / general-chat agent | README decisions; design.md people and screening | 8f223c3 | claimed | Record exhaustive small-case benchmarks and approximate larger-case search; simple-body treatment, with physical accuracy distinguished from search coverage. |
+| Record small-case enumeration and body blockage | John / general-chat agent | README decisions; design.md people and screening | 8f223c3 | done | Small-case enumeration/large-case approximation and simple body obstacles recorded; search versus physics limits checked. Next define one finite benchmark, occupancy scenario and evaluation model; no solver run. |
 
 Next technical tasks remain unclaimed: define bus-shelter geometry/scenarios; choose airflow and temperature interfaces; define occupant exposure/benefit; verify candidate inputs and the screening approximation. Teammates should claim concrete sections before starting those edits.
 
@@ -38,6 +38,8 @@ Use four categories: **benefit to people, all financial costs, environmental eff
 **Complexity rule — John, 2026-11-07:** explore accuracy now, then simplify and remove nonessential extensions if needed to fit the 25-page paper. Favor mathematical elegance, clear explanation and required results over accumulating mechanisms. No particular feature has been selected for removal. See [design reduction rule](design.md#complexity-and-the-25-page-paper).
 
 **Wind/convexity clarification — John, 2026-11-07:** retain convex continuous structure with binary installation choices as needed; do not impose a preferred wind direction or use segmentation merely to force convexity. John proposed an excessive-speed ceiling with no penalty below it. The convex ceiling penalty is recorded; its threshold and positive fan-cooling benefit remain unresolved. This does not cancel spatial candidate refinement. See [wind formulation](design.md#convexity-and-direction-independent-wind-penalty).
+
+**Complexity-dependent computation — John, 2026-11-07:** use exhaustive enumeration for small candidate sets and approximation at larger complexity, benchmarking against small cases. Simple body obstacles and surrounding exposure samples are the accepted working direction; physical coefficients and accuracy remain unvalidated. Enumeration is exhaustive only over its finite options, not exact physics or all continuous placements.
 
 The general chat coordinates the work; verification/ideas may use separate chats. Explain models before code, verify one complete small case before scaling, and preserve actual AI-assistance provenance.
 

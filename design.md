@@ -57,7 +57,7 @@ Illustrative arithmetic only: ten people present for one hour, each receiving a 
 
 ## People as points, exposure along paths
 
-Occupants sample the conditions produced by constrained coolers/outlets; equipment definitions are below.
+**Working direction accepted by John, 2026-11-07:** simple body obstacles (boxes/cylinders) with a few surrounding exposure points; retain point trajectories for bookkeeping. Average local penalties, not front/back velocity vectors. Freeze occupancy snapshots when estimating response coefficients so the screening map can remain affine; this does not validate superposition. Initially omit anatomical detail/body heat, then test sensitivity. Sample surrounding air, not zero no-slip wall velocity. See [obstruction evidence](research.md#occupant-obstruction-and-thermal-plumes).
 
 Person p has arrival/departure times and trajectory r_p(t); their speed is ||d r_p/dt||. A stationary person has constant position during the stay. With matched baseline and intervention paths, benefit is:
 
@@ -115,15 +115,15 @@ P_w(\mathbf u)=\lambda[\|\mathbf u\|_2^2-v_{\max}^2]_+,
 P_w(\mathbf u)=\lambda[\|\mathbf u\|_2-v_{\max}]_+^2.
 $$
 
-Each needs lambda>=0 and v_max>=0, with units/scales chosen consistently. They have different growth above the ceiling; neither is a piecewise-linear fit or awards preferred-direction comfort. First form uses an epigraph p>=0, p>=sum_c u_c²-v_max² and penalty lambda*p in minimized discomfort. This is convex quadratic/conic representable, not MILP. No new binary variables are needed for this penalty. Subtracting v_max² avoids a jump at the threshold. The second form is squared excess speed. Neither threshold/shape/weight is chosen.
+Both require lambda,v_max>=0 with consistent units. First form: p>=0, p>=sum_c u_c²-v_max², minimize lambda*p. This is convex quadratic/conic, not MILP; no extra binaries. Subtracting v_max² avoids a jump. Second form penalizes squared excess speed. Neither is a linear fit; growth differs, and thresholds/weights remain unselected.
 
-This penalty does not reward fan cooling; temperature-only discomfort plus this term misses that benefit. Resolve a supported thermal-comfort treatment before finalizing utility. Fixed local direction/nonnegative scalar speed is an unadopted physical simplification needing layout/weather justification. A norm upper-bound auxiliary works for minimized increasing penalties, but can inflate if reused to award speed benefits. Exact direction-independent speed rewards generally break convexity in unrestricted velocity components.
+Fan cooling benefit remains unresolved. Fixed local direction/scalar speed is unadopted. A norm upper bound works for minimized penalties but can inflate speed rewards. Exact direction-independent speed rewards generally break convexity in unrestricted vectors.
 
 ### Adaptive outlet placement search
 
-John proposed coarse-grid optimization followed by smaller promising regions and finer spacing. Retaining 10 of 100 equal intervals then 10% of that length leaves 10% then 1%; these fractions are illustrative. Rank joint configurations, not standalone outlets. This is heuristic refinement, not binary search or a global guarantee. Candidate positions are alternatives, not installed hardware.
+**Accepted strategy — John, 2026-11-07:** enumerate configurations when the candidate set/allowed outlet count and evaluation cost are small; use approximations at larger complexity. Use small cases as benchmarks for surrogate ranking and search quality. Enumeration covers only the defined finite options and does not make approximate airflow exact; continuous controls/routes also need a defined treatment. No crossover size or runtime budget chosen.
 
-Agent safeguards: retain diverse good configurations and previous candidates, preserve coarse exploration elsewhere, jointly re-optimize, then check broader-grid and interaction sensitivity. A globally solved nested candidate set cannot worsen the same objective; shrinking sets, changed coefficients or time limits remove that guarantee. Stop after placement/benefit stabilization under a chosen tolerance. No grid, fractions, tolerance or solver run selected; spatial refinement does not fix surrogate physics.
+John's coarse-to-fine proposal remains: shrink promising regions and refine spacing. Keeping 10/100 equal intervals then 10% of that length leaves 10% then 1%; fractions are illustrative. Rank joint configurations. Agent safeguards: retain diverse winners/old candidates and some coarse exploration, re-optimize jointly, then check broader grids and interactions. Nested exact solves cannot worsen an unchanged objective; shrinking sets or time limits remove that guarantee. No grid, tolerance or solver run selected; neither spatial refinement nor enumeration proves real-world global optimality.
 
 ## Bus-stop installation compatibility
 
@@ -249,7 +249,7 @@ Different surrounding temperatures require segment recurrence; no single common-
 
 Prefer conditional segment equations with precomputed alpha values for fixed flow or discrete duct/insulation/flow modes; linear implications can be encoded with indicators or justified bounded big-M constraints. Modes must conserve shared airflow. Freely variable flow changes alpha; fixed coefficients then become approximations. Avoid merging different-temperature streams in the first tree model; variable-flow mixing introduces additional nonlinearities. The resulting duct constraints can be linear, but utility and other physics still determine the overall optimization class.
 
-Source: [duct heat-transfer evidence](research.md#duct-heat-transfer). Zero gain is an idealized comparison, not an adopted fact; neglect it only after sensitivity shows small benefit/ranking changes. Startup storage, leakage, detailed moisture and pressure treatment are possible extensions, subject to the simplicity rule. Checks: alpha=1 gives T_v=T_u; 0<=alpha<=1 keeps T_v between inlet and surroundings. Illustrative alpha=.95, T_u=20°C, T_a=35°C gives 20.75°C. No coefficient, flow mode, duct size, route, budget or tolerance selected.
+Source: [duct evidence](research.md#duct-heat-transfer). Zero gain needs sensitivity justification. Startup, leakage, moisture and pressure detail are optional extensions under the simplicity rule. Checks: alpha=1 preserves temperature; alpha in [0,1] bounds it between inlet/ambient. Illustrative .95,20°C,35°C gives 20.75°C. No coefficients, modes, sizes, routes, budget or tolerance selected.
 
 ## Station comparison planning
 
