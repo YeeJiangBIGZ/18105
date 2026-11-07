@@ -164,6 +164,32 @@ Outdoor wind is a scenario, not a control. Keep one installation across calm and
 
 Sources read 2026-11-07: [NASA fluid equations](https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/navier-strokes-equation/) and [NIST local CFD versus uniform zones](https://www.nist.gov/publications/using-cfd-capabilities-contam-30-simulating-airflow-and-contaminant-transport-and). These establish method distinctions, not validated shelter predictions.
 
+### Interacting airflow: research recommendation, not adopted
+
+Proposed 2026-11-07; [evidence](research.md#interacting-jets-and-wind-comfort). Isolated-outlet fields are alternative solutions, not simultaneous velocities. Geometry, pressure, entrainment and bodies prevent a universal algebraic merge.
+
+For the actual local time-varying velocity w, define mean m=E[w] and fluctuation energy k=E[||w-m||²]/2 (m²/s²). Then exactly:
+
+$$
+ s_{\rm rms}^2=E[\|\mathbf w\|^2]=\|\mathbf m\|^2+2k,
+ \qquad \|\mathbf m\|\le E[\|\mathbf w\|]\le s_{\rm rms}.
+$$
+
+A proposed RMS ceiling lambda*[||m||²+2k-s_max²]_+ is convex in (m,k); retaining convexity in controls needs affine surrogates. Its threshold requires separate calibration.
+
+This identity does not predict m,k from outlets. Zero mean permits either weak or strong fluctuations. Keep (m,k); RMS differs from mean scalar speed and is not validated comfort. Walking uses body-relative velocity. Spatial samples cannot create missing temporal fluctuations. A finite multiplier leaves a zero resultant zero; normalization is undefined there; velocity times speed has wrong units.
+
+Equal-density proxy sqrt(sum Q_i||v_i||²/sum Q_i) is direction-blind for equal speeds. With nonnegative conserved weights it is split-invariant and continuous as added Q tends to zero at bounded speed (existing total>0). Tiny speed with finite Q need not have tiny effect. Incoming energy is not downstream RMS or local k; no collision coefficient adopted.
+
+**Proposed finite-mode interaction surrogate:** fix positions, operating modes, weather and occupancy. Evaluate total person-time utility F(S) from a joint physical/comfort model for empty, single and selected pair configurations. Define a_i=F({i})-F(empty), b_ij=F({i,j})-F({i})-F({j})+F(empty). Then:
+
+$$
+ \widehat F(z)=F(\varnothing)+\sum_i a_i z_i+\sum_{i<j}b_{ij}y_{ij},\quad
+ 0\le y_{ij}\le z_i,z_j,\quad y_{ij}\ge z_i+z_j-1,\quad z_i\in\{0,1\}.
+$$
+
+AND gives y_ij=z_i*z_j. Signed coefficients plus linear resource constraints yield MILP without utility segmentation. Exact relative to F for at most two active modes when every feasible pair is included; approximate beyond that. Enforce equipment-mode exclusivity and shared capacities consistent with evaluations. N modes need 1+N+N(N-1)/2 evaluations per scenario; omitting pairs requires evidence. Validate triples and rankings. No simulations, coefficients, tolerance, adoption or runtime guarantee. F still needs useful fan benefit; this is a utility surrogate, not fluid mechanics.
+
 ## Rail-station extension and missing inputs
 
 Behavior, geometry and outdoor exposure are independent inputs: stationary queues can be narrow, circulation broad/bidirectional, and uses can change over time. Model mixed waiting/movement in one benefit framework. Evidence, read 2026-11-06: [Network Rail sections 3.5/3.7](https://www.networkrail.co.uk/wp-content/uploads/2023/12/NR-GN-CIV-100-03-Station-Capacity-Planning-guidance.pdf), [NYC mixed-use plazas](https://www.nyc.gov/html/dot/html/pedestrians/nyc-plaza-program.shtml); neither is cooling-performance evidence.
@@ -183,42 +209,14 @@ Reliability is integrated, not a fifth category. Comfort/risk thresholds and pri
 
 ## Technology and installation options
 
-### Definition of a system
+Unselected options; required bus devices remain fan and two wet-pad coolers. Specify plant capacity/location, outlets/flow/direction, utilities, heat rejection and controls separately. Air distribution creates no extra cooling capacity.
 
-A design specifies cooling technology, number and size of units, supply outlet locations and directions, supporting site modifications, utility and distribution connections, heat rejection where applicable, and operating rules. The cooling plant and the outlets delivering cooling need not be at the same location.
-
-### Technology candidates
-
-| Technology | Mechanism and implementation | Main design issue |
-|---|---|---|
-| Fans | Ceiling, wall, column or pedestal fans move air over occupants | Airspeed at occupied locations, coverage and draft/noise effects; fan output is not an air-temperature reduction |
-| Direct evaporative coolers | Fan blows air through wetted media | Climate-dependent evaporation, added moisture, water supply and cleaning |
-| Indirect evaporative coolers | Separate wet air stream cools supply air through a heat exchanger | Does not directly add moisture to supply air; requires more equipment and a separate exhaust path |
-| Mist systems | Overhead or perimeter nozzles disperse water for evaporation, optionally with fans | Wind drift, evaporation conditions, hygiene and avoiding unwanted wetting |
-| Refrigerated air cooling | Split units, ducted outlets or fan coils supplied by a chiller | Electricity, cooled-air escape, condensate drainage and placement of heat rejection |
-| Radiant cooling | Chilled panels above or beside occupied areas exchange radiant heat with people | Chilled-water source, panel exposure to occupants and condensation management; outdoor membrane systems are a research-backed extension |
-
-Direct/indirect evaporation: [UK Energy Technology List](https://etl.energysecurity.gov.uk/products/heating-ventilation-air-conditioning-hvac/evaporative-air-coolers). Fans: [CBE guidebook](https://cbe-berkeley.gitbook.io/fans-guidebook). Mist: [University of Melbourne demonstration](https://research.unimelb.edu.au/strengths/updates/impact/mist-demonstrates-a-context-aware-outdoor-urban-cooling-system). Refrigeration: [PNNL](https://basc.pnnl.gov/resource-guides/air-conditioning). Outdoor radiant cooling: [UBC Cold Tube](https://sala.ubc.ca/research/the-cold-tube/).
-
-### Layouts and supporting choices
-
-Compare overhead, column, rest-area, remote-plant and portable layouts using occupancy/obstacles/wind, not nominal coverage. Check [shade sun angles](https://www.epa.gov/heatislands/guide-reducing-heat-islands), screen ventilation/access, heat-rejection recirculation, pumps/insulation/condensation, water treatment/drainage, wiring/hoses and service access. Ducts add pressure and thermal/leakage losses. Schedule or modulate flow by climate/occupancy where controllable. [Thermal storage](https://betterbuildingssolutioncenter.energy.gov/resources/combined-heat-and-power-technology-fact-sheet-series-thermal-energy-storage) shifts production but adds losses; savings are not automatic. No layout selected.
-
-### Heat pipes
-
-Heat pipes transfer heat by evaporation/condensation from a warmer end to a cooler sink; they do not independently create refrigeration. Identify sink temperature/capacity and heat rejection before proposing a scheme. [NASA thermal control](https://www.nasa.gov/smallsat-institute/sst-soa/thermal-control/). Precooling/reheating around a dehumidifying coil is another use, not automatically higher overall efficiency ([DOE discussion](https://www.energy.gov/eere/buildings/articles/2014-08-28-issuance-energy-conservation-standards-packaged-terminal-air)). Distinguish heat pipes from chilled-water and refrigerant distribution pipes.
-
-### Cooling source versus delivery arrangement
-
-Separate plant, air-handler and outlet locations. Options: central air handling with ducts; chilled-water plant feeding distributed air handlers; independent units. A chilled-water schematic is chiller → water pipes → coil/fan → ducts → spectator outlets, plus water return and plant heat rejection. Under-seat ports supply ordinary air, not refrigerant or sprayed chilled water. No evidence establishes that most open stadiums use them.
-
-Delivery may be under/beside seats, pitch-side, wall/column/overhead or local rest areas. Fans, mist and radiant systems are distinct mechanisms. These are options, not selected layouts or as-built diagrams. Sources: [ASHRAE air handling/distribution](https://handbook.ashrae.org/handbooks/S20/IP/s20_ch04/s20_ch04_ip.aspx); [NLR air-handler reference](https://hvacresourcemap.nlr.gov/commercial-hvac/all-systems/air-water-distribution/ahu).
-
-### Ducted evaporative cooling proposal
-
-Discussed 2026-11-06; not selected. Engineered spray sections need evaporation distance, droplet capture, drainage, water treatment and humidity control. Deliver humid air downstream, not arbitrarily transported liquid mist. Alternatively deliver water to final mist nozzles and assess wind/wetting. Include duct pressure/heat/leakage losses, fan/pump electricity and water. Standalone cooler power figures do not establish ducted-system power.
-
-Sources: [UK definitions](https://etl.energysecurity.gov.uk/products/heating-ventilation-air-conditioning-hvac/evaporative-air-coolers); [Condair carry-over guidance](https://www.condair.de/downloads/10-point-guides/10-point-guide-to-specifying-humidifiers-en-rt.pdf); [CAREL separators](https://www.carelparts.com/amfile/file/download/file/2230/category/2205/). Manufacturer dimensions are equipment-specific.
+- Fans move air over people; evaporation through wetted media lowers supply temperature and adds humidity. Indirect evaporation separates wet and supply streams. [CBE](https://cbe-berkeley.gitbook.io/fans-guidebook), [UK definitions](https://etl.energysecurity.gov.uk/products/heating-ventilation-air-conditioning-hvac/evaporative-air-coolers).
+- Mist needs evaporation, drift/wetting and hygiene control ([Melbourne demonstration](https://research.unimelb.edu.au/strengths/updates/impact/mist-demonstrates-a-context-aware-outdoor-urban-cooling-system)). Refrigeration needs power, condensate drainage and outdoor heat rejection ([PNNL](https://basc.pnnl.gov/resource-guides/air-conditioning)). Radiant panels need a cold source, exposure and condensation control ([UBC prototype](https://sala.ubc.ca/research/the-cold-tube/)).
+- Compare overhead, column, seat-area, remote-plant and portable layouts against occupancy, obstacles and wind. Check access, structure, utilities, service, [shade](https://www.epa.gov/heatislands/guide-reducing-heat-islands) and heat recirculation. [Storage](https://betterbuildingssolutioncenter.energy.gov/resources/combined-heat-and-power-technology-fact-sheet-series-thermal-energy-storage) shifts production with losses; savings are not automatic.
+- Central air handling uses ducts; chilled water can feed distributed coil/fans; independent units are another architecture. Under-seat ports supply air, not refrigerant. No evidence says most open stadiums use them. [ASHRAE](https://handbook.ashrae.org/handbooks/S20/IP/s20_ch04/s20_ch04_ip.aspx), [NLR](https://hvacresourcemap.nlr.gov/commercial-hvac/all-systems/air-water-distribution/ahu).
+- Heat pipes transfer heat to a cooler sink, not create refrigeration ([NASA](https://www.nasa.gov/smallsat-institute/sst-soa/thermal-control/)). Coil precooling/reheating may assist dehumidification ([DOE](https://www.energy.gov/eere/buildings/articles/2014-08-28-issuance-energy-conservation-standards-packaged-terminal-air)); distinguish chilled-water/refrigerant lines.
+- Ducted evaporation remains proposed: engineered spray sections need evaporation distance, droplet separation, drainage, treatment and humidity control. Deliver humid air downstream; alternatively pipe water to final mist nozzles. Include duct losses and fan/pump power; standalone ratings do not establish ducted consumption. [Condair](https://www.condair.de/downloads/10-point-guides/10-point-guide-to-specifying-humidifiers-en-rt.pdf), [CAREL](https://www.carelparts.com/amfile/file/download/file/2230/category/2205/); dimensions are equipment-specific.
 
 ## Optional duct network and installation model
 

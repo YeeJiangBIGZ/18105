@@ -25,7 +25,7 @@ Use the four lanes in [agent.md](agent.md#four-work-lanes); no personal assignme
 
 | Task | Human / agent | File and section | Starting main SHA | State | Deliverable / checks / handoff |
 |---|---|---|---|---|---|
-| Research interacting airflows and comfort | John / general-chat agent | README task/next action; research.md new airflow evidence plus condensation of bus geometry/stadium precedents; design.md airflow interface/interaction surrogate plus condensation of technology options | 2da1415 | claimed | Review primary jet/comfort studies; distinguish mean velocity, RMS and turbulence; propose a bounded tractable model without adopting it. Preserve prior decisions and source limitations. |
+| Research interacting airflows and comfort | John / general-chat agent | README; research.md interacting jets plus condensed geometry/stadium records; design.md interaction interface/surrogate plus condensed technology options | 2da1415 | done | Six primary studies reviewed at stated access levels; mean velocity/RMS distinction and finite-mode pairwise MILP proposal recorded. Units/identity/AND algebra checked; no CFD, calibration or adoption. Next validate one shelter case and held-out interactions. |
 
 Next technical tasks remain unclaimed: define bus-shelter geometry/scenarios; choose airflow and temperature interfaces; define occupant exposure/benefit; verify candidate inputs and the screening approximation. Teammates should claim concrete sections before starting those edits.
 
@@ -90,5 +90,7 @@ Tianyi's proposed temperature advection–diffusion equation is recorded in [des
 On 2026-11-07, the remote had only the initial Overleaf import (`cc664d5`): a title and empty Introduction in `main.tex`. Tianyi's PDE proposal came through chat, not that commit. Recheck remote updates before subsequent work; this is an inspection baseline, not a perpetual claim about the repository.
 
 ## Next action
+
+[Interacting-airflow research](research.md#interacting-jets-and-wind-comfort) now distinguishes mean flow, fluctuation energy and scalar airspeed. Multiplying a resultant by incoming RMS does not resolve cancellation. A [finite-mode pairwise utility surrogate](design.md#interacting-airflow-research-recommendation-not-adopted) is proposed for MILP; it requires joint-configuration evaluations and higher-order validation, and is not an adopted physical closure.
 
 First resolve positive airflow cooling and temperature/humidity/radiation in a defensible convex thermal-comfort model; excessive-wind and noise penalties alone are insufficient. Then choose scales, weights and thresholds; fix one shelter/occupancy/weather benchmark, equipment response/noise data, resource constraints and the power-unit interpretation. Compare exhaustive and approximate search on that finite case, test interactions and refinement, and retain only material extensions within 25 pages. No numerical solver or manuscript edit is requested by this recording task.
