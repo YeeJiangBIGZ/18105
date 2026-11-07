@@ -166,7 +166,7 @@ Sources read 2026-11-07: [NASA fluid equations](https://www1.grc.nasa.gov/beginn
 
 ### Mean flow and RMS fluctuations
 
-**Accepted — John, 2026-11-07:** mean flow, RMS fluctuations and finite-mode interaction MILP; physical/comfort calibration remains open. [Evidence](research.md#interacting-jets-and-wind-comfort).
+**Accepted — John, 2026-11-07:** mean velocity and RMS fluctuations; prediction/comfort unvalidated. [Evidence](research.md#interacting-jets-and-wind-comfort). Pairwise MILP is superseded as the general solution.
 
 For local velocity w(t), mean m=E[w], deviation w'=w-m and fluctuation RMS sigma (m/s):
 
@@ -176,21 +176,30 @@ $$
  s_{\rm rms}=\sqrt{\|\mathbf m\|^2+\sigma^2}.
 $$
 
-Here k=E[||w'||²]/2 is fluctuation energy per mass (m²/s²). Add vectors in the instantaneous decomposition, not scalar sigma to vector m. The combined RMS uses squared contributions, not ||m||+sigma. Also ||m||<=E[||w||]<=s_rms; none is automatically a calibrated comfort index. Walking uses body-relative velocity. Predicting m,sigma still requires a checked joint-flow model or measurements; isolated outlet fields and spatial samples alone do not create collision turbulence. Zero mean permits weak or strong fluctuations.
+k has units m²/s². Do not add scalar sigma to m. ||m||<=E[||w||]<=s_rms; comfort remains uncalibrated. Walking uses body-relative velocity. Spatial sampling cannot create temporal fluctuations. Zero mean allows weak/strong fluctuations; incoming weighted RMS is not downstream RMS.
 
-Optional ceiling lambda*[||m||²+sigma²-s_max²]_+ is convex in (m,sigma) for lambda>=0, not linear; control dependence and threshold need justification. Pre-evaluate nonlinear comfort outside the MILP.
+Optional ceiling lambda*[||m||²+sigma²-s_max²]_+ is convex in (m,sigma) for lambda>=0, not linear. Control dependence and threshold need justification.
 
-Incoming-flow RMS does not predict downstream RMS; multiplying a resultant cannot repair cancellation. See research for continuity, weighting and unit limitations. No universal merge law adopted.
+### PDE integration and corrected optimization status
 
-**Finite-mode interaction MILP — accepted approach, unvalidated coefficients:** fix candidate positions, operating modes, weather and occupancy. Pre-evaluate person-time utility F(S) for empty, single and feasible pair configurations, using joint airflow statistics and temperature/moisture. Define a_i=F({i})-F(empty), b_ij=F({i,j})-F({i})-F({j})+F(empty). Optimize:
+**Clarified 2026-11-07:** pairwise utilities cannot determine higher-order interactions. Their MILP linearization does not fix that limitation. Full-configuration lookup is enumeration; adding MILP to select its best entry is unnecessary. Small-case enumeration remains a verification option.
+
+**Proposal, not yet adopted/validated:** discretize Tianyi's PDE and put grid temperatures T and outlet choices z in one optimization. A possible steady form under prescribed affine airflow, fixed diffusion and compatible linear boundary treatment is:
 
 $$
- \widehat F(z)=F(\varnothing)+\sum_i a_i z_i+\sum_{i<j}b_{ij}y_{ij},\quad
- y_{ij}\ge0,\quad y_{ij}\le z_i,\quad y_{ij}\le z_j,\quad
- y_{ij}\ge z_i+z_j-1,\quad z_i\in\{0,1\}.
+ (A_0+\sum_i z_i A_i)T=b_0+\sum_i z_i b_i.
 $$
 
-AND constraints give y_ij=z_i*z_j; linear resources yield MILP without utility segmentation. Exact relative to F for <=2 active modes with every feasible pair; otherwise approximate. Enforce mode exclusivity and consistent shared capacities. All-pairs evaluation costs 1+N+N(N-1)/2 runs per scenario. Validate omitted interactions/triples and rankings. No simulations, coefficients, tolerance or runtime guarantee. Useful fan benefit remains unresolved; fluid mechanics is not linearized by this construction.
+This represents all active choices simultaneously without tabulating their combinations. For binary z_i and justified finite bounds L_j<=T_j<=U_j, introduce W_ij=z_i*T_j and impose:
+
+$$
+ L_jz_i\le W_{ij}\le U_jz_i,\qquad
+ T_j-U_j(1-z_i)\le W_{ij}\le T_j-L_j(1-z_i).
+$$
+
+Substitute W into the equations. Exact bounded-product algebra checked at z=0,1; mesh, bounds, boundaries and affine flow unvalidated. Time-indexed states are possible; steady/transient choice open.
+
+Coupled u(z) dot grad(T) does not require enumeration. Joint airflow, continuous-flow times temperature, RMS and comfort may still require mixed-integer convex/nonlinear optimization. No forced utility segmentation. Next derive a complete small model, identify products/assumptions and establish solver class. No full MILP proof, implementation or physical validation.
 
 ## Rail-station extension and missing inputs
 
