@@ -1,6 +1,6 @@
 # HiMCM four-person agent workflow
 
-Repository: https://github.com/YeeJiangBIGZ/18105. Updated 2026-11-07. These rules coordinate the four human teammates and their agents; agents do not acquire authority to make team decisions or contact teammates merely by reading this file.
+Repository: https://github.com/YeeJiangBIGZ/18105. Updated 2026-11-08. These rules coordinate the four human teammates and their agents; agents do not acquire authority to make team decisions or contact teammates merely by reading this file.
 
 ## Start every work session
 
@@ -35,6 +35,8 @@ Any different teammate/agent can check a component; verification is not restrict
 Owner instruction, 2026-11-07: explore accuracy now, but keep the model mathematically simple and explainable. If the 25-page submission limit becomes binding, simplify the model and remove nonessential extensions while retaining required outputs. Discussion does not make every feature mandatory. Separate the core from optional extensions in design.md; do not silently drop consequential effects or label untested assumptions accurate. No particular feature or page allocation is fixed yet.
 
 Owner clarification, 2026-11-07: aim for convex continuous structure even with mixed-integer installation choices. Do not force it with piecewise-linear segmentation or an artificial personal wind-direction preference. Stronger assumptions need explicit justification; distinguish spatial candidate refinement from utility approximation. Convex excessive-wind penalties do not by themselves represent useful fan cooling.
+
+Owner priority, 2026-11-08: evaluation is the main task; configuration optimization follows as a limited extension. Explore methods beyond MILP, including the proposed repeated-area search. Earlier convex-programming preferences do not require the evaluator to fit MILP/convex constraints. Keep new search assumptions proposed until checked and accepted; finish the bus-stop evaluation before expanding optimization.
 
 ## File ownership and evidence
 

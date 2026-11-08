@@ -14,7 +14,7 @@ For each component record: owner and requirement; input units, coordinates, time
 
 ### Component handoffs to establish
 
-Geometry/weather/equipment → feasible boundary inputs → airflow/temperature/moisture and radiant conditions → people/benefit → candidate optimization → verification. All interfaces remain proposed; use common units and scenarios and agree changes before another component relies on them. Geometry/performance, solver/closure, comfort mapping and screening coefficients remain unresolved; no named lane assignments or independent validation implied.
+Geometry/weather/equipment → feasible boundary inputs → airflow/temperature/moisture and radiant conditions → people/benefit → verification → optional search. All interfaces remain proposed; use common units and scenarios and agree changes before another component relies on them. Geometry/performance, solver/closure, comfort mapping and screening coefficients remain unresolved; no named lane assignments or independent validation implied.
 
 ## Complexity and the 25-page paper
 
@@ -90,16 +90,16 @@ Independent steady snapshots require airflow/thermal/moisture adjustment fast re
 
 ## Candidate screening before detailed verification
 
-**Owner requirements, 2026-11-07:** preserve convex continuous optimization structure (binary installation remains mixed-integer); comfort has no preferred wind direction. Avoid piecewise-linear segmentation merely to force that structure. Spatial outlet-grid refinement is a separate, still-discussed method. Stronger physical assumptions may be considered but are not automatically accepted. No solver or calibrated utility selected; additive-response screening remains unvalidated.
+**Priority revised by John, 2026-11-08:** evaluate first; optimization is secondary and should explore methods beyond MILP. The earlier convex-programming preference applies to that optional route, not as a prerequisite for the evaluator. No artificial preferred wind direction or forced utility segmentation. Spatial refinement remains separate; additive responses are unvalidated.
 
-For fixed candidate positions/directions, let z_i be binary installation and x_i an operating level, with 0<=x_i<=x_i_max*z_i. Precomputed, consistently normalized responses can give:
+Optional fixed-candidate approximation: binary installation z_i, level 0<=x_i<=x_i_max*z_i:
 
 $$
 T_{jt}\approx T^0_{jt}-\sum_i a_{jti}x_i,\qquad
 \mathbf u_{jt}\approx\mathbf u^0_{jt}+\sum_i\mathbf b_{jti}x_i.
 $$
 
-Here a is temperature reduction per unit control and b the velocity increment over the same ambient baseline; count ambient once. On/off operation can use x_i=z_i. Coefficients depend on normalization, weather and geometry. Sum vector increments before evaluating comfort; this neglects redirected jets/mixing interactions. Moisture/radiation remain separate.
+a is temperature reduction/unit control; b is velocity increment over ambient (count once). On/off: x_i=z_i. Coefficients depend on weather/geometry/normalization. Neglected jet interactions need validation; moisture/radiation remain separate.
 
 ### Convexity and direction-independent wind penalty
 
@@ -132,9 +132,9 @@ L^0 is ambient noise, L_ji the source-only level at the receiver, and L^lim a co
 
 ### Adaptive outlet placement search
 
-**Accepted strategy — John, 2026-11-07:** enumerate configurations when the candidate set/allowed outlet count and evaluation cost are small; use approximations at larger complexity. Use small cases as benchmarks for surrogate ranking and search quality. Enumeration covers only the defined finite options and does not make approximate airflow exact; continuous controls/routes also need a defined treatment. No crossover size or runtime budget chosen.
+John accepted small-case enumeration and larger-case approximation on 2026-11-07; optimization is secondary under the 2026-11-08 priority. Enumeration certifies only finite options with the specified evaluator. No crossover/runtime budget fixed.
 
-John's coarse-to-fine proposal remains: shrink promising regions and refine spacing. Keeping 10/100 equal intervals then 10% of that length leaves 10% then 1%; fractions are illustrative. Rank joint configurations. Agent safeguards: retain diverse winners/old candidates and some coarse exploration, re-optimize jointly, then check broader grids and interactions. Nested exact solves cannot worsen an unchanged objective; shrinking sets or time limits remove that guarantee. No grid, tolerance or solver run selected; neither spatial refinement nor enumeration proves real-world global optimality.
+John proposed coarse-to-fine intervals (illustrative 10% then 1%). Rank joint configurations; retaining diverse winners/old points and some coarse exploration is an agent safeguard. Nested exact solves cannot worsen the same objective; shrinking/time limits remove that guarantee. Grid, tolerance and solver remain unselected; no continuous/physical global optimum established.
 
 ## Bus-stop installation compatibility
 
@@ -182,24 +182,24 @@ Optional ceiling lambda*[||m||²+sigma²-s_max²]_+ is convex in (m,sigma) for l
 
 ### PDE integration and corrected optimization status
 
-**Clarified 2026-11-07:** pairwise utilities cannot determine higher-order interactions. Their MILP linearization does not fix that limitation. Full-configuration lookup is enumeration; adding MILP to select its best entry is unnecessary. Small-case enumeration remains a verification option.
+Pairwise utilities cannot determine higher-order interactions. Full-configuration lookup is enumeration; subsequent MILP selection is unnecessary. Small-case enumeration remains useful. Direct PDE-constrained optimization below is **optional and deferred** under John's 2026-11-08 evaluation-first priority, not adopted/validated.
 
-**Proposal, not yet adopted/validated:** discretize Tianyi's PDE and put grid temperatures T and outlet choices z in one optimization. A possible steady form under prescribed affine airflow, fixed diffusion and compatible linear boundary treatment is:
-
-$$
- (A_0+\sum_i z_i A_i)T=b_0+\sum_i z_i b_i.
-$$
-
-This represents all active choices simultaneously without tabulating their combinations. For binary z_i and justified finite bounds L_j<=T_j<=U_j, introduce W_ij=z_i*T_j and impose:
+With prescribed affine airflow, fixed diffusion and linear boundary treatment, a possible discretization is (A_0+sum_i z_i A_i)T=b_0+sum_i z_i b_i. For binary z_i, finite valid L_j<=T_j<=U_j and W_ij=z_i*T_j, exact constraints are:
 
 $$
  L_jz_i\le W_{ij}\le U_jz_i,\qquad
  T_j-U_j(1-z_i)\le W_{ij}\le T_j-L_j(1-z_i).
 $$
 
-Substitute W into the equations. Exact bounded-product algebra checked at z=0,1; mesh, bounds, boundaries and affine flow unvalidated. Time-indexed states are possible; steady/transient choice open.
+Binary algebra checked at 0/1; mesh, bounds, flow and boundary assumptions are unvalidated. Transient states are possible. Joint airflow, continuous-flow products, RMS and comfort may prevent MILP/convexity; no full solver-class proof or implementation. Calculus does not itself require enumeration.
 
-Coupled u(z) dot grad(T) does not require enumeration. Joint airflow, continuous-flow times temperature, RMS and comfort may still require mixed-integer convex/nonlinear optimization. No forced utility segmentation. Next derive a complete small model, identify products/assumptions and establish solver class. No full MILP proof, implementation or physical validation.
+### Repeated-area search as a secondary extension
+
+**John's proposal, 2026-11-08; unvalidated:** enumerate outlet patterns in a representative stadium cell and repeat across equivalent areas. Evaluation is primary; no MILP needed. For m positions/q states, search q^m patterns rather than q^(mM) independent configurations across M cells. Example: m=6,q=3 gives 729 finite patterns, not all continuous layouts.
+
+Evaluate every active outlet in each cell jointly. Repetition needs equivalent wind, sunlight, occupancy, geometry and boundaries. Use periodic interfaces or neighboring cells, not artificial walls; verify a larger block and asymmetric scenarios. Windward/leeward, shaded/sunny and entrance areas may need separate classes. [Evidence](research.md#periodic-and-symmetric-model-reduction); no block size/tolerance selected.
+
+For equivalent repeats, B_total≈M*B_cell; E_total≈M*E_cell+E_shared (exclude shared energy from cells). Efficiency is the ratio of totals, not M times cell efficiency. Check plant/duct capacity, pressure, shared costs and budgets. Symmetry does not guarantee an unrestricted symmetric optimum. Report best tested repeating pattern; larger blocks can test alternating patterns. Local changes/coordinate search among zone patterns are proposed fallbacks, not validated algorithms.
 
 ## Rail-station extension and missing inputs
 

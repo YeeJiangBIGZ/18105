@@ -1,6 +1,6 @@
 # HiMCM 2026 — Team 18105
 
-Problem B: **Air Conditioning the Environment: Modeling Energy Waste in Public Cooling**. Updated 2026-11-07.
+Problem B: **Air Conditioning the Environment: Modeling Energy Waste in Public Cooling**. Updated 2026-11-08.
 
 ## Workspace and records
 
@@ -25,7 +25,7 @@ Use the four lanes in [agent.md](agent.md#four-work-lanes); no personal assignme
 
 | Task | Human / agent | File and section | Starting main SHA | State | Deliverable / checks / handoff |
 |---|---|---|---|---|---|
-| Record evaluation priority and repeated-area search proposal | John / general-chat agent | README priority/next action/teammate status; agent.md work priority; design.md screening/symmetry and condensed optional PDE notes; research.md periodic-boundary evidence | 7667f1e | claimed | Record evaluation-first scope and secondary non-MILP search; assess repeating cells, interactions, global resources and restricted optimality. Preserve teammate model.md. |
+| Record evaluation priority and repeated-area search proposal | John / general-chat agent | README, agent.md, design.md, research.md; teammate model.md preserved | 7667f1e | done | Evaluation-first priority accepted; repeated-area search remains proposed. Periodic-boundary evidence and restricted-optimum/resource caveats checked; no simulation or venue symmetry validated. Next complete bus evaluator. |
 
 Next technical tasks remain unclaimed: define bus-shelter geometry/scenarios; choose airflow and temperature interfaces; define occupant exposure/benefit; verify candidate inputs and the screening approximation. Teammates should claim concrete sections before starting those edits.
 
@@ -33,11 +33,13 @@ Next technical tasks remain unclaimed: define bus-shelter geometry/scenarios; ch
 
 Start with a simple **open-sided bus shelter**, comparing the required fan and two evaporative coolers. Enclosure changes are set aside for now. Shade is not explicitly named as a system in the problem, although facility design and solar exposure are; holding the shelter's shade fixed is a proposed comparison condition. No specific cooler or outlet arrangement has been selected.
 
+**Current priority — John, 2026-11-08:** evaluation is the team's main work. Establish useful cooling benefit, energy and overall effectiveness before searching for improved configurations. Optimization is a later, limited extension; use methods beyond MILP and do not make solver structure a prerequisite for the evaluator. John proposed searching a small repeated stadium area and scaling its pattern; symmetry assumptions and validation remain unselected. Bus shelter remains the starting case. See [repeated-area proposal](design.md#repeated-area-search-as-a-secondary-extension).
+
 Use four categories: **benefit to people, all financial costs, environmental effects, and nonfinancial practicality**. Reliability affects each rather than receiving a separate score. Comfort can improve toward an optimum and worsen with overcooling; health protection is distinct and needs its own justified measure. Final metrics, weights, comfort functions and safety thresholds remain undecided.
 
 **Complexity rule — John, 2026-11-07:** explore accuracy now, then simplify and remove nonessential extensions if needed to fit the 25-page paper. Favor mathematical elegance, clear explanation and required results over accumulating mechanisms. No particular feature has been selected for removal. See [design reduction rule](design.md#complexity-and-the-25-page-paper).
 
-**Wind/convexity clarification — John, 2026-11-07:** retain convex continuous structure with binary installation choices as needed; do not impose a preferred wind direction or use segmentation merely to force convexity. John proposed an excessive-speed ceiling with no penalty below it. The convex ceiling penalty is recorded; its threshold and positive fan-cooling benefit remain unresolved. This does not cancel spatial candidate refinement. See [wind formulation](design.md#convexity-and-direction-independent-wind-penalty).
+**Earlier wind/convexity preference — John, 2026-11-07:** for the discussed mathematical-programming route, retain convex continuous structure with binary installation choices as needed; do not impose a preferred wind direction or use segmentation merely to force convexity. John proposed an excessive-speed ceiling with no penalty below it. The convex ceiling penalty is recorded; its threshold and positive fan-cooling benefit remain unresolved. This does not cancel spatial candidate refinement. See [wind formulation](design.md#convexity-and-direction-independent-wind-penalty).
 
 **Complexity-dependent computation — John, 2026-11-07:** use exhaustive enumeration for small candidate sets and approximation at larger complexity, benchmarking against small cases. Simple body obstacles and surrounding exposure samples are the accepted working direction; physical coefficients and accuracy remain unvalidated. Enumeration is exhaustive only over its finite options, not exact physics or all continuous placements.
 
@@ -74,7 +76,7 @@ Discussed structure, not a validated implementation:
 3. Represent occupants as points with arrival/departure times and paths. Constant-position paths represent stationary occupants. Integrate benefit over exposure time; distance integrals require inverse-speed weighting and separate waiting contributions.
 4. John supports sampling occupancy moments/segments and averaging. The proposed time-snapshot method computes benefit first and duration-weights it; sampling and steady-state validity remain open. See [walking flow and snapshots](design.md#walking-flow-and-snapshot-averaging).
 5. Sum benefits over actual or representative occupants, then compare with configuration-level electricity, financial cost, environmental effects and practicality. Shared costs are counted once.
-6. Optimization integration remains unresolved after rejecting pairwise sufficiency for arbitrary outlet counts. Investigate [direct discretized PDE constraints](design.md#pde-integration-and-corrected-optimization-status); do not require pre-evaluation of all configurations. John proposed coarse-to-fine interval refinement; fractions/spacings and exploration safeguards remain unselected. No runtime or continuous-global-optimum guarantee.
+6. After evaluating the required cases, investigate a limited improvement search beyond MILP. [Repeated-area enumeration](design.md#repeated-area-search-as-a-secondary-extension) and coarse-to-fine placement are proposals. Direct PDE-constrained optimization is optional; pairwise sufficiency/all-configuration lookup do not solve the general search. No runtime or global-optimum guarantee.
 7. For optional ducted systems, John acknowledged node temperatures and segment inlet/outlet relations. Selectable routing, shared installation costs and thermal-loss modes are [recorded proposals](design.md#optional-duct-network-and-installation-model), not mandatory bus-model features or validated engineering. Fixed/precomputed coefficients are needed for the discussed linear duct equations.
 
 Tianyi's proposed temperature advection–diffusion equation is recorded in [design.md](design.md). It requires an airflow field; it does not calculate that field itself. Initial/boundary conditions, moisture transport and mixing assumptions remain unresolved. No final solver, coefficients, comfort function, weights or numerical result exists.
@@ -87,12 +89,12 @@ Tianyi's proposed temperature advection–diffusion equation is recorded in [des
 - [Semi-open research](research.md) retains the significant-outdoor-exchange requirement. Enclosed rooms cannot replace the required semi-open case. Documented deployments, transferable equipment principles and prototypes are distinguished.
 - [Design options](design.md) retains stadium and ducted-system research. The owner's earlier exclusion of stand-alone stadium fans does not remove the required bus-shelter fan comparison. No technology or venue has been selected.
 
-## Teammate update at first inspection
+## Teammate updates
 
-On 2026-11-07, the remote had only the initial Overleaf import (`cc664d5`): a title and empty Introduction in `main.tex`. Tianyi's PDE proposal came through chat, not that commit. Recheck remote updates before subsequent work; this is an inspection baseline, not a perpetual claim about the repository.
+On 2026-11-07, the remote had only the initial Overleaf import (`cc664d5`): a title and empty Introduction in `main.tex`. Tianyi's PDE proposal came through chat, not that commit. On 2026-11-08, fetched and read teammate [model.md](model.md), commit 7667f1e: PDE/pedestrian evaluation framework, with optimization reserved for an extension. Preserved unchanged. Its equations, assumptions and claimed strengths are teammate proposals pending validation; this read does not establish physical consistency. John's latest priority does not require MILP for the extension. Recheck remote updates before subsequent work.
 
 ## Next action
 
-[Mean flow and RMS fluctuations](design.md#mean-flow-and-rms-fluctuations) remain accepted. Next derive a small [discretized PDE/optimization formulation](design.md#pde-integration-and-corrected-optimization-status), exposing all products and assumptions. Do not represent the superseded pairwise surrogate or an all-configuration lookup as a solved integration. Affine airflow, temperature bounds, turbulent mixing and solver class are unverified.
+Complete the bus-stop evaluator: fix geometry, weather/occupancy and baseline; define comfort benefit versus energy; specify airflow, temperature/moisture, radiation and equipment inputs; resolve the printed power units; compare the three required systems and check sensitivities. Review teammate model.md against these requirements before implementation. Mean flow/RMS remains the agreed representation, with physical prediction unvalidated.
 
-Also resolve positive airflow cooling and temperature/humidity/radiation in a defensible convex thermal-comfort model; excessive-wind and noise penalties alone are insufficient. Then choose scales, weights and thresholds; fix one shelter/occupancy/weather benchmark, equipment response/noise data, resource constraints and the power-unit interpretation. Compare exhaustive and approximate search on that finite case, test interactions and refinement, and retain only material extensions within 25 pages. No numerical solver or manuscript edit is requested by this recording task.
+After evaluation works, explore a compact improvement search such as repeated-area enumeration, grouping non-equivalent zones and checking inter-area effects/resources. Direct PDE/MILP integration is optional, not the immediate milestone. No new solver or manuscript implementation is requested by this discussion.
