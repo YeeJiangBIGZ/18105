@@ -54,7 +54,11 @@ John / general-chat agent, 2026-11-07. Question: can isolated outlet vectors be 
 
 **Mathematical checks, not new empirical laws:** for actual velocity w, E||w||²=||Ew||²+E||w-Ew||². Thus a vector plus fluctuation energy can represent a zero-mean/nonzero-RMS state. Input-weighted RMS is instead direction-blind; splitting one stream with conserved weights leaves it unchanged, but that property cannot validate it as downstream speed. Multiplying a resultant by a finite factor leaves exact cancellation unchanged; assigning its direction to a finite RMS is undefined at cancellation and unstable nearby. No reviewed source supplies a universal algebraic merge function of isolated source vectors alone.
 
-**Optional PDE branch, now deferred behind evaluation:** pairwise data cannot determine arbitrary higher-order interactions; full-configuration tabulation is enumeration. Derive a small discretized temperature PDE with decision variables and check bounds, binary-product linearizations, boundary conditions and objective class. A matrix affine in outlet binaries requires additional flow/diffusion assumptions; it does not prove physical superposition. Preserve single/pair/triple joint calculations as validation cases rather than the accepted general optimizer. Joint airflow/turbulent heat mixing, body effects, positive fan benefit, numerical settings and tolerances remain unresolved. No new empirical source supports an exact MILP for the complete physical model.
+**Deferred PDE branch:** binary-product linearization does not validate joint physics. Full-table enumeration and pairwise truncation are not general solutions; direct PDE-constrained optimization remains optional/unvalidated. See design for conditions.
+
+## Variable neighborhood search
+
+Reviewed 2026-11-09: Mladenović and Hansen, *Variable Neighborhood Search*, Computers & Operations Research 24 (1997), 1097–1100, [original paper](https://sci2s.ugr.es/sites/default/files/files/Teaching/GraduatesCourses/Metaheuristicas/Bibliography/HansenVNS.pdf), §2, full text. Changing perturbation neighborhoods followed by local search and incumbent improvement provides a simple non-MILP heuristic. Routing results do not validate cooling. Fan moves/restarts/scenario checks are unvalidated adaptations; no runtime/global guarantee.
 
 ## Periodic and symmetric model reduction
 

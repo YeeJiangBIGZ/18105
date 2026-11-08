@@ -1,6 +1,6 @@
 # HiMCM 2026 — Team 18105
 
-Problem B: **Air Conditioning the Environment: Modeling Energy Waste in Public Cooling**. Updated 2026-11-08.
+Problem B: **Air Conditioning the Environment: Modeling Energy Waste in Public Cooling**. Updated 2026-11-09.
 
 ## Workspace and records
 
@@ -25,7 +25,7 @@ Use the four lanes in [agent.md](agent.md#four-work-lanes); no personal assignme
 
 | Task | Human / agent | File and section | Starting main SHA | State | Deliverable / checks / handoff |
 |---|---|---|---|---|---|
-| Propose fan/cooling-fan search heuristic | John / general-chat agent | README scope/status; design.md adaptive search and condensed optional PDE/repetition notes; research.md search source and condensed deferred-PDE note | fa12507 | claimed | Restrict search to fan/evaporative-fan families; propose bounded multi-start neighborhood search using whole-layout evaluations. Preserve teammate model.md; no implementation. |
+| Propose fan/cooling-fan search heuristic | John / general-chat agent | README, design.md, research.md; model.md unchanged | fa12507 | done | Device-family scope recorded; multi-start neighborhood search proposed with complete-layout scoring, feasibility checks, perturbations and finite budget. Original VNS paper reviewed; no implementation/calibration or global-optimum claim. |
 
 Next technical tasks remain unclaimed: define bus-shelter geometry/scenarios; choose airflow and temperature interfaces; define occupant exposure/benefit; verify candidate inputs and the screening approximation. Teammates should claim concrete sections before starting those edits.
 
@@ -34,6 +34,8 @@ Next technical tasks remain unclaimed: define bus-shelter geometry/scenarios; ch
 Start with a simple **open-sided bus shelter**, comparing the required fan and two evaporative coolers. Enclosure changes are set aside for now. Shade is not explicitly named as a system in the problem, although facility design and solar exposure are; holding the shelter's shade fixed is a proposed comparison condition. No specific cooler or outlet arrangement has been selected.
 
 **Current priority — John, 2026-11-08:** evaluation is the team's main work. Establish useful cooling benefit, energy and overall effectiveness before searching for improved configurations. Optimization is a later, limited extension; use methods beyond MILP and do not make solver structure a prerequisite for the evaluator. John proposed searching a small repeated stadium area and scaling its pattern; symmetry assumptions and validation remain unselected. Bus shelter remains the starting case. See [repeated-area proposal](design.md#repeated-area-search-as-a-secondary-extension).
+
+**Device scope — John, 2026-11-09:** restrict the improvement search to ordinary fans and cooling fans, interpreted here as the wet-pad evaporative coolers in our evaluation model; retain the required small/large variants. This is a modeling scope choice, not proof that all other technologies are physically unviable. A [multi-start neighborhood heuristic](design.md#adaptive-outlet-placement-search) is proposed, not adopted or implemented; score whole configurations with the evaluator.
 
 Use four categories: **benefit to people, all financial costs, environmental effects, and nonfinancial practicality**. Reliability affects each rather than receiving a separate score. Comfort can improve toward an optimum and worsen with overcooling; health protection is distinct and needs its own justified measure. Final metrics, weights, comfort functions and safety thresholds remain undecided.
 
@@ -97,4 +99,4 @@ On 2026-11-07, the remote had only the initial Overleaf import (`cc664d5`): a ti
 
 Complete the bus-stop evaluator: fix geometry, weather/occupancy and baseline; define comfort benefit versus energy; specify airflow, temperature/moisture, radiation and equipment inputs; resolve the printed power units; compare the three required systems and check sensitivities. Review teammate model.md against these requirements before implementation. Mean flow/RMS remains the agreed representation, with physical prediction unvalidated.
 
-After evaluation works, explore a compact improvement search such as repeated-area enumeration, grouping non-equivalent zones and checking inter-area effects/resources. Direct PDE/MILP integration is optional, not the immediate milestone. No new solver or manuscript implementation is requested by this discussion.
+After evaluation works, test the proposed multi-start fan/cooling-fan neighborhood search, optionally using repeated-area reduction with boundary/resource validation. Direct PDE/MILP integration is optional, not the immediate milestone. No new solver or manuscript implementation is requested by this discussion.
