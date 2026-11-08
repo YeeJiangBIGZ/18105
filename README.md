@@ -25,7 +25,7 @@ Use the four lanes in [agent.md](agent.md#four-work-lanes); no personal assignme
 
 | Task | Human / agent | File and section | Starting main SHA | State | Deliverable / checks / handoff |
 |---|---|---|---|---|---|
-| Record evaluation priority and repeated-area search proposal | John / general-chat agent | README, agent.md, design.md, research.md; teammate model.md preserved | 7667f1e | done | Evaluation-first priority accepted; repeated-area search remains proposed. Periodic-boundary evidence and restricted-optimum/resource caveats checked; no simulation or venue symmetry validated. Next complete bus evaluator. |
+| Propose fan/cooling-fan search heuristic | John / general-chat agent | README scope/status; design.md adaptive search and condensed optional PDE/repetition notes; research.md search source and condensed deferred-PDE note | fa12507 | claimed | Restrict search to fan/evaporative-fan families; propose bounded multi-start neighborhood search using whole-layout evaluations. Preserve teammate model.md; no implementation. |
 
 Next technical tasks remain unclaimed: define bus-shelter geometry/scenarios; choose airflow and temperature interfaces; define occupant exposure/benefit; verify candidate inputs and the screening approximation. Teammates should claim concrete sections before starting those edits.
 
