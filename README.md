@@ -25,7 +25,7 @@ Use the four lanes in [agent.md](agent.md#four-work-lanes); no personal assignme
 
 | Task | Human / agent | File and section | Starting main SHA | State | Deliverable / checks / handoff |
 |---|---|---|---|---|---|
-| Record newly clarified PDE/optimization direction | John / general-chat agent | README; design.md airflow/PDE integration; research.md status | 05bd62c | done | Preserved mean/RMS decision; superseded pairwise sufficiency and all-configuration lookup. Direct discretized PDE is proposed, not a validated MILP. Binary-product algebra and document consistency checked; next derive a small complete model. |
+| Record evaluation priority and repeated-area search proposal | John / general-chat agent | README priority/next action/teammate status; agent.md work priority; design.md screening/symmetry and condensed optional PDE notes; research.md periodic-boundary evidence | 7667f1e | claimed | Record evaluation-first scope and secondary non-MILP search; assess repeating cells, interactions, global resources and restricted optimality. Preserve teammate model.md. |
 
 Next technical tasks remain unclaimed: define bus-shelter geometry/scenarios; choose airflow and temperature interfaces; define occupant exposure/benefit; verify candidate inputs and the screening approximation. Teammates should claim concrete sections before starting those edits.
 
