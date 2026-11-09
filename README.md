@@ -25,6 +25,7 @@ Use the four lanes in [agent.md](agent.md#four-work-lanes); no personal assignme
 
 | Task | Human / agent | File and section | Starting main SHA | State | Deliverable / checks / handoff |
 |---|---|---|---|---|---|
+| Research four selected venues | John / general-chat agent | README decisions/status; research.md Selected four-venue evidence dossier; design.md Selected venue reconstruction plan | 57f5b48 | working | Deep source review for Dhoby Ghaut, Expo EWL platform, Japan National Stadium and Cartuja Qanat Agora; parameter provenance, geometry/weather access, gaps and reconstruction plan. |
 | Research Santa 2025 search methods | John / general-chat agent | README; research.md Santa evidence and concise contribution workflow | e14c410 | done | Official task and first/second-place methods checked at stated access levels. Symmetry/tiling plus annealing transfer proposed; rigid footprint packing and global/polynomial guarantees do not transfer. No code run or adoption. |
 
 Next technical tasks remain unclaimed: define bus-shelter geometry/scenarios; choose airflow and temperature interfaces; define occupant exposure/benefit; verify candidate inputs and the screening approximation. Teammates should claim concrete sections before starting those edits.
