@@ -25,7 +25,7 @@ Use the four lanes in [agent.md](agent.md#four-work-lanes); no personal assignme
 
 | Task | Human / agent | File and section | Starting main SHA | State | Deliverable / checks / handoff |
 |---|---|---|---|---|---|
-| Research Santa 2025 search methods | John / general-chat agent | README task/reference; research.md new Santa evidence and concise contribution workflow | e14c410 | claimed | Check official task and participant solutions; distinguish transferable symmetry/search ideas from packing physics and polynomial/global guarantees. No algorithm adoption or implementation. |
+| Research Santa 2025 search methods | John / general-chat agent | README; research.md Santa evidence and concise contribution workflow | e14c410 | done | Official task and first/second-place methods checked at stated access levels. Symmetry/tiling plus annealing transfer proposed; rigid footprint packing and global/polynomial guarantees do not transfer. No code run or adoption. |
 
 Next technical tasks remain unclaimed: define bus-shelter geometry/scenarios; choose airflow and temperature interfaces; define occupant exposure/benefit; verify candidate inputs and the screening approximation. Teammates should claim concrete sections before starting those edits.
 
@@ -94,6 +94,8 @@ Tianyi's proposed temperature advection–diffusion equation is recorded in [des
 ## Teammate updates
 
 On 2026-11-07, the remote had only the initial Overleaf import (`cc664d5`): a title and empty Introduction in `main.tex`. Tianyi's PDE proposal came through chat, not that commit. On 2026-11-08, fetched and read teammate [model.md](model.md), commit 7667f1e: PDE/pedestrian evaluation framework, with optimization reserved for an extension. Preserved unchanged. Its equations, assumptions and claimed strengths are teammate proposals pending validation; this read does not establish physical consistency. John's latest priority does not require MILP for the extension. Recheck remote updates before subsequent work.
+
+[Santa 2025 research](research.md#santa-2025-packing-methods-and-cooling-layout-transfer) supplies symmetry/tiling and annealing ideas for the secondary search; no cooling algorithm newly adopted or validated.
 
 ## Next action
 
