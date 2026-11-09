@@ -25,6 +25,7 @@ Use the four lanes in [agent.md](agent.md#four-work-lanes); no personal assignme
 
 | Task | Human / agent | File and section | Starting main SHA | State | Deliverable / checks / handoff |
 |---|---|---|---|---|---|
+| Research cooling equipment | John / general-chat agent | research.md Cooling equipment matched to Problem B; design.md Equipment parameter handoff; README status | 2211fc7 | working | Compare official A/B/C specifications with manufacturer dimensions, installation, power/airflow/water and dated prices; preserve mismatches and unknowns. |
 | Research four selected venues | John / general-chat agent | [Evidence dossier](research.md#selected-four-venue-evidence-dossier); [reconstruction plan](design.md#selected-venue-reconstruction-plan) | 57f5b48 | done | Primary-source findings, access limits, geometry conflicts, weather routes and remaining inputs recorded; documentation checked and published. No numerical validation or complete weather dataset. Next: resolve bus geometry and acquire a matched weather sample; Expo roof dimensions need reconciliation. |
 | Research Santa 2025 search methods | John / general-chat agent | README; research.md Santa evidence and concise contribution workflow | e14c410 | done | Official task and first/second-place methods checked at stated access levels. Symmetry/tiling plus annealing transfer proposed; rigid footprint packing and global/polynomial guarantees do not transfer. No code run or adoption. |
 
