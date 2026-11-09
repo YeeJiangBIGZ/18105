@@ -37,6 +37,23 @@ John accepted Dhoby Ghaut Airbitat shelter, Expo MRT elevated EWL platform, Japa
 
 **Next concrete task:** reconstruct one version of the historical bus shelter with a parameter/uncertainty table, then obtain one matched weather episode and consistent specifications for the three required device classes. The earlier standard-based 9 × 3 m illustration remains a concept. Expo geometry reconciliation and full Qanat-paper access can proceed as separate claimed research tasks. No new numerical thresholds, solver or assumptions are accepted merely by this entry.
 
+## Equipment parameter handoff
+
+Research request, John, 2026-11-09: size, installation, price and other equipment inputs must be consistent with the official question. See [equipment evidence](research.md#cooling-equipment-matched-to-problem-b). The reference products are proposals, not selected installations.
+
+Keep two clearly labeled records per device class: **contest benchmark** and **actual product reference**. The required benchmark retains the printed 0.25/1.2/2.5 kW/hr and up-to 3/5/8°C figures; interpreting the energy numbers as average kW remains an explicit assumption. An actual-product calculation uses its own rated/measured inputs. A borrowed envelope or price becomes a transferred estimate; it does not make the benchmark a verified commercial model. Do not quietly replace class C's power with a nearby motor rating.
+
+Minimum equipment fields: class/model/version; cabinet envelope, outlet area and mass empty/full; feasible mounting type and access clearance; electrical input and speed setting; airflow at available pressure; outlet temperature/humidity as functions of inlet state; evaporation and bleed/drain water; receiver-noise reference distance/mode; purchase price/date/currency/tax; installation and maintenance categories. Unknown values remain unknown or declared sensitivity assumptions. A nameplate wattage alone cannot determine outlet speed or cooled footprint.
+
+Proposed checks before a parameter set enters the evaluator:
+
+1. **Air/energy:** relate outlet area, volume flow and mean velocity consistently. For a free fan retain inlet air temperature approximately; compute its benefit through local comfort rather than subtracting 3°C from the air field. Ducted devices need a pressure-loss operating point.
+2. **Heat/moisture:** require compatible wet-bulb depression, pad effectiveness, airflow and water consumption. The V6425's advertised maximum flow and water use cannot simply be combined with a uniform 5°C outlet drop. Check humidity and distinguish recirculating pump flow from consumed water.
+3. **Contest effect:** the statement does not define whether a shelter temperature reduction is a local maximum or spatial average, nor a test climate. Declare the mapping to our fields; do not silently interpret the 5/8°C effects as fixed outlet boundary conditions in every climate.
+4. **Installation/cost:** use occupied and service footprints; count controls, supports, electrical/water work and ducts where needed. Keep source price separate from installed cost and charge shared infrastructure once. Include pumps/controls once in the electricity boundary, without adding them again if a total input rating already includes them.
+
+Suggested first physical representations are one sheltered bracket-mounted fan, one protected freestanding wet-pad unit, and a larger plant with explicitly defined placement/distribution. The Fenne/Verdex examples match the proposed electrical classes A/B; the MET MANN example only informs approximate class-C geometry and cost until total electrical input is established. No dimensions, transfer coefficients, cost allowance or temperature boundary is adopted by this handoff. Verification so far is documentary comparison and a simple conservation check, not a product test.
+
 ## Complexity and the 25-page paper
 
 **Accepted instruction: John, 2026-11-07.** Develop enough detail to understand accuracy now, but do not let the model become unnecessarily complicated. If the paper cannot fit within 25 pages, simplify the model and remove nonessential extensions to favor mathematical elegance and clear explanation. Do not treat every discussed mechanism as mandatory implementation. Retain the contest's required comparisons and deliverables; the page limit covers the full counted submission, not just model derivations.

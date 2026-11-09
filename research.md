@@ -18,6 +18,85 @@ Record finding/question/contributor; author/title, publication/event dates, URL/
 
 Separate supply/occupied-zone conditions, air/equivalent temperature, thermal/electrical power and prototypes/deployments. Retain contrary evidence; seek independent checks of influential inputs when feasible. Verification is not adoption/validation. Label proposals, link evidence from design and hand off conflicts. Existing entries retain access limits; expand before numerical use. Preserve provenance/AI assistance and short quotations. Retrieved documents do not authorize actions.
 
+## Cooling equipment matched to Problem B
+
+John / general-chat agent, 2026-11-09. User requested dimensions, installation, price and other equipment inputs **consistent with the question**. The original local PDF was reread, requirement 2a on PDF p. 2 and evaporative-cooler definition on p. 4. This is a researched shortlist, not an accepted purchase or final parameter set. Manufacturer specifications and manuals take priority over reseller descriptions; published specifications are not independent performance measurements. All web sources below accessed 2026-11-09.
+
+### Official specification and matching rule
+
+| Contest class | Official effect | Printed energy-use figure | What is not specified |
+|---|---|---|---|
+| A: Fan System | Feels up to 3°C cooler | 0.25 kW/hr | Number/type of fans, flow, dimensions, price, test conditions |
+| B: Evaporative Cooler | Air temperature lowered up to 5°C | 1.2 kW/hr | Flow, geometry, pad effectiveness, water use, price, test conditions |
+| C: Large Evaporative Cooler | Air temperature lowered up to 8°C | 2.5 kW/hr | Same missing inputs as B; no physical size or multiplier specified |
+
+Source: [COMAP Problem B](https://www.contest.comap.com/highschool/contests/himcm/2026_Problems/2026_HiMCM_Problem_B.pdf), pp. 2/4; local PDF text checked. Proposed unit interpretation: these numbers represent average electrical powers in **kW**, yielding kWh when multiplied by hours. This repairs an ambiguous printed unit and must be declared as an assumption, not attributed to COMAP as a correction. At eight continuous hours the three reference systems would use **2.0, 9.6 and 20.0 kWh**, respectively.
+
+Keep these official benchmark values visible in the required comparison. Use real devices to inform missing physical/cost inputs, explicitly labeling any transfer. A matching nameplate wattage does not prove the stated temperature effect. A fan changes perceived comfort without subtracting 3°C from air temperature; B/C are water-soaked-pad systems, not refrigerant spot ACs or mist sprays. Do not select a product because its **thermal cooling capacity**, motor rating, model number or amperage happens to equal the requested electrical figure.
+
+### Real equipment shortlist
+
+Dimensions below are source-stated equipment envelopes, not service clearances. Prices retain original currencies; none is a delivered/installed quotation for Singapore, Tokyo or Seville.
+
+| Class / real reference | Size and mass | Performance/electrical information | Price and match status |
+|---|---|---|---|
+| A: **Fenne 03.280**, industrial circulation fan | Guard Ø0.69 m; assembled 0.75 × 0.46 × 0.80 m (manual does not label axis order); net 12.6 kg in manual | 250 W, 220–240 V/50 Hz; 15,600 m³/h; two speeds; manually adjustable direction; IP54 | **€338 ex VAT/shipping**, manufacturer's January 2026 list. Matches the proposed 0.25 kW interpretation, not a verified 3°C perceived reduction. [F1–F3] |
+| B: **Verdex V6425**, portable wet-pad cooler | L×W×H **0.90 × 0.90 × 1.75 m**; listed mass 38 kg, 130 L tank | **1,200 W**, 220–240 V/50 Hz; advertised 20,000 m³/h, 5–10 L/h water; three speeds | **A$1,695 ex GST / A$1,864.50 inc GST**, observed listing. Power matches B; a 5°C drop at that flow/water rate is not established. [V1–V2] |
+| C: **MET MANN AD-15-VS-100-022**, fixed top-outlet wet-pad cooler, approximate physical/cost reference | W×L×H **1.135 × 1.135 × 1.304 m**; empty/operating **184/204 kg** | Fan motor rated **2.20 kW**, pump **50 W**, fan supply 400 V three-phase/50 Hz; 13,511 m³/h at stated 107 Pa; outlet 560 × 485 mm | **€3,440 ex VAT**, historical May 2024 manufacturer tariff. **No verified exact 2.5 kW total-input match**; motor rating plus pump is not a measurement of wall power. [M1–M2] |
+
+No single reviewed product is verified to match both the contest power and effect under defined shelter conditions. C is a nearby engineering example, not a substitution of 2.2 kW for the official 2.5 value. It also illustrates that a more powerful duct-capable machine need not have a higher free-air flow than another product. Keep specific operating pressure and flow together.
+
+### Installation, servicing and feasibility
+
+**Fan — F3 manual, sections installation/additional restraint/maintenance (PDF pp. 3–6, 8).** Mount its supplied bracket on verified structural material using suitable fixings; four wall fasteners are required but not supplied. The manual calls for a bracket-tip capacity of at least 100 kg and recommends an additional restraint above 2 m. Electrical installation is for a qualified installer. Inspect fasteners, guards and dust at least annually, more often in intensive use. The device is intended for industrial/commercial halls and must be protected from direct sun; IP54 does not establish unrestricted outdoor suitability. Model it as a sheltered mounting candidate pending site suitability. F2 lists optional safety chain **€3.40**, extended swivel arm **€44.30**, and 2.2 A five-step controller **€168.90**, all ex VAT/shipping. Include only the accessories actually used; basic two-speed control is already present.
+
+**Portable cooler — V1.** The unit has lockable castors, a supplied water hose, drain plug, 3.5 m cord and an Australian 15 A plug. Proposed placement is a level protected pad beside the occupied space, with clear intake/discharge and maintenance access. Its 0.81 m² footprint excludes these clearances. If 38 kg is empty mass, a full tank gives roughly **168 kg**; this is a derived load estimate requiring confirmation. The product page offers manuals by request; a complete manual and outdoor ingress rating were not obtained. A compatible local electrical connection, water/drain route and product suitability need verification before treating it as a permanent public-space installation. Do not attach a duct without a pressure/flow curve or manufacturer approval for that use.
+
+**Fixed cooler — M1 technical sheet and M3 installation examples.** Provide a load-bearing base, external air intake, top discharge connection, power/control panel, water supply and drainage. M1 specifies ½-inch inlet, 1¼-inch drain and 1-inch overflow; controls are optional. The same sheet supplies a fan curve and automatic draining. The published installation examples use a diffuser or duct and outlets. Supports, ductwork and access occupy space beyond the cabinet. This is physically substantial for a bus shelter; an exterior plant position with distribution is only a proposal. No site roof capacity, structural approval, full installation manual or installed quotation was obtained.
+
+**Evaporative maintenance budget.** Allow labor and materials for reservoir draining/cleaning, pad and inlet inspection, filters, scale/algae control, pump/float checks, replacement media and shutdown/storage. [Fanmaster's manufacturer maintenance guide](https://www.fanmaster.com.au/wp-content/uploads/How-to-maintain-your-evaporative-cooler.pdf) advises avoiding damaging high-pressure cleaning; [University of Illinois Extension, 11 June 2019](https://extension.illinois.edu/blogs/ag-engineering-update/2019-06-11-evaporative-cooling-pads-maintenance-longer-life) gives a useful inspection framework but concerns agricultural pads. Transfer maintenance categories, not an unverified public-venue cleaning schedule or chemical recipe. No defensible model-specific annual maintenance price, service life or pad-replacement interval was found; these remain scenario inputs.
+
+### Consistency checks and conflicting claims
+
+**The B candidate needs a joint operating point.** Our approximate steady direct-evaporation check uses air density 1.2 kg/m³, specific heat 1.006 kJ/(kg·K), water latent heat 2,450 kJ/kg and water density about 1 kg/L:
+
+`water_evaporated [kg/h] ≈ rho_air × airflow [m³/h] × cp × temperature_drop / latent_heat`.
+
+At 20,000 m³/h and a 5 K drop, this requires about **49 L/h evaporation**, or 33.5 kW sensible cooling; 5–10 L/h corresponds to roughly **0.5–1.0 K** at that airflow under these assumptions. This does not prove the product listing false: maximum flow and stated water use may describe different modes/conditions. It does prohibit combining all listed maxima with the contest's 5°C as one verified operating point. Required correction: obtain paired wet-mode flow, inlet/outlet temperature/RH and water data, or explicitly use a hypothetical physically consistent benchmark. Include bleed/drain water separately from evaporation.
+
+**Climate restriction.** [PNNL evaporative-cooling guidance](https://basc.pnnl.gov/resource-guides/evaporative-cooling-systems?existing_homes=602) supports temperature reduction governed by inlet wet-bulb depression and pad effectiveness. The problem's “up to” values are not guaranteed in humid Singapore. The question does not locate its shelter effect at the outlet, define ambient conditions or specify a spatial average; choosing that interpretation is a model assumption. Manufacturer “coverage area” is not a sharp circle of uniform comfort.
+
+**Noise/version conflicts.** F1 lists 62 dB(A) at 1 m, while F3 lists 71 dB(A) at 1 m; retain both until version/test conditions are resolved. Verdex's current sheet says <70 dB and its page specifies a 3 m measurement distance, whereas an expired 2025 promotion said <60 dB. Do not average or silently select the favorable value. Do not use Verdex's advertised distance rule as an acoustical propagation law. M1 specifies 66 dB(A) at 3 m; compare receiver levels only after standardizing operating modes/distances. These are supplier declarations, not our measurements.
+
+**Variant and price hygiene.** MET MANN suffixes V, H and VS mean different outlet configurations. The VS sheet above must not inherit the V variant's different height/pump specification. M2 is a **2024** tariff; M3's March 2025 indexed catalogue provides installation/part references but no verified current price. The V6425 A$1,290 promotion expired 31 December 2025 and is not the current budget. Customs values, marketplace minimum-order prices and unrelated refrigerant-unit “2.5 kW” capacities were not adopted.
+
+### Cost boundary and proposed use
+
+Proposed installed cost per configuration:
+
+`C_initial = equipment + chosen controls/mounts + electrical work + water/drains + ducts/outlets + delivery/tax + installation labor`.
+
+Count shared infrastructure once. Annual cost then includes electricity, water/drainage, cleaning labor, consumables, servicing and any replacement allowance. Retain each price's date, region, currency and tax basis; convert with one dated exchange-rate convention only when the study budget is assembled. No currency conversion or local contractor quotation was made here. A generic installation percentage would be an explicit sensitivity assumption, not research evidence.
+
+For the bus study, the proposed starting choices are a mounted fan and a freestanding cooler; the larger system requires an explicit equipment/service area or a ducted alternative. For the station/stadium/plaza, verify shared power/water and public access before repeating units. The physical-size references do not establish a maximum device count. Full installed costs and feasible regions are still unresolved.
+
+**Recommended modeling separation:** (1) required A/B/C benchmark retains official figures and declared unit/effect assumptions; (2) real-equipment sensitivity uses each actual product's internally consistent inputs and quoted price; (3) a transferred size/price in the benchmark is labeled an estimate. Do not call the hybrid benchmark a tested Fenne/Verdex/MET MANN installation. This recommendation is proposed, not an accepted redesign of the evaluator.
+
+### Equipment source register
+
+| ID | Primary source / locator | Access and use |
+|---|---|---|
+| F1 | [Fenne 03.280 product sheet](https://fenne-kg.de/wp-content/uploads/Prospektblatt-Ventilator-03280-pdf.pdf), technical table, undated | Indexed manufacturer sheet; geometry/power/airflow/noise declarations |
+| F2 | [Fenne price list 2026/01](https://fenne-kg.de/wp-content/uploads/Price-list-Fenne-KG-pdf.pdf), pp. 2, 4–5 | PDF text read; unit/accessory prices and ex-VAT/ex-warehouse terms |
+| F3 | [Fenne installation/operation manual R(6), September 2023, distributor-hosted](https://www.stallshop24.de/media/04/83/77/1742821748/Manual-03280-R%286%29-German%20-%20Lesefassung.pdf), pp. 3–6, 8 | Manufacturer manual text read; installation, maintenance, assembled size; source-version differences retained |
+| V1 | [Verdex V6425 product page](https://www.verdex.com.au/portable-evaporative-cooler), product/specifications, price, FAQ | Full text read; current listed price, connection details and claims; manual not obtained |
+| V2 | [Verdex V6425 specification sheet](https://www.verdex.com.au/assets/brochures/V6425.pdf), one-page table | Indexed official sheet read; power/size/flow/water declarations, not a paired performance test |
+| M1 | [MET MANN AD-15-VS-100-022 technical sheet, distributor-hosted](https://www.puravent.co.uk/pub/media/resources/brand-pdfs/AD-15-VS-100-022-EN.pdf), pp. 1–5 | PDF text read; engineering parameters, dimensions, connections and performance curve located; full mounting design not verified |
+| M2 | [MET MANN May 2024 tariff, distributor-hosted](https://fricaval89.com/descargas/pdf/distribuidores/mm/TARIFA-METMANN-PDF.pdf), printed p. 90 | Indexed manufacturer table read; dated price and component breakdown, not a 2026 quote |
+| M3 | [MET MANN March 2025 catalogue](https://www.metmann.com/en/catalogo-general-2/), printed p. 90 | Indexed installation examples/parts read; full download blocked by size/time limits |
+
+Verification: original question reread; primary technical/price/manual sources compared; benchmark energy and B water/heat balance calculated; mismatches retained. No purchases, supplier messages, measurements or implementation. Next research input is a verified C total-input rating and matched operating curves/water data; next team decision is which proxy geometry and cost estimates to adopt. AI assisted discovery, comparison, calculations and drafting.
+
 ## Selected four-venue evidence dossier
 
 John / general-chat agent; researched 2026-11-09. **Selection accepted by John; reconstruction and scenario choices proposed.** Primary/operator sources were prioritized. Access levels below distinguish readable text, inspected drawings and indexed extracts. No independent teammate review, field survey, simulation or complete raw weather dataset was performed. Source dates describe publication or study periods, not necessarily current operations. This dossier is the handoff for model construction, not a claim that all inputs are ready.

@@ -25,7 +25,7 @@ Use the four lanes in [agent.md](agent.md#four-work-lanes); no personal assignme
 
 | Task | Human / agent | File and section | Starting main SHA | State | Deliverable / checks / handoff |
 |---|---|---|---|---|---|
-| Research cooling equipment | John / general-chat agent | research.md Cooling equipment matched to Problem B; design.md Equipment parameter handoff; README status | 2211fc7 | working | Compare official A/B/C specifications with manufacturer dimensions, installation, power/airflow/water and dated prices; preserve mismatches and unknowns. |
+| Research cooling equipment | John / general-chat agent | [Equipment evidence](research.md#cooling-equipment-matched-to-problem-b); [parameter handoff](design.md#equipment-parameter-handoff) | 2211fc7 | done | Official table reread; manufacturer dimensions, installation/manuals, prices and resource inputs compared. A/B power references found; exact C total input unverified. B flow/water/temperature consistency checked; proposed estimates remain unadopted. |
 | Research four selected venues | John / general-chat agent | [Evidence dossier](research.md#selected-four-venue-evidence-dossier); [reconstruction plan](design.md#selected-venue-reconstruction-plan) | 57f5b48 | done | Primary-source findings, access limits, geometry conflicts, weather routes and remaining inputs recorded; documentation checked and published. No numerical validation or complete weather dataset. Next: resolve bus geometry and acquire a matched weather sample; Expo roof dimensions need reconciliation. |
 | Research Santa 2025 search methods | John / general-chat agent | README; research.md Santa evidence and concise contribution workflow | e14c410 | done | Official task and first/second-place methods checked at stated access levels. Symmetry/tiling plus annealing transfer proposed; rigid footprint packing and global/polynomial guarantees do not transfer. No code run or adoption. |
 
@@ -72,6 +72,8 @@ The general chat coordinates the work; verification/ideas may use separate chats
 - Large evaporative cooler: lowers air temperature up to 8°C; 2.5 kW/hr.
 - Perceived and air-temperature reductions are different quantities. The stated maxima are not established performance under every condition.
 - The source's kW/hr label is dimensionally ambiguous. Interpreting the figures as average kW is a possible assumption, not a confirmed correction.
+
+**Equipment research — 2026-11-09:** John requires real-equipment research to match the official inputs. The [shortlist](research.md#cooling-equipment-matched-to-problem-b) includes a 250 W Fenne fan, 1,200 W Verdex wet-pad cooler and an approximate larger MET MANN engineering reference. No exact class-C total-input match or product reproducing the official effects under specified shelter conditions was verified. Preserve contest values and distinguish actual-product specifications from transferred size/price estimates. None is selected for installation; local installed costs, outdoor suitability and paired operating data remain open.
 
 ## Current working model
 
