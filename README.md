@@ -25,7 +25,7 @@ Use the four lanes in [agent.md](agent.md#four-work-lanes); no personal assignme
 
 | Task | Human / agent | File and section | Starting main SHA | State | Deliverable / checks / handoff |
 |---|---|---|---|---|---|
-| Propose fan/cooling-fan search heuristic | John / general-chat agent | README, design.md, research.md; model.md unchanged | fa12507 | done | Device-family scope recorded; multi-start neighborhood search proposed with complete-layout scoring, feasibility checks, perturbations and finite budget. Original VNS paper reviewed; no implementation/calibration or global-optimum claim. |
+| Research Santa 2025 search methods | John / general-chat agent | README task/reference; research.md new Santa evidence and concise contribution workflow | e14c410 | claimed | Check official task and participant solutions; distinguish transferable symmetry/search ideas from packing physics and polynomial/global guarantees. No algorithm adoption or implementation. |
 
 Next technical tasks remain unclaimed: define bus-shelter geometry/scenarios; choose airflow and temperature interfaces; define occupant exposure/benefit; verify candidate inputs and the screening approximation. Teammates should claim concrete sections before starting those edits.
 
