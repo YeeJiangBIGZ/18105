@@ -25,10 +25,10 @@ Use the four lanes in [agent.md](agent.md#four-work-lanes); no personal assignme
 
 | Task | Human / agent | File and section | Starting main SHA | State | Deliverable / checks / handoff |
 |---|---|---|---|---|---|
-| Research four selected venues | John / general-chat agent | README decisions/status; research.md Selected four-venue evidence dossier; design.md Selected venue reconstruction plan | 57f5b48 | working | Deep source review for Dhoby Ghaut, Expo EWL platform, Japan National Stadium and Cartuja Qanat Agora; parameter provenance, geometry/weather access, gaps and reconstruction plan. |
+| Research four selected venues | John / general-chat agent | [Evidence dossier](research.md#selected-four-venue-evidence-dossier); [reconstruction plan](design.md#selected-venue-reconstruction-plan) | 57f5b48 | done | Primary-source findings, access limits, geometry conflicts, weather routes and remaining inputs recorded; documentation checked and published. No numerical validation or complete weather dataset. Next: resolve bus geometry and acquire a matched weather sample; Expo roof dimensions need reconciliation. |
 | Research Santa 2025 search methods | John / general-chat agent | README; research.md Santa evidence and concise contribution workflow | e14c410 | done | Official task and first/second-place methods checked at stated access levels. Symmetry/tiling plus annealing transfer proposed; rigid footprint packing and global/polynomial guarantees do not transfer. No code run or adoption. |
 
-Next technical tasks remain unclaimed: define bus-shelter geometry/scenarios; choose airflow and temperature interfaces; define occupant exposure/benefit; verify candidate inputs and the screening approximation. Teammates should claim concrete sections before starting those edits.
+Next technical tasks remain unclaimed: reconstruct the historical bus shelter with labeled estimates; acquire matched weather/occupancy scenarios; resolve Expo geometry; choose airflow and temperature interfaces; define occupant exposure/benefit. Teammates should claim concrete sections before starting those edits.
 
 ## Agreed scope and decisions
 
@@ -37,6 +37,8 @@ Start with a simple **open-sided bus shelter**, comparing the required fan and t
 **Current priority — John, 2026-11-08:** evaluation is the team's main work. Establish useful cooling benefit, energy and overall effectiveness before searching for improved configurations. Optimization is a later, limited extension; use methods beyond MILP and do not make solver structure a prerequisite for the evaluator. John proposed searching a small repeated stadium area and scaling its pattern; symmetry assumptions and validation remain unselected. Bus shelter remains the starting case. See [repeated-area proposal](design.md#repeated-area-search-as-a-secondary-extension).
 
 **Device scope — John, 2026-11-09:** restrict the improvement search to ordinary fans and cooling fans, interpreted here as the wet-pad evaporative coolers in our evaluation model; retain the required small/large variants. This is a modeling scope choice, not proof that all other technologies are physically unviable. A [multi-start neighborhood heuristic](design.md#adaptive-outlet-placement-search) is proposed, not adopted or implemented; score whole configurations with the evaluator.
+
+**Four venues accepted — John, 2026-11-09:** Dhoby Ghaut Airbitat bus shelter (Singapore, historical trial); Expo MRT's elevated East–West Line platform (Singapore); Japan National Stadium (Tokyo); Cartuja Qanat **Ágora** (Seville, replacing Adelaide Oval). This deliberately covers a shelter, station, stadium and public plaza. The Ágora is distinct from the adjacent amphitheater. Site selection is accepted; exact reconstruction dimensions, weather episodes, equipment placement and simplified boundaries are not yet adopted. See the [evidence dossier](research.md#selected-four-venue-evidence-dossier). Actual Airbitat/Qanat plants differ from the hypothetical ordinary-fan/wet-pad alternatives; do not transfer their measured performance directly.
 
 Use four categories: **benefit to people, all financial costs, environmental effects, and nonfinancial practicality**. Reliability affects each rather than receiving a separate score. Comfort can improve toward an optimum and worsen with overcooling; health protection is distinct and needs its own justified measure. Final metrics, weights, comfort functions and safety thresholds remain undecided.
 
@@ -90,7 +92,7 @@ Tianyi's proposed temperature advection–diffusion equation is recorded in [des
 - Do not equate stationary occupants with assigned seating or walking with narrow one-way passages. Behavior, geometry and outdoor exposure are separate inputs. Mixed and time-varying occupancy can share one framework.
 - [Bus-stop research](research.md) supports climate-dependent testing rather than a universal winner. Mist prototypes differ from the source's wet-pad coolers; the latter intentionally deliver humid air, not liquid spray onto people. Singapore's ended cooled-air trial highlights placement and maintenance costs.
 - [Semi-open research](research.md) retains the significant-outdoor-exchange requirement. Enclosed rooms cannot replace the required semi-open case. Documented deployments, transferable equipment principles and prototypes are distinguished.
-- [Design options](design.md) retains stadium and ducted-system research. The owner's earlier exclusion of stand-alone stadium fans does not remove the required bus-shelter fan comparison. No technology or venue has been selected.
+- [Design options](design.md) retains stadium and ducted-system precedents. The current fan/cooling-fan scope supersedes the earlier stadium fan exclusion. Four venues are selected above; exact installations and numerical parameters remain undecided.
 
 ## Teammate updates
 
@@ -100,6 +102,6 @@ On 2026-11-07, the remote had only the initial Overleaf import (`cc664d5`): a ti
 
 ## Next action
 
-Complete the bus-stop evaluator: fix geometry, weather/occupancy and baseline; define comfort benefit versus energy; specify airflow, temperature/moisture, radiation and equipment inputs; resolve the printed power units; compare the three required systems and check sensitivities. Review teammate model.md against these requirements before implementation. Mean flow/RMS remains the agreed representation, with physical prediction unvalidated.
+Start with the [bus-shelter evidence and gaps](research.md#dhoby-ghaut-airbitat-bus-shelter): distinguish the 2018 overhead-outlet trial from the 2019 redesign. The earlier 9 × 3 m illustration is a standard-based concept, not its measured geometry. Fix a reproducible geometry, matched weather/occupancy and baseline; define comfort benefit versus energy; specify airflow, temperature/moisture, radiation and equipment inputs; resolve the printed power units. Then compare the three required systems and check sensitivities. Review teammate model.md before implementation. Mean flow/RMS remains the agreed representation, with physical prediction unvalidated.
 
 After evaluation works, test the proposed multi-start fan/cooling-fan neighborhood search, optionally using repeated-area reduction with boundary/resource validation. Direct PDE/MILP integration is optional, not the immediate milestone. No new solver or manuscript implementation is requested by this discussion.

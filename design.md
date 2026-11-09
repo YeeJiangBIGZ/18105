@@ -4,7 +4,7 @@ length_reason: Consolidates equations, candidate evaluation factors, installatio
 
 # Model and design
 
-Updated: 2026-11-07. Working structure discussed with John, incorporating Tianyi's temperature-equation proposal and assistant-proposed details. No calibrated implementation, chosen solver or numerical optimum. [README.md](README.md) holds agreed scope and decisions; [research.md](research.md) holds evidence; [agent.md](agent.md) holds collaboration rules.
+Updated: 2026-11-09. Working structure discussed with John, incorporating Tianyi's temperature-equation proposal and assistant-proposed details. Four venues are selected; reconstruction details below remain proposals. No calibrated implementation, chosen solver or numerical optimum. [README.md](README.md) holds agreed scope and decisions; [research.md](research.md) holds evidence; [agent.md](agent.md) holds collaboration rules.
 
 ## Design contribution workflow
 
@@ -15,6 +15,27 @@ For each component record: owner and requirement; input units, coordinates, time
 ### Component handoffs to establish
 
 Geometry/weather/equipment → feasible boundary inputs → airflow/temperature/moisture and radiant conditions → people/benefit → verification → optional search. All interfaces remain proposed; use common units and scenarios and agree changes before another component relies on them. Geometry/performance, solver/closure, comfort mapping and screening coefficients remain unresolved; no named lane assignments or independent validation implied.
+
+## Selected venue reconstruction plan
+
+John accepted Dhoby Ghaut Airbitat shelter, Expo MRT elevated EWL platform, Japan National Stadium and Cartuja Qanat Ágora on 2026-11-09. The following is the general-chat agent's **proposed** minimal reconstruction and handoff, based on the [four-venue evidence dossier](research.md#selected-four-venue-evidence-dossier). Selecting a real venue does not adopt every dimension, equipment claim or operating assumption. No model geometry is implemented by this research update.
+
+| Case / first domain | Retain in a rough model | Simplify initially | Gate before claiming a site-specific result |
+|---|---|---|---|
+| Dhoby Ghaut: historical shelter plus surrounding air | Roof, screens/posts, benches, open boarding side, nearby relevant obstacles; distinguish 2018 and 2019 layouts | Representative seated/standing/walking occupants; omit decorative detail | Reconcile site footprint with photos; label inferred dimensions; obtain outlet and matched weather inputs |
+| Expo: occupied platform strip with its roof and outside buffer | Roof section, elevation, edge barriers/doors, columns, access openings and track-side exchange | Train-present/absent steady snapshots; representative queue and movement zones | Resolve roof-length discrepancy before whole-platform scaling; verify usable floor dimensions and openings |
+| Tokyo: coarse bowl plus selected occupied sectors | Tier slope, roof shade, concourse/rear openings, differing windward/leeward exposures | Equivalent seat/crowd obstruction; limited fan modes | Establish sector boundaries from broader flow or defensible prescribed conditions; verify fan data before scaling |
+| Seville Ágora: roofed sunken plaza and entrances | Floor/avenue levels, barriers, roof and openings; separate adjacent amphitheater | Simple occupant zones; existing active plant off for a fan-only comparison | Inspect full sections/height datum; define whether cooling/storage systems are disabled or explicitly costed |
+
+**Common comparison boundary.** The selected venues provide geometry, climate and evidence. The first proposed comparison holds their passive geometry/shade fixed and evaluates ordinary fans and the small/large wet-pad alternatives. Existing hybrid cooling is not automatically included in the baseline. If an existing system remains on, account for its contribution and all relevant electricity/water in both the reference and intervention consistently. Treat observed Airbitat/Qanat performance as evidence about those specific systems, not calibration data for different devices without a transfer argument.
+
+**Common input/output contract.** Inputs are geometry with a coordinate system and north direction; dated simultaneous outdoor temperature, RH, wind and solar conditions; surface/radiant assumptions; outlet flow, temperature, moisture and equipment power; occupancy locations/paths and dwell weights. Outputs are occupied-zone mean velocity, fluctuation statistics if predicted, temperature, RH and radiant conditions, followed by person-time benefit and configuration-level resource use. Mark every input measured, design-specified, transferred or estimated, with the source ledger in research.md. Do not infer instantaneous occupancy from capacity or daily entries.
+
+**Keep the first evaluator small.** Start with a few representative weather/occupancy snapshots and the required device classes at declared feasible positions. Compare the same people and time interval against the no-active-cooling reference. Test domain/resolution sensitivity and mass/energy consistency; compare temperature/RH trends with matching evidence where possible. Field validation remains partial where wind or radiation is unavailable. Geometry and placement sensitivity are more defensible than unsupported extra precision.
+
+**Scaling and optional complexity.** Validate the bus case first. Expo adds mixed waiting/movement and track-side exchange; Tokyo adds multiple exposure sectors; Seville adds a contrasting climate and enclosure geometry. Full train transients, every spectator's body, detailed stadium louvres and Qanat thermal storage are optional unless omitting them changes the question being answered. Repeated stadium sectors require matching boundary conditions and shared-resource accounting. Optimization remains a later limited extension; the four-site selection does not require four complete CFD/optimization projects within 25 pages.
+
+**Next concrete task:** reconstruct one version of the historical bus shelter with a parameter/uncertainty table, then obtain one matched weather episode and consistent specifications for the three required device classes. The earlier standard-based 9 × 3 m illustration remains a concept. Expo geometry reconciliation and full Qanat-paper access can proceed as separate claimed research tasks. No new numerical thresholds, solver or assumptions are accepted merely by this entry.
 
 ## Complexity and the 25-page paper
 
@@ -260,7 +281,7 @@ Source: [duct evidence](research.md#duct-heat-transfer). Zero gain needs sensiti
 
 ### Proposed comparison for requirement 2b
 
-Under matched weather/occupancy, compare a roofed, partly enclosed waiting-area reference with local refrigerated spot units, distributed ducted cooling and climate-dependent evaporation. Specify heat rejection/drainage and losses through openings. Fan-assisted/hybrid systems are documented possibilities; radiant cooling is optional research-based scope. Enclosed refuges supplement, not replace, significant-outdoor-exchange modeling. Shade/enclosure changes must be explicit baseline modifications. No station design selected.
+Expo's elevated EWL platform is now the selected station case; exact geometry and equipment layout remain unresolved. Under matched weather/occupancy, compare ordinary fans and wet-pad cooling within the current device scope. Preserve significant outdoor exchange, clearance and access; hold shade fixed unless explicitly testing a modification. Earlier refrigerated, distributed-duct and radiant precedents remain background research, not the selected comparison. Enclosed refuges cannot replace the semi-open case. See the [reconstruction plan](#selected-venue-reconstruction-plan).
 
 ### How the bus model would need to change
 

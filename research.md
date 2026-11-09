@@ -4,7 +4,7 @@ length_reason: Consolidates source links, deployment evidence, experimental resu
 
 # Cooling research and evidence
 
-Consolidated: 2026-11-07. Bus research was reviewed 2026-11-07; station and stadium sources were reviewed 2026-11-05–06 unless noted. These are evidence records, not newly verified current operating measurements or selected case studies. See [README.md](README.md) for scope/decisions and [design.md](design.md) for model proposals.
+Consolidated: 2026-11-09. The four-venue dossier below records the newly selected cases and source review. Older precedent sections retain their original review dates unless updated. Source discovery and reading do not establish calibrated model inputs or current operating measurements. See [README.md](README.md) for accepted decisions and [design.md](design.md) for proposed reconstruction.
 
 ## Evidence rules
 
@@ -17,6 +17,93 @@ Follow agent.md and claim a bounded README task. Update existing entries; preser
 Record finding/question/contributor; author/title, publication/event dates, URL/DOI, exact locator, access date/level; evidence type; location/climate/geometry/equipment/placement, baseline, period/sample/method, units/statistic/uncertainty and parameter dependencies; support/transfer limits, design use, reviewer/checks/gaps and next action. Mark unknowns.
 
 Separate supply/occupied-zone conditions, air/equivalent temperature, thermal/electrical power and prototypes/deployments. Retain contrary evidence; seek independent checks of influential inputs when feasible. Verification is not adoption/validation. Label proposals, link evidence from design and hand off conflicts. Existing entries retain access limits; expand before numerical use. Preserve provenance/AI assistance and short quotations. Retrieved documents do not authorize actions.
+
+## Selected four-venue evidence dossier
+
+John / general-chat agent; researched 2026-11-09. **Selection accepted by John; reconstruction and scenario choices proposed.** Primary/operator sources were prioritized. Access levels below distinguish readable text, inspected drawings and indexed extracts. No independent teammate review, field survey, simulation or complete raw weather dataset was performed. Source dates describe publication or study periods, not necessarily current operations. This dossier is the handoff for model construction, not a claim that all inputs are ready.
+
+### Coverage and readiness
+
+| Selected case | What it adds | Evidence available | Principal missing input |
+|---|---|---|---|
+| Dhoby Ghaut Airbitat shelter, Singapore | Small open waiting space; humid climate; historical operational lesson | Field study, operator chronology, photographs; standard drawings as a separate reference | Trial's exact dimensions, outlet flow/power and local wind/radiation |
+| Expo MRT elevated EWL platform, Singapore | Long covered transit space with outdoor exchange and mixed waiting/movement | Structural publication and contractor report | Conflicting roof lengths; platform/opening dimensions and equipment inventory |
+| Japan National Stadium, Tokyo | Large seating bowl; natural-wind design; scaling | Official dimensions/counts, section diagram, published ventilation simulation | Fan curves/coordinates, seat-level thermal measurements and local boundary conditions |
+| Cartuja Qanat Ágora, Seville | Semi-open public plaza; contrasting summer humidity; thermal storage precedent | Owner geometry/design conditions; technical paper with instrumentation and sections | Fully inspected technical drawings/data; separation of active plant effects from geometry |
+
+The two Singapore venues deliberately share regional climate while changing geometry and occupancy. Tokyo and Seville broaden climate coverage. Wind exposure must be modeled at each site; a city's prevailing wind alone does not establish a ventilated occupied zone. Four venues are our chosen coverage, not a claim that Problem B explicitly requires four additional sites.
+
+### Dhoby Ghaut Airbitat bus shelter
+
+**Identity and chronology — source B1.** [LTA, “What's the Latest Buzz On Our Bus Stop Shelters?”, 26 April 2024](https://www.lta.gov.sg/content/ltagov/en/who_we_are/statistics_and_publications/Connect/bus-stop-shelters.html), subsection “Airbitat Oasis Smart Bus Stop”; full web text read. The trial was outside Plaza Singapura at Dhoby Ghaut. Its original overhead nozzles were redesigned into seat-attached columns after a year; the trial ended in August 2021 because operations/maintenance costs were high relative to ordinary stops. Treat the original and redesigned installations as separate configurations, not simultaneous features or a currently operating system.
+
+**Measured evidence — source B2.** Velasco and Segovia, [“Effectiveness of equipping bus stop shelters with cooling and filtering systems in a city with tropical climate”](https://www.researchgate.net/publication/373484112_Effectiveness_of_equipping_bus_stop_shelters_with_cooling_and_filtering_systems_in_a_city_with_tropical_climate), DOI [10.1108/SASBE-03-2023-0063](https://doi.org/10.1108/SASBE-03-2023-0063); online August 2023, *Smart and Sustainable Built Environment* 13(5), 1330–1345. Author-upload text read: methods/site description, thermal results and limitations. Five March 2018 evening sessions covered 16:20–19:20. Reported shelter area: **32 m²**. The system combined multistage cooling and filtration; technical drawings/specifications were unavailable, and a commercial UBC1 unit was used as a proxy. The mean air-temperature reduction was about **1°C**. Reported 25th–75th percentiles were **31.2–33.4°C** at the original shelter and **30.9–32.5°C** at Airbitat, with RH **48.0–60.9%** and **52.0–62.3%**, respectively. These are not extreme ranges or paired temperature reductions. Wind and mean radiant temperature were not measured, preventing full comfort validation. Non-simultaneous occupancy counts cannot establish preference. Its one-year dismantling statement must be reconciled with B1's later redesign/end chronology.
+
+**Reconstruction implication (our proposal).** Begin with the documented 2018 configuration because it has corresponding field observations; retain the 2019 redesign as a later placement comparison if its geometry can be established. An area alone does not determine length, depth or roof height. The earlier 9 × 3 m / 27 m² illustration derives from a different LTA standard and must remain a separate conceptual reference, not an as-built Airbitat model. Use photographs for topology and label any inferred dimensions; do not infer installation permission, loading or utilities from appearance.
+
+**Missing before quantitative validation:** trial plan/section and orientation; outlet number, size, velocity, temperature/RH and control schedule; actual electrical/water use; time-aligned ambient and occupied-zone observations; shade/radiant conditions; boarding/waiting distributions. B2 can support an order-of-magnitude temperature check for its historical weather and equipment, not validation of ordinary wet-pad fans. The stop ID/precise coordinates were not verified in this review. See [standard drawings and DataMall access](#candidate-geometry-and-data).
+
+### Expo MRT elevated platform
+
+**Boundary.** Study the elevated East–West Line platform at Expo, not the underground Downtown Line or the neighboring exhibition halls. Keep stairs/escalator openings, roof, platform edges and track-side exchange explicit. Exact current boundaries and screen-door geometry still need a dated plan/photo check.
+
+**Structural source E1.** BCA, [*Structural Steel Design and Construction*](https://www1.bca.gov.sg/docs/default-source/docs-corp-news-and-publications/publications/for-industry/buildability-series/structural_steel_design_and_construction_lowres.pdf), Table 4.1 and Expo case, printed p. 63. Indexed primary-document extracts read; direct PDF retrieval failed, so drawings were not visually verified. The publication gives a platform roof **200 m × 29 m**, **four V-shaped columns**, and a separate ticket-hall roof **38.7 m diameter**. Project dates are July 1998–January 2001. These are roof dimensions, not usable waiting-floor dimensions.
+
+**Conflicting source E2.** [Aveng Annual Report, June 2004](https://www.sharedata.co.za/data/004183/pdfs/aveng_ar_04.pdf), printed p. 38, “Expo station: Singapore”; indexed passage and photograph description read, direct PDF access intermittent. It describes a **130 m** titanium-clad elliptical roof and **40 m** stainless-steel disc. Its “up to four degrees cooler” statement has no measurement protocol in that passage and is not adopted as an air-temperature offset.
+
+**Open discrepancy:** 130 m versus 200 m is consequential. Do not average them, silently choose one, or assume they refer to the same extent. Compare a dimensioned plan with a scaled map and identify which structure/extent each source measures. The rounded disc sizes alone do not resolve the platform-roof discrepancy. No exact reconstructed geometry is adopted.
+
+**Model value and missing inputs (our assessment).** A platform strip can test localized cooling, crosswind loss and crowd pulses without simulating the entire interchange. It needs actual platform width/elevation, roof section, openings, obstructions, boarding zones and feasible mounting areas. No Expo-specific current fan count, manufacturer curve, power, mounting schedule or measured cooling dataset was verified. A fleet-wide fan announcement would not supply those values. Initially compare train-present and train-absent snapshots; train-induced transient airflow is an optional refinement, not something a static outside wind automatically includes. Station entry counts would need conversion into platform-specific person-time, with uncertainty.
+
+### Japan National Stadium
+
+**Official inventory — source J1.** Japan Sport Council, [facility overview](https://www.jpnsport.go.jp/kokuritu/Default.aspx?TabId=439), “heat measures” and facility summary; full text read, no publication date shown. Reported dimensions are approximately **350 m north–south × 260 m east–west**, height **47 m**; three seating tiers and **67,750 seats**. Heat measures include **185 airflow fans**, mist at eight locations and separate conditioned rest rooms. Capacity is not attendance; 185 is an installed inventory, not a universal stadium maximum or a count of evaporative coolers.
+
+**Section and mechanism — source J2.** JSC, [*Overview of the Japan National Stadium*](https://www.jpnsport.go.jp/corp/Portals/0/kokuritsu/overview_of_the_JapanNationalStadium.pdf), PDF p. 6, section D. PDF downloaded; text and rendered page inspected. Eaves and terraces admit natural wind; the drawing depicts heat/moisture leaving above the field and supplementary fans around the lower two tiers. Fan-position diagrams are explicitly illustrative, not exact installation coordinates. This is design intent, not measured airflow under all weather.
+
+**Simulation precedent — source J3.** [Kyushu University research release, June 2021](https://www.kyushu-u.ac.jp/ja/researches/view/604), results/publication details; web text read. It reports Uchida and Araya's [2021 stadium LES study, DOI 10.1155/2021/8822548](https://doi.org/10.1155/2021/8822548), using a GIS-based three-dimensional model. For a roughly **3 m/s northerly wind above the stadium**, the simulated initial fluid layer largely dispersed in about **20 minutes**. This is one simulated ventilation case, not a measured air-change rate, thermal-comfort result or guarantee for other winds. Full computational inputs and a reusable mesh were not obtained here.
+
+**Reconstruction implication (our proposal).** Use a coarse bowl/opening model to establish different sector exposures, then one or several occupied seating sectors for detailed equipment evaluation. Preserve roof shade, tier slope, rear/concourse openings and local fan direction. Rotational symmetry of seating does not imply symmetry of wind or sunlight. A repeated cell must exchange air/heat consistently with its neighbors; it cannot be independently tiled while retaining one favorable inflow everywhere.
+
+**Missing:** detailed fan positions, operating modes, flow/power/noise curves; tier sections and opening porosity; roof/seat thermal properties; measured local weather and thermal conditions; actual crowd distributions/event duration. Do not assign whole-stadium energy to a small sector or scale a sector's benefit to every seat without exposure/occupancy weights. Mist and rest rooms stay outside the current fan/wet-pad comparison unless explicitly included and costed.
+
+### Cartuja Qanat Agora
+
+**Selected space — source Q1.** [Cartuja Qanat official project page](https://cartujaqanat.com/), “Ágora” and climate-control sections; full text read, page undated. The Ágora is a **750 m² rectangular space**, **2 m below avenue level**, with semitransparent barriers. It is separate from the adjacent amphitheater; that space's capacity must not be transferred. Listed design conditions include air **27°C**, cover **24°C**, outside exchange of **9 h⁻¹ at 37°C** and **7 h⁻¹ precooled to 28°C**, and supply of **21 h⁻¹ at 25°C** through buried ducts and **11 h⁻¹ at 24°C** through submerged ducts. These are project descriptions/design values, not verified simultaneous measurements. Confirm reference volume and operating modes before combining rates.
+
+**Technical source Q2.** Montero-Gutiérrez et al., [“Exploring a new approach to ancient Qanat techniques using earth-air and water-air heat exchangers for efficient natural cooling”](https://doi.org/10.1016/j.enconman.2025.120066), *Energy Conversion and Management* 341 (1 October 2025), 120066; [institutional PDF](https://rodin.uca.es/bitstream/handle/10498/38706/OA_2025_0659.pdf?sequence=1). Indexed primary text/figure captions and publisher summary read; full PDF download was incomplete and failed validation. Figure 2 describes sections of the approximately **20 m × 40 m**, southwest-oriented space; those rounded dimensions do not replace the reported 750 m². Figure 7 locates temperature/humidity sensors along buried/submerged paths and soil/water sensors. Experiments distinguish inactive operation, daytime cooling and nighttime regeneration. Publisher highlights report an 8°C reduction and about 20 kWh of daytime cooling; these are system results, not a uniform occupant temperature reduction or electrical consumption. Raw time series and full methods remain unverified.
+
+**Reconstruction implication (our proposal).** This adds a public plaza rather than another transport facility or stadium. Preserve its sunken geometry, roof, barriers and access openings. First evaluate hypothetical fan/wet-pad alternatives with existing active cooling disabled and shade retained. A separate actual-system study would need ground/water storage, night regeneration, pumps and roof heat exchange. Do not attribute the real hybrid system's performance to a portable wet-pad unit, or give a cooled roof a free benefit in the baseline.
+
+**Missing:** fully inspected dimensioned section and height datum; barrier/opening details; reconciled operating modes and airflows; electrical and water records; occupied-zone velocity/radiation; attendance/dwell patterns; raw experimental data and uncertainties. A 3 m roof-height statement in indexed text needs its reference level checked before use. No claim is made that the original site's active plant fits our simple device scope without modification.
+
+### Weather sources and scenario construction
+
+These are data routes, not a downloaded/cleaned dataset. All were reviewed/discovered on 2026-11-09. Record observation station, coordinates, measurement height, time zone, period, units and missing-data flags when acquiring values; station wind is a boundary reference, not person-level airflow.
+
+| Source / locator / access | What is usable | Limitation / next action |
+|---|---|---|
+| [Meteorological Service Singapore, Climate of Singapore](https://www.weather.gov.sg/climate-climate-of-singapore), humidity/wind sections; web text | Regional humidity cycle and monsoon context; mean annual RH about 82% | Annual RH is not a hot-afternoon condition or site observation |
+| [NEA/data.gov.sg weather collection](https://data.gov.sg/collections/1459/view), collection catalogue; [official API documentation](https://developers.data.gov.sg/); catalogue/docs read | Temperature, RH, wind speed/direction, with some one-minute observations and historical coverage | Download a common interval; verify variable availability and units for each station, not merely the nearest name |
+| [JMA normals](https://www.data.jma.go.jp/stats/data/en/normal/normal.html), Tokyo, 1991–2020; published table | July/August mean RH 76%/74%; mean temperature 25.7/26.9°C | Monthly means are context, not an extreme-heat episode |
+| [JMA historical observations/download](https://www.data.jma.go.jp/risk/obsdl/), official data route located | Hourly/daily Tokyo forcing and quality flags | Select contemporaneous temperature, humidity, wind and solar data; check station metadata/relocations before transfer |
+| [AEMET Seville Airport normals, station 5783](https://www.aemet.es/es/serviciosclimaticos/datosclimatologicos/valoresclimatologicos?k=&l=5783), 1981–2010 table | July mean RH 44%, mean daily maximum 36.0°C; August 48%, 35.5°C | Different normal period from JMA; airport exposure differs from the sunken plaza |
+| [AEMET OpenData](https://opendata.aemet.es/), official access route located | Historical/observational weather access | API key/access setup may be needed; no account/key created and no series acquired |
+
+**Proposed sampling:** choose actual simultaneous hot-period records, including hot-calm and humid-hot episodes plus contrasting wind directions when represented. Retain temperature–humidity–wind covariance rather than constructing every combination of independent extremes. Use multiple weather snapshots with duration weights; preserve thermal history if modeling Qanat storage. A controlled same-weather cross-site experiment can separately isolate geometry effects, but label it hypothetical rather than local climatology. Include solar/radiant forcing and distinguish outdoor meteorological direction (“from”) from the simulation velocity vector (“toward”).
+
+### Shared input ledger and next handoff
+
+For every adopted value record `venue/version; parameter; value/range; unit; source+locator; measured/design/proxy/estimated; date/time; reference height or area; uncertainty; intended use`. Keep the actual-system description separate from the hypothetical equipment table. No current source supplies a complete fan curve, water consumption, price, noise and geometry package for all four venues.
+
+1. **First bus case:** establish the historical geometry and a matched weather/occupancy scenario. If dimensions remain estimated, publish them and a sensitivity range; do not label the earlier concept a measured reconstruction.
+2. **Equipment inputs:** use the problem's three required device classes, resolve the printed power units, and obtain internally consistent airflow/outlet area/power/wet-bulb effectiveness data. Manufacturer maxima are not uniform occupied-zone performance.
+3. **Expo:** reconcile the two roof lengths before scaling a whole-platform model; a labeled generic strip can support early method development meanwhile.
+4. **Tokyo:** establish at least windward/leeward sector conditions before repeating a layout. J3 can guide a wind scenario, not validate our comfort calculation.
+5. **Seville:** obtain the complete Q2 paper/sections and choose whether real active systems are off or explicitly modeled; budget all associated energy/water consistently.
+6. **All sites:** acquire representative occupancy/dwell information and costs. Distinguish capital, maintenance and electricity; use dated local tariffs/currency for later calculations. Actual costs, carbon factors, noise and water rates were not verified in this review. Report scenario rankings with uncertainty rather than inventing a measured winner.
+
+Research status: selection and evidence dossier complete; numerical parameter adoption and physical validation remain open. No authors/operators were contacted, no simulation was run, and no incomplete PDF or third-party drawing was added to GitHub. AI assisted source discovery, comparison and drafting.
 
 ## Santa 2025 packing methods and cooling-layout transfer
 
@@ -71,7 +158,7 @@ Compare occupied-zone speeds, temperature/moisture, total benefit and configurat
 
 ### Candidate geometry and data
 
-John / general-chat agent, reviewed 2026-11-07. Proposed, not selected: use a reproducible LTA-standard reference shelter, matching a named stop if claiming a specific venue. Problem 2a names no city/dimensions; requirement 3 allows data or justified estimates. Preserve outdoor exchange and the required devices.
+John / general-chat agent, reviewed 2026-11-07; status updated 2026-11-09. The LTA-standard reference below was an earlier proposal. Dhoby Ghaut Airbitat is now selected; these standard dimensions are not its surveyed geometry. See the [selected shelter dossier](#dhoby-ghaut-airbitat-bus-shelter). Problem 2a names no city/dimensions; requirement 3 allows data or justified estimates. Preserve outdoor exchange and the required devices.
 
 [LTA September 2025 drawings](https://www.lta.gov.sg/content/dam/ltagov/industry_innovations/industry_matters/development_construction_resources/Street_Work_Proposals/Standards_and_Specifications/SDRE/SDRE14-11_BUS_1-5_September_2025.pdf), rendered PDF page 6/BUS5 rev C: plan depth 3000 mm, size table includes 9 m length, seats/screens/columns/path connections/kerb/bollards/information panels/conduits. Hence proposed 9x3 m footprint; remaining heights/structure need verification. Page 5/BUS4 rev D is separately marked TEMPORARY USE ONLY; do not merge its dimensions into BUS5. Official standard, not surveyed site or approved retrofit; conduits do not establish spare electrical capacity, water or roof loading. No structural/independent review.
 
@@ -79,7 +166,7 @@ John / general-chat agent, reviewed 2026-11-07. Proposed, not selected: use a re
 
 Candidate mounting regions beneath beams, beside posts, rear seats and an external plant pad remain proposals. Exclude boarding/access paths, sightlines and service clearances; check loading, utilities, drainage and maintenance before declaring feasibility.
 
-Requested inline 3D concept built 2026-11-07: rotatable/top/front/end views, removable roof, bare/fan/ducted alternatives. Assumptions: 9x3 m footprint, 2.7 m roof, two 2.8 m benches, 1.5 m rear opening, 0.8x0.8x1.1 m external cooler, outlet x=1.5/4.5/7.5 m, illustrative posts/screens/ducts. Controls checked in headless Chrome; desktop/narrow renders inspected. Arrows are axes, not solved flow; no CFD or optimization. Inline source remains in chat. Next select reference versus named site and verify dimensions/feasible regions; no geometry or placement adopted.
+Requested inline 3D concept built 2026-11-07: rotatable/top/front/end views, removable roof, bare/fan/ducted alternatives. Assumptions: 9x3 m footprint, 2.7 m roof, two 2.8 m benches, 1.5 m rear opening, 0.8x0.8x1.1 m external cooler, outlet x=1.5/4.5/7.5 m, illustrative posts/screens/ducts. Controls checked in headless Chrome; desktop/narrow renders inspected. Arrows are axes, not solved flow; no CFD or optimization. Inline source remains in chat. Now reconstruct the selected historical trial separately and verify dimensions/feasible regions; no specific geometry or placement adopted.
 
 ### Evidence
 
@@ -112,9 +199,7 @@ Access limit: indexed primary abstract/conclusion available; direct full-page re
 
 #### Targeted cooled-air delivery: actual operational lesson
 
-Singapore LTA retrospective, 26 April 2024: Airbitat trial at Dhoby Ghaut moved outlets from overhead to columns attached to seats to address cooling and operational feedback. The three-year trial ended in August 2021 because operating/maintenance costs were high relative to typical stops. This supports modeling outlet placement and lifecycle costs; does not establish a measured energy-efficiency ranking or current deployment.
-
-Source: https://www.lta.gov.sg/content/ltagov/en/who_we_are/statistics_and_publications/Connect/bus-stop-shelters.html
+The selected [Dhoby Ghaut dossier](#dhoby-ghaut-airbitat-bus-shelter), sources B1/B2, consolidates the operator chronology and field study. Keep placement/lifecycle lessons distinct from a measured energy-efficiency ranking.
 
 #### Cooled radiant surfaces: experimental alternative
 
@@ -156,7 +241,7 @@ LTA's above-ground station account identifies natural ventilation, greenery and 
 
 Sources: [LTA above-ground stations](https://www.lta.gov.sg/content/ltagov/en/who_we_are/statistics_and_publications/Connect/greenmrtstations.html); [LTA sustainability report](https://www.lta.gov.sg/content/dam/ltagov/who_we_are/statistics_and_publications/report/pdf/LTA_SR2324.pdf).
 
-The owner's strong-draft objection and stadium fan exclusion remain recorded. Do not turn them into a general physical claim that all air movement harms comfort or exclude the fan explicitly required for the bus comparison. A draft penalty or acceptable airflow constraint is a proposal, not a selected numerical limit.
+The owner's earlier strong-draft concern remains relevant to comfort, while the current fan/cooling-fan scope supersedes the stadium fan exclusion. Do not turn discomfort in some conditions into a general physical claim that all air movement harms comfort. A draft penalty or acceptable airflow constraint is a proposal, not a selected numerical limit.
 
 #### Futamatagawa station in Japan: mist experiment
 
@@ -200,7 +285,7 @@ Heat pipes are optional heat-transfer components needing a suitable heat sink. N
 
 ## Stadium precedents
 
-Reviewed 2026-11-05–06; published designs, not current measurements or chosen venues. John excluded stand-alone fans from the stadium shortlist because of draft concerns; this neither establishes that airflow is inherently unpleasant nor removes Problem B's required bus fan. Distributed conditioned air also uses fans. No unsupported claim that most stadiums use under-seat cooling.
+Historical precedents reviewed 2026-11-05–06, not current operating measurements. Japan National Stadium is now the selected stadium; see its [new dossier](#japan-national-stadium). The current fan/cooling-fan scope supersedes the earlier stadium fan exclusion. Distributed conditioned air also uses fans. No unsupported claim that most stadiums use under-seat cooling.
 
 - **Al Janoub/Al Wakrah:** [engineer interview, 2019](https://www.workerswelfare.qa/en/news/al-wakrah-stadium-cooling-technology.html) describes under-seat diffusers, partial recirculation and geometry limiting infiltration. It distinguishes Khalifa, whose structure required small nozzles. [FIFA, 2022](https://inside.fifa.com/sustainability/news/legacy-in-action-qatars-revolutionary-stadium-cooling-technology) describes pitch/stand delivery. A cold bubble is not an impermeable boundary; no carbon-neutrality/performance claim adopted.
 - **Singapore National Stadium:** [Arup](https://www.arup.com/projects/singapore-sports-hub/) and [2016 release](https://www.v2com-newswire.com/en/newsroom/categories/institutional-architecture/press-kits/2186-01/singapore-national-stadium) describe 55,000 seats, under-seat cooled air, movable shading roof and arcade louvres. [MEHITS](https://www.climaveneta.com/EN/projects/1774) plant serves multiple complex areas; do not assign whole-complex thermal capacity to bowl electricity or guarantee comfort in all weather.
