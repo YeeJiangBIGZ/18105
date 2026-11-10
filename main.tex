@@ -1,14 +1,161 @@
-\documentclass{article}
-\usepackage{graphicx} % Required for inserting images
+\documentclass[11pt]{article}
 
-\title{18105}
-\author{Tianyi Jiang}
-\date{November 2026}
+\usepackage[letterpaper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{xcolor}
+\usepackage{array}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+
+\pagestyle{fancy}
+\fancyhead[L]{Team 18105}
+\fancyhead[C]{}
+\fancyhead[R]{Page \thepage}
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0.4pt}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{8pt}
 
 \begin{document}
 
-\maketitle
+% ============================================================================
+% PAGE 1 : SUMMARY SHEET
+% ============================================================================
+\thispagestyle{empty}
 
-\section{Introduction}
+% ---- Standard HiMCM summary-sheet three-column header ----
+% "B" and "18105" are centered below their titles.
+\begin{center}
+\begin{minipage}[c]{0.30\textwidth}
+\centering
+\textbf{Problem Chosen}\\[2pt]
+{\Large \textcolor{red}{\textbf{B}}}
+\end{minipage}%
+\hfill
+\begin{minipage}[c]{0.40\textwidth}
+\centering
+\textbf{2026 HiMCM}\\[2pt]
+\textbf{Summary Sheet}
+\end{minipage}%
+\hfill
+\begin{minipage}[c]{0.30\textwidth}
+\centering
+\textbf{Team Control Number}\\[2pt]
+{\Large \textcolor{red}{\textbf{18105}}}
+\end{minipage}
+\end{center}
+
+\vspace{6pt}
+\noindent\hrule
+\vspace{12pt}
+
+% ---- Summary (five readable paragraphs) ----
+\noindent
+On a hot afternoon, commuters waiting at a bus shelter, an elevated platform, or
+an open plaza feel the cooled air they paid for slip away into the surrounding
+heat. These semi-open spaces are harder to cool than enclosed buildings: with no
+sealed boundary, the cooling constantly fights incoming hot air and much of it
+blows into empty space. Full air-conditioning is rarely economical or feasible
+there, leaving fans and evaporative coolers as the only practical options. A fan
+only injects jet velocity and lowers perceived temperature by wind chill, with no
+temperature or humidity source; an evaporative cooler adds a cooling sink and a
+moisture source, its temperature drop bounded by the wet-bulb depression.
+
+To judge these devices we build a coupled model. A two-dimensional
+\textbf{advection--diffusion equation} tracks temperature and humidity under the
+wind, and \textbf{moving agents} represent passengers. Two agent modes are needed:
+task-locked agents model people who must stay at a fixed waiting position, while
+free-waiting agents step locally toward the most comfortable nearby cell. We keep
+the coupling one-way, treating agents as field observers, because resolving
+two-way plume-obstacle-body interactions would multiply the cost; that refinement
+is deferred to the limitations. We convert each agent's perceived temperature
+into a two-sided discomfort score that penalizes both overheating and cold
+drafts. Summing comfort gained over waiting time and dividing by energy consumed
+gives a cooling-efficiency ratio, the first required quantity.
+
+Efficiency alone is not enough: a layout can earn a high ratio with tiny power
+yet deliver negligible comfort to a large crowd, or block evacuation routes and
+create slip hazards. We therefore add a \textbf{cooling-effectiveness score} built
+from six criteria with entropy weighting and \textbf{TOPSIS}; entropy weighting
+derives objective weights from sample variance, and we test whether the preferred
+layout shifts under priorities such as a cost-focused operator versus a
+safety-focused administrator. Layouts that break safety or physical limits are
+filtered out first.
+
+Running the full model inside an optimizer is impractical: each high-fidelity
+evaluation must solve a transient convection--diffusion field and integrate agent
+motion, so hundreds of \textbf{simulated-annealing} iterations would exceed
+ordinary laptop runtime. We instead adopt a \textbf{surrogate-assisted search}:
+Latin-Hypercube Sampling selects a limited set of high-fidelity runs, these train
+a fast random-forest stand-in, simulated annealing searches for the near-optimal
+layout on that stand-in alone, and the optimized candidate layout is checked
+against the full model.
+
+The general recommendations we report are synthesized by us from cross-comparison
+across many cases, not produced directly by the optimizer. We apply the framework
+to two venues with contrasting climates: the humid Dhoby Ghaut bus shelter, where
+high humidity limits evaporative-cooler performance, and the dry-hot Cartuja Qanat
+\'Agora sunken plaza, where \textbf{evaporative cooling} has large theoretical
+potential, so the optimal strategy shifts with the environment. The main
+limitations are the two-dimensional simplification, the one-way coupling, the
+surrogate's prediction error, and the local-optimum nature of simulated
+annealing.
+
+\vspace{12pt}
+\noindent Keywords: advection-diffusion PDE, agent-based model, surrogate-assisted
+simulated annealing, TOPSIS, evaporative cooling, multi-criteria evaluation
+
+% ============================================================================
+% PAGE 2 : TABLE OF CONTENTS
+% ============================================================================
+\clearpage
+
+{\LARGE\bfseries Contents}\par
+\vspace{14pt}
+\begingroup
+\large
+\setlength{\parskip}{4pt}
+
+\newcommand{\tocsec}[1]{\par\vspace{10pt}\noindent\textbf{#1}\hfill\par}
+\newcommand{\tocsub}[1]{\par\noindent\hspace*{2.2em}#1\dotfill\par}
+
+\tocsec{1\quad Introduction}
+\tocsub{1.1\quad Background and Motivation}
+\tocsub{1.2\quad Problem Restatement \& Requirements Breakdown}
+\tocsub{1.3\quad Overall Framework and Paper Organization}
+
+\tocsec{2\quad Assumptions and Justification}
+\tocsub{2.1\quad Physical and Climate Assumptions}
+\tocsub{2.2\quad Cooling Device and Energy Assumptions}
+\tocsub{2.3\quad Pedestrian and Crowd Assumptions}
+
+\tocsec{3\quad Notation and Key Variables}
+
+\tocsec{4\quad Integrated PDE-Agent Modelling Framework}
+\tocsub{4.1\quad Governing Advection-Diffusion PDE}
+\tocsub{4.2\quad Dual-Mode Pedestrian Agent Model}
+\tocsub{4.3\quad Two-Sided Discomfort Metric \& Cooling Efficiency (Requirement 1)}
+\tocsub{4.4\quad Multi-Criteria Cooling Effectiveness with Entropy-TOPSIS (Requirement 4)}
+
+\tocsec{5\quad Surrogate-Assisted Simulated Annealing for Layout Optimization}
+\tocsub{5.1\quad Computational Bottleneck of High-Fidelity Simulation}
+\tocsub{5.2\quad Latin Hypercube Sampling \& Random Forest Surrogate}
+\tocsub{5.3\quad Optimization Search and Back Validation}
+
+\tocsec{6\quad Model Application to Two Distinct Venues (Requirement 3)}
+\tocsub{6.1\quad Venue 1: Humid Dhoby Ghaut Bus Shelter}
+\tocsub{6.2\quad Venue 2: Dry-Hot Cartuja Qanat \'Agora Plaza}
+\tocsub{6.3\quad Cross-Venue Comparison}
+
+\tocsec{7\quad Sensitivity Analysis}
+
+\tocsec{8\quad Strengths, Limitations and Future Work}
+
+\tocsec{9\quad Conclusions}
+
+\tocsec{References}
+\tocsec{Appendices}
+
+\endgroup
 
 \end{document}
