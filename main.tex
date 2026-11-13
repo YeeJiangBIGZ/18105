@@ -4,8 +4,12 @@
 \usepackage{amsmath,amssymb}
 \usepackage{xcolor}
 \usepackage{array}
+\usepackage{booktabs}
 \usepackage[hidelinks]{hyperref}
 \usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{multirow}
 
 \pagestyle{fancy}
 \fancyhead[L]{Team 18105}
@@ -122,7 +126,7 @@ simulated annealing, TOPSIS, evaporative cooling, multi-criteria evaluation
 \tocsec{1\quad Introduction}
 \tocsub{1.1\quad Background and Motivation}
 \tocsub{1.2\quad Problem Restatement \& Requirements Breakdown}
-\tocsub{1.3\quad Overall Framework and Paper Organization}
+\tocsub{1.3\quad Overall Framework}
 
 \tocsec{2\quad Assumptions and Justification}
 \tocsub{2.1\quad Physical and Climate Assumptions}
@@ -157,5 +161,830 @@ simulated annealing, TOPSIS, evaporative cooling, multi-criteria evaluation
 \tocsec{Appendices}
 
 \endgroup
+
+% ============================================================================
+% SECTION 1 : INTRODUCTION
+% ============================================================================
+\section{Introduction}
+
+\subsection{Background and Motivation}
+
+Heatwaves are growing longer, more frequent, and more intense in many cities. People who wait at bus shelters, train platforms, and open plazas are directly exposed to this heat. These waiting spaces are usually semi-open, so they cannot be sealed the way an office or a shopping mall is. A vapor-compression air conditioner is rarely practical in such a space. It would spend most of its energy cooling air that immediately escapes into the open surroundings. The practical devices are a fan or an evaporative cooler.
+
+The two devices rest on different physics. An evaporative cooler lowers the actual air temperature by evaporating water. The same process raises the humidity of the air it discharges. In a humid climate this extra moisture reduces the cooling benefit. A fan does not lower the air temperature at all. It only raises the air speed over the skin, which speeds up sweat evaporation and lowers the perceived temperature.
+
+These differences mean that device choice depends on the local climate and on where people stand. A simple model that treats the whole venue as one uniform temperature misses this fact. Cooling is local and directional. The cool region stays near the device, while people farther away feel little benefit. We therefore need a spatially resolved description of the temperature and humidity fields. We also need to simulate how pedestrians position themselves, because the benefit of a device depends on where the people are. This is the motivation for the coupled physics-and-agent framework developed in this paper.
+
+\subsection{Problem Restatement \& Requirements Breakdown}
+
+We consider a semi-open waiting venue that must be cooled with a limited set of devices. The problem allows exactly three devices: a fan and two evaporative coolers of different capacity. We must decide which devices to use, where to place them, and how to operate them so that waiting passengers receive the greatest comfort for the energy spent.
+
+The problem asks for five things.
+
+\begin{itemize}
+\item \textbf{Requirement 1.} Define a cooling efficiency metric, using the open-freezer analogy given in the problem statement.
+\item \textbf{Requirement 2.} Construct a base model of a bus stop with the three permitted devices.
+\item \textbf{Requirement 3.} Adapt the model and apply it to at least two distinct venues under different climate conditions.
+\item \textbf{Requirement 4.} Extend the evaluation from cooling efficiency to a broader effectiveness metric that integrates thermal comfort, waiting experience, energy consumption, and operational cost.
+\item \textbf{Requirement 5.} Provide actionable recommendations on device selection, placement, and operation strategy to maximize passenger comfort per unit energy consumption.
+\end{itemize}
+
+We address all five requirements within one unified framework rather than building five separate models. Each requirement shares the same physical model, the same pedestrian agent model, and the same evaluation pipeline, which keeps the results consistent.
+
+\subsection{Overall Framework}
+
+Figure~\ref{fig:workflow} summarizes our full computational workflow. Starting
+from external inputs including venue geometry and meteorological conditions, our
+pipeline proceeds in three sequential stages: physics-pedestrian simulation,
+multi-criteria evaluation, and surrogate-assisted layout optimization. A dashed
+feedback loop represents iterative optimization cycles between the optimizer and
+the high-fidelity PDE-Agent simulation.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.80\textwidth]{workflow_optimized.pdf}
+\caption{Integrated workflow connecting physics-based simulation, multi-criteria evaluation, and surrogate-assisted layout optimization.}
+\label{fig:workflow}
+\end{figure}
+
+% ============================================================================
+% SECTION 2 : ASSUMPTIONS AND JUSTIFICATION
+% ============================================================================
+\section{Assumptions and Justification}
+
+A cooling model of a semi-open venue must balance physical detail against the
+cost of solving a transient field many times inside an optimizer. We state the
+assumptions that define this balance here. Each assumption narrows the model so
+that the remaining problem stays solvable and reproducible. We group the
+assumptions into three sets: physical and climate, device and energy, and
+pedestrian and crowd.
+
+Of the eight assumptions, Assumptions~3, 4, and 7 are critical, because the
+conclusions depend on them, and each is tested in Section~7. The remainder are
+supporting simplifications.
+
+\subsection{Physical and Climate Assumptions}
+
+Physical-climate assumptions define the computational domain and background
+environmental conditions for our PDE solver.
+
+\textbf{Assumption 1:} The venue is modeled as a two-dimensional horizontal
+plane. We neglect vertical stratification of temperature and humidity.
+\textit{Justification:} Passengers stand or sit in a thin layer near the ground.
+The horizontal spread of the cooling plume is much larger than the vertical
+mixing height. A two-dimensional field keeps the solver fast enough for repeated
+evaluation inside the optimizer. This simplification also drops the gravitational
+sinking of cold, dense plume air, a trade-off we accept because the waiting layer
+is thin and horizontal spread dominates.
+
+\textbf{Assumption 2:} The outdoor temperature, humidity, and background wind
+remain constant during one simulation. \textit{Justification:} Each simulation
+covers a short waiting window of a few minutes. Ambient weather changes slowly
+over such a span, so a steady background is accurate. Short-lived wind gusts are
+not resolved as time-varying flow; they are folded into the constant effective
+diffusivity that represents unresolved turbulent mixing.
+
+\textbf{Assumption 3:} The wind field is prescribed rather than solved from the
+momentum equations. Turbulent mixing enters through a single, spatially uniform
+effective diffusivity. \textit{Justification:} Solving the full Navier--Stokes
+equations in three dimensions would be too costly. The dominant transport in a
+semi-open space is advection by the prescribed wind plus turbulent diffusion,
+which the effective diffusivity captures. In reality, turbulence varies near
+walls and inside the jet, so a uniform diffusivity is an approximation. We test
+the sensitivity of the results to this parameter in Section~7.
+
+\subsection{Cooling Device and Energy Assumptions}
+
+Device-and-energy assumptions fix how the fan and the evaporative cooler act on
+the flow and how their energy use is counted.
+
+\textbf{Assumption 4:} The evaporative cooler is ideal. It adds a cooling sink to
+the temperature field and a moisture source to the humidity field, coupled along
+the adiabatic wet-bulb line by Eq.~\eqref{eq:aq}. Its outlet cannot cool below
+the ambient wet-bulb temperature, so we set its saturation effectiveness to
+$\varepsilon=1$.
+\textit{Justification:} The sink and source reflect the physical operation of the
+device, which removes sensible heat and adds water vapor to the discharged air.
+The adiabatic coupling fixes the correct amount of added moisture per degree of
+cooling. The wet-bulb bound is the thermodynamic limit of evaporative cooling,
+and $\varepsilon=1$ means the outlet reaches this ideal bound exactly. This keeps
+the outlet condition physically consistent in every climate we test. Real coolers
+fall short of this bound, so the case $\varepsilon<1$ can be explored in the
+sensitivity analysis of Section~7.
+
+\textbf{Assumption 5:} A fan changes only the local air speed. It adds no
+temperature or humidity source. \textit{Justification:} A fan has no refrigerant
+and no water. Its benefit comes from wind chill on the skin, which raises
+perceived comfort without changing the air state.
+
+\textbf{Assumption 6:} Each device draws its rated power whenever it runs, so
+energy use is $E=P\,t$. \textit{Justification:} The devices run at a fixed
+setting in our comparison. Part-load behavior is outside the scope of the cooling
+efficiency metric of Requirement~1.
+
+\subsection{Pedestrian and Crowd Assumptions}
+
+Pedestrian-crowd assumptions define how waiting passengers move through the field
+and how their comfort is scored.
+
+\textbf{Assumption 7:} A passenger follows one of two movement modes. A
+task-locked agent stays at a fixed waiting position, while a free-waiting agent
+steps locally toward the most comfortable nearby cell, restricted to a small
+local neighborhood around its original position. Agents read the temperature and
+humidity field but do not change it, so we ignore body heat, wakes, and
+obstruction of the plume. \textit{Justification:} People who wait for a specific
+bus or spot stay put, while others drift toward comfort. Two modes capture both
+behaviors without a full social-force model. The one-way coupling removes the
+need to resolve two-way plume-obstacle-body interactions, which keeps the
+computation cost low enough for repeated optimizer evaluation. This refinement is
+deferred to the limitations section.
+
+\textbf{Assumption 8:} A passenger's discomfort follows a perceived-temperature
+index that combines air temperature, humidity, and wind speed. All comparisons
+use a fixed waiting horizon, and the venues operate at moderate crowd density, so
+congestion is neglected. \textit{Justification:} People sense a combination of
+these variables rather than dry-bulb temperature alone, so the index is more
+faithful than dry-bulb temperature. A fixed horizon keeps every layout comparable
+on the same time basis. The venues operate below dense-crowd conditions, so
+congestion is a secondary effect.
+
+% ============================================================================
+% SECTION 3 : NOTATION AND KEY VARIABLES
+% ============================================================================
+\section{Notation and Key Variables}
+
+We collect the symbols used in the rest of the paper here. Bold lowercase
+letters denote two-dimensional vectors in the horizontal plane. A subscript
+$\infty$ marks the ambient outdoor value. Unless stated otherwise, every field is
+a function of position $(x,y)$ and time $t$. Tables~\ref{tab:notation1}
+and~\ref{tab:notation2} list the symbols by group.
+
+\begin{table}[H]
+\centering
+\caption{Notation for space, time, fields, and climate.}
+\label{tab:notation1}
+\begin{tabular}{@{} l l l @{}}
+\toprule
+\textbf{Symbol} & \textbf{Meaning} & \textbf{Unit} \\
+\midrule
+\multicolumn{3}{@{}l}{\textit{Space and time}} \\
+$\Omega$ & venue domain (two-dimensional) & -- \\
+$(x,y)$ & horizontal coordinates & $m$ \\
+$t$ & time & $s$ \\
+$\tau$ & waiting and evaluation horizon & $s$ \\
+\addlinespace
+\multicolumn{3}{@{}l}{\textit{Fields and climate}} \\
+$T(x,y,t)$ & air temperature field & $^{\circ}$C \\
+$T_{\infty}$ & ambient air temperature & $^{\circ}$C \\
+$q(x,y,t)$ & specific humidity field & $kg\,kg^{-1}$ \\
+$q_{\infty}$ & ambient specific humidity & $kg\,kg^{-1}$ \\
+$\mathbf{u}(x,y)$ & prescribed wind velocity vector & $m\,s^{-1}$ \\
+$\kappa_T$ & effective thermal diffusivity & $m^{2}\,s^{-1}$ \\
+$\kappa_q$ & effective moisture diffusivity & $m^{2}\,s^{-1}$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Notation for devices, pedestrians, and evaluation.}
+\label{tab:notation2}
+\begin{tabular}{@{} l l l @{}}
+\toprule
+\textbf{Symbol} & \textbf{Meaning} & \textbf{Unit} \\
+\midrule
+\multicolumn{3}{@{}l}{\textit{Cooling devices}} \\
+$S_T(x,y,t)$ & temperature source term (cooling sink) & $^{\circ}$C\,$s^{-1}$ \\
+$S_q(x,y,t)$ & moisture source term & $s^{-1}$ \\
+$T_{wb}$ & wet-bulb temperature & $^{\circ}$C \\
+$P_k$ & rated power of device $k$ & $W$ \\
+$E$ & total energy consumed & $J$ \\
+\addlinespace
+\multicolumn{3}{@{}l}{\textit{Comfort and pedestrians}} \\
+$\theta$ & perceived (apparent) temperature & $^{\circ}$C \\
+$N$ & number of pedestrian agents & -- \\
+$\mathbf{p}_i(t)$ & position of agent $i$ & $m$ \\
+$D$ & two-sided discomfort score & -- \\
+\addlinespace
+\multicolumn{3}{@{}l}{\textit{Evaluation and optimization}} \\
+$\eta$ & cooling efficiency & comfort per energy \\
+$C$ & comprehensive cooling effectiveness score & -- \\
+$w_j$ & entropy weight of criterion $j$ & -- \\
+$\mathbf{x}$ & decision vector (selection, placement, operation) & -- \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The next section turns these quantities into the governing equations of the
+integrated model.
+
+% ============================================================================
+% SECTION 4 : INTEGRATED PDE-AGENT MODELLING FRAMEWORK
+% ============================================================================
+\section{Integrated PDE-Agent Modelling Framework}
+
+This section assembles the quantities of Section~3 into one model. We first
+state the governing equations for temperature and humidity. We then describe
+how pedestrians move through the resulting fields. The fields and the agents
+together define the cooling-efficiency metric of Requirement~1. We close by
+extending efficiency into a multi-criteria effectiveness score for
+Requirement~4.
+
+\subsection{Governing Advection-Diffusion PDE}
+
+We resolve the venue as a two-dimensional domain $\Omega$ and track $T(x,y,t)$
+(air temperature) and $q(x,y,t)$ (specific humidity) everywhere inside it. A
+single zone temperature cannot show where cooling actually reaches people,
+because the wind carries cooled air to one side of the venue while the other
+side stays hot. Both fields therefore obey an advection--diffusion equation. For
+temperature,
+
+\begin{equation}
+\frac{\partial T}{\partial t} + \mathbf{u}\cdot\nabla T
+= \kappa_T\,\nabla^{2} T + S_T(x,y),
+\label{eq:temp}
+\end{equation}
+
+and for specific humidity,
+
+\begin{equation}
+\frac{\partial q}{\partial t} + \mathbf{u}\cdot\nabla q
+= \kappa_q\,\nabla^{2} q + S_q(x,y).
+\label{eq:hum}
+\end{equation}
+
+Equation~\eqref{eq:temp} has three parts. The time-derivative term
+$\partial T/\partial t$ is the local rate of change of temperature at a fixed
+point. The advection term $\mathbf{u}\cdot\nabla T$ expresses that moving air
+carries its temperature with it. The diffusion term $\kappa_T\nabla^{2}T$, where
+$\kappa_T$ is the effective thermal diffusivity, accounts for turbulent
+eddy-mixing: it transports heat from hot regions toward cooler regions and
+reduces sharp spatial temperature gradients. Turbulent mixing in an open space is
+far larger than molecular diffusion, so $\kappa_T$ and $\kappa_q$ are effective
+eddy diffusivities.
+
+We prescribe the wind field instead of solving the Navier--Stokes equations. The
+ambient breeze enters from the open side in the positive $x$ direction and decays
+with penetration depth because the roof and walls shelter the interior. A fan
+contributes a localized jet near the unit:
+
+\begin{equation}
+u_x(x,y) = U_0\left(1-\beta\frac{x}{L_x}\right)
++ U_{\mathrm{jet}}\exp\!\left(-\frac{(x-x_c)^2+(y-y_c)^2}{2\sigma_{\mathrm{jet}}^2}\right),
+\qquad u_y=0,
+\label{eq:wind}
+\end{equation}
+
+where $U_0$ is the wind speed at the open edge, $\beta$ the sheltering decay,
+$L_x$ the domain depth, and $(x_c,y_c)$ the device position. A fan changes only
+this velocity field, so it enters the model through $\mathbf{u}$ and through the
+wind-chill term in Section~4.3.
+
+An evaporative cooler changes the air state directly. It adds a localized heat
+sink to the temperature field and a moisture source to the humidity field:
+
+\begin{equation}
+S_T(x,y) = -A_T\,g(x,y), \qquad
+S_q(x,y) = +A_q\,g(x,y), \qquad
+g(x,y)=\exp\!\left(-\frac{(x-x_c)^2+(y-y_c)^2}{2\sigma_c^2}\right).
+\label{eq:source}
+\end{equation}
+
+The amplitudes are linked along the adiabatic wet-bulb line, so each degree of
+sensible cooling carries the physically correct amount of added moisture:
+
+\begin{equation}
+A_q = A_T\,\frac{c_p}{L_v},
+\label{eq:aq}
+\end{equation}
+
+with $c_p$ the specific heat of air and $L_v$ the latent heat of vaporization.
+This single relation makes the cooler work well in dry air and poorly in humid
+air, because the wet-bulb bound limits how far the temperature can fall.
+
+The open side at $x=0$ is an inflow boundary with $T=T_\infty$ and $q=q_\infty$.
+The remaining three sides are solid walls with zero flux,
+$\partial T/\partial n=\partial q/\partial n=0$.
+
+We solve Eqs.~\eqref{eq:temp}--\eqref{eq:hum} on a uniform grid with first-order
+upwind advection and a second-order central-difference Laplacian, advanced in
+time by explicit Euler. We enforce the CFL stability criterion for our explicit
+Euler time-stepping scheme; the full condition appears in Appendix~A.
+Figure~\ref{fig:schematic} shows the domain setup.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.72\textwidth]{domain_layout.pdf}
+\caption{Domain schematic for the open-air venue. The left edge is the open
+inflow side with hot ambient air, and the other three edges are solid zero-flux
+walls. The evaporative cooler produces a cold plume carried downwind across the
+dashed waiting zone, while the background wind weakens with penetration depth.}
+\label{fig:schematic}
+\end{figure}
+
+\subsection{Dual-Mode Pedestrian Agent Model}
+
+Pedestrians read the local field and respond to it. We represent each passenger
+as an agent with position $\mathbf{p}_i(t)$. Two modes cover the behaviors seen
+in a waiting space. A task-locked agent must stay at a fixed position, such as a
+bus-stop pole or a queue, and never moves. A free-waiting agent can drift toward
+comfort.
+
+For a task-locked agent the position is constant:
+
+\begin{equation}
+\mathbf{p}_i(t) = \mathbf{p}_i^{0}.
+\label{eq:locked}
+\end{equation}
+
+A free-waiting agent samples the perceived temperature in its neighboring cells
+and steps toward the coolest one:
+
+\begin{equation}
+\mathbf{p}_i(t+\Delta t) = \mathbf{p}_i(t) + \Delta p\,\mathbf{e}^{\star}_i(t),
+\qquad
+\mathbf{e}^{\star}_i(t) = \arg\min_{\mathbf{e}\in\mathcal{E}}
+\theta\bigl(\mathbf{p}_i(t)+\Delta p\,\mathbf{e}\bigr),
+\label{eq:free}
+\end{equation}
+
+where $\mathcal{E}$ is the set of allowed unit step directions and $\Delta p$ the
+step length. The agent stays inside $\Omega$ and avoids obstacles.
+Figure~\ref{fig:agents} illustrates the two modes.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.72\textwidth]{figure3_agent_modes.pdf}
+\caption{The two pedestrian modes on a small grid of perceived temperatures. A
+task-locked agent stays at a fixed cell, while a free-waiting agent steps toward
+the coolest neighboring cell.}
+\label{fig:agents}
+\end{figure}
+
+We keep the coupling one-way: agents observe the field but do not change it.
+Their body heat, wakes, and obstruction are neglected, as stated in
+Assumption~7. The field is then solved once and reused across many agent
+configurations.
+
+Free-waiting agents are only allowed to re-locate within a limited local
+neighborhood surrounding their original waiting position. They cannot travel
+long-distance across the entire venue domain, consistent with real-world
+waiting-passenger behavior.
+
+One limitation of this local-neighbor stepping rule is that agents may become
+trapped inside locally cool micro-zones and are unable to discover better cooling
+zones further away. More sophisticated pedestrian mobility rules can be
+considered for future work.
+
+\subsection{Two-Sided Discomfort Metric and Cooling Efficiency (Requirement 1)}
+
+The raw fields are converted into human comfort in two algebraic steps. The
+perceived equivalent temperature $\theta$ (the temperature a passenger actually
+feels) combines air temperature, wind speed, and humidity:
+
+\begin{equation}
+\theta(x,y) = T(x,y) - \alpha_w\,\lVert\mathbf{u}(x,y)\rVert
++ \alpha_h\bigl(q(x,y)-q_{\mathrm{ref}}\bigr),
+\label{eq:theta}
+\end{equation}
+
+where $\alpha_w$ is the wind-cooling coefficient and $\alpha_h$ the
+humidity-penalty coefficient. A stronger breeze raises convective and
+evaporative heat loss from the skin, so it lowers the perceived temperature.
+High humidity makes a given temperature feel hotter.
+
+The discomfort is a two-sided quadratic penalty that punishes both over-heating
+and cold drafts:
+
+\begin{equation}
+D(\theta) =
+\left(\frac{\max(\theta-\theta_H,\,0)}{s_H}\right)^{2}
++
+\left(\frac{\max(\theta_L-\theta,\,0)}{s_L}\right)^{2}.
+\label{eq:discomfort}
+\end{equation}
+
+Here $[\theta_L,\theta_H]$ is the comfortable perceived-temperature interval, and
+$s_H$, $s_L$ are the penalty scales for over-heating and over-cooling.
+
+The two-sided form is physically motivated. In semi-open cooling venues,
+localized cold jets from evaporative coolers can generate uncomfortable cold
+drafts near the device, so we penalize both overheating and excessive local
+chilling. Quadratic penalty forms are widely adopted in outdoor thermal-comfort
+modelling literature to quantify deviation from a target comfortable temperature
+interval. We select the quadratic form primarily for computational convenience.
+Alternative functional forms such as piecewise-linear penalties can be explored
+in future sensitivity analysis.
+
+Figure~\ref{fig:discomfort} shows this function.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.62\textwidth]{figure4_discomfort_function.pdf}
+\caption{The two-sided discomfort function. Discomfort is zero inside the
+comfort band and rises quadratically on both sides; the dashed lines mark the
+ambient and cooled perceived temperatures of the bus-stop demonstration.}
+\label{fig:discomfort}
+\end{figure}
+
+Let $D_0$ be the discomfort a passenger feels without any cooling. The benefit of
+a layout is the total discomfort it removes from the passengers:
+
+\begin{equation}
+B = \sum_{i=1}^{N}\int_{0}^{\tau}
+\Bigl[D_0 - D\bigl(\theta(\mathbf{p}_i(t))\bigr)\Bigr]\,dt,
+\label{eq:benefit}
+\end{equation}
+
+integrated over the waiting horizon $\tau$. The energy cost is the sum of each
+device's power times its operating time,
+
+\begin{equation}
+E = \sum_{k} P_k\,t_k.
+\label{eq:energy}
+\end{equation}
+
+The cooling efficiency is their ratio:
+
+\begin{equation}
+\eta = \frac{B}{E}.
+\label{eq:efficiency}
+\end{equation}
+
+A layout earns a high $\eta$ only when a large fraction of the spent energy
+actually reaches people, which is exactly the open-freezer concern in the problem
+statement. Figure~\ref{fig:fields} shows the full chain for one dry-hot bus-stop
+case: the PDE produces the temperature field, the perceived-temperature step adds
+wind and humidity, and the discomfort step condenses everything into a scalar.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{fig4_fields.png}
+\caption{Steady-state fields for the bus-stop demonstration. (a) Air temperature
+shows a cold plume of $29.67\,^\circ$C against a $38\,^\circ$C ambient. (b)
+Perceived temperature reaches a minimum of $29.1\,^\circ$C. (c) Discomfort is
+high in the hot ambient air and low inside the cooled plume, giving an $83\%$
+reduction in the waiting zone.}
+\label{fig:fields}
+\end{figure}
+
+\subsection{Multi-Criteria Cooling Effectiveness with Entropy-TOPSIS (Requirement 4)}
+
+Efficiency alone is not a complete score. A layout can earn a high ratio with
+tiny power yet deliver negligible comfort to a large crowd, or block an
+evacuation route and create a slip hazard. Requirement~4 asks for a broader
+effectiveness that also weighs thermal comfort, waiting experience, energy, cost,
+and safety. We build a six-criterion decision matrix. Each candidate layout is a
+row, and the six columns are cooling efficiency, average thermal comfort, waiting
+experience, total energy consumption, installation and operation cost, and a
+safety index for slip and evacuation risk.
+
+We weight the criteria objectively with the entropy method, which derives weights
+from how much each criterion discriminates among the candidate layouts. No
+subjective expert weights are used. For a normalized criterion matrix $p_{ij}$
+with $m$ candidate layouts, the entropy of criterion $j$ is
+
+\begin{equation}
+e_j = -\frac{1}{\ln m}\sum_{i=1}^{m} p_{ij}\ln p_{ij},
+\label{eq:entropy}
+\end{equation}
+
+and its weight is
+
+\begin{equation}
+w_j = \frac{1-e_j}{\sum_{k=1}^{6}(1-e_k)}.
+\label{eq:weight}
+\end{equation}
+
+A criterion with high entropy varies little across layouts and receives a small
+weight. A criterion that separates good from bad layouts receives a large weight.
+
+We then rank the layouts with TOPSIS. We form the weighted normalized decision
+matrix, take the ideal best solution $A^{+}$ and ideal worst solution $A^{-}$
+from the best and worst values of each criterion, and score each layout $i$ by
+its separation from them:
+
+\begin{equation}
+C_i = \frac{d_i^{-}}{d_i^{+}+d_i^{-}},
+\qquad
+d_i^{+}=\sqrt{\sum_{j=1}^{6}\bigl(v_{ij}-v_j^{+}\bigr)^2},
+\qquad
+d_i^{-}=\sqrt{\sum_{j=1}^{6}\bigl(v_{ij}-v_j^{-}\bigr)^2}.
+\label{eq:topsis}
+\end{equation}
+
+Here $v_{ij}$ is the weighted normalized value and $v_j^{\pm}$ the ideal
+solutions. The score $C_i\in[0,1]$ measures how close a layout sits to the ideal
+and how far from the worst. Layouts that violate safety or physical limits are
+filtered out before ranking. The score $C_i$ is the cooling-effectiveness measure
+required by Requirement~4, and it feeds the optimizer in Section~5.
+
+% ============================================================================
+% SECTION 5 : SURROGATE-ASSISTED SIMULATED ANNEALING FOR LAYOUT OPTIMIZATION
+% ============================================================================
+\section{Surrogate-Assisted Simulated Annealing for Layout Optimization}
+
+Section~4.4 closed with the effectiveness score $C_i$ that a city should
+maximize when it selects, places, and operates cooling devices. Of its six
+criteria the cooling efficiency $\eta$ dominates the computational cost, so this
+section optimizes $\eta$ first and assembles the full score $C_i$ from the same
+fields. Searching for the best layout is hard because every candidate requires a
+full model solve. This section builds an optimizer that stays affordable. We first measure why a
+direct search is too slow. We then replace the expensive solve with a fast
+random-forest surrogate trained on a Latin-hypercube sample. We finish by
+annealing on the surrogate and checking the best layout against the full model.
+
+\subsection{Computational Bottleneck of High-Fidelity Simulation}
+
+One evaluation of a candidate layout solves Eqs.~\eqref{eq:temp}--\eqref{eq:hum}
+to steady state and integrates the discomfort of the pedestrians. On our
+$60\times30$ grid this solve takes about $0.75$~s. A simulated-annealing search
+needs several hundred candidate evaluations. Four hundred iterations of direct
+annealing would then need about five minutes on this small grid. The cost rises
+quickly with grid resolution, with three-dimensional flow, and with more
+devices. A direct search therefore works only for a handful of layouts, not for
+the systematic comparison that Requirement~5 asks for.
+
+The expensive step is the field solve, not the rest of the pipeline. The
+perceived temperature, discomfort, benefit, and efficiency all follow from the
+same fields through cheap algebraic operations. We therefore treat the field
+solve as the single bottleneck to accelerate. The optimizer searches over the
+decision vector $\mathbf{x}=(x_c,y_c,s)$, where $(x_c,y_c)$ is the device
+position and $s$ is a dimensionless strength scale that multiplies the rated
+source amplitude of the cooler, and it maximizes the cooling efficiency:
+
+\begin{equation}
+\max_{\mathbf{x}\in\mathcal{X}}\ \eta(\mathbf{x}),
+\qquad
+\mathbf{x}=(x_c,\,y_c,\,s),
+\label{eq:opt}
+\end{equation}
+
+with $\mathcal{X}=[1,7.5]\times[0.5,3.5]\times[0.5,1.5]$ the feasible box after
+safety and physical filters; the first two coordinates are the device position
+in metres and the third is the dimensionless strength. The efficiency $\eta$ is
+one of the six criteria of $C_i$ and shares its single field solve with the
+comfort and waiting-experience criteria, while cost, energy, and safety are
+cheap functions of the layout. The same search machinery applies to $C_i$
+without change.
+%% BLOCKED(A2): need decision on how the strength scale s enters the energy
+%% cost, E = s P_rated (part-load or oversize) vs E = P_rated fixed. The current
+%% box allows s up to 1.5 with fixed energy, which is physically inconsistent and
+%% changes the optimized eta.
+
+\subsection{Latin Hypercube Sampling and Random Forest Surrogate}
+
+We approximate the efficiency map with a fast surrogate. Solving the full model
+at every point the optimizer visits would be wasteful. Instead we draw a small
+set of training layouts with Latin hypercube sampling (LHS). LHS stratifies the
+box so that the samples spread evenly across every dimension instead of leaving
+gaps. For the $j$-th coordinate of the $k$-th sample it sets
+
+\begin{equation}
+x_j^{(k)} = \frac{\pi_j(k)-u_j^{(k)}}{n},
+\qquad
+j\in\{1,2,3\},
+\qquad
+k=1,\dots,n,
+\label{eq:lhs}
+\end{equation}
+
+where $\pi_j$ is a random permutation of $\{1,\dots,n\}$ and $u_j^{(k)}$ is a
+uniform random number in $[0,1]$. The sample is then rescaled to the bounds of
+$\mathcal{X}$. We use $n=120$ samples.
+
+We solve the full model at each sampled point and record the efficiency
+$\eta^{(k)}$. We split the $120$ pairs into $96$ training and $24$ held-out
+test pairs, an $80/20$ split, and train a random-forest surrogate on the
+training set only. A random forest averages many regression trees, each
+grown on a random subset of the data, which yields a smooth predictor that needs
+no assumption about the shape of $\eta(\mathbf{x})$:
+
+\begin{equation}
+\hat\eta(\mathbf{x}) = \frac{1}{M}\sum_{m=1}^{M} T_m(\mathbf{x}),
+\label{eq:rf}
+\end{equation}
+
+where $T_m$ is the $m$-th tree and $M$ the number of trees. On the $24$
+held-out pairs the surrogate reaches $R^2=0.926$ and a mean absolute error of
+$0.0001$. The $90$th-percentile absolute error is $0.0002$, about $12\%$ of the
+efficiency span $0.0019$; relative error is ill-posed here because some
+held-out efficiencies sit near zero. One surrogate prediction costs about five
+milliseconds against $0.75$~s for a full solve, a speedup of about two orders
+of magnitude.
+
+\subsection{Optimization Search and Back Validation}
+
+We search the surrogate with simulated annealing. At each step the algorithm
+draws a nearby layout $\mathbf{x}'$ and accepts it with the Metropolis
+probability
+
+\begin{equation}
+P(\text{accept}) =
+\min\!\Bigl\{1,\ \exp\!\Bigl(\tfrac{\hat\eta(\mathbf{x}')-\hat\eta(\mathbf{x})}{T}\Bigr)\Bigr\},
+\label{eq:sa}
+\end{equation}
+
+where $T$ is a temperature that decays through the run. Accepting occasional
+downhill moves lets the search escape local maxima of $\hat\eta$. We run a
+single anneal of $400$ iterations with an initial temperature $T_0=0.1$, a
+geometric cooling factor $\alpha=0.96$ per step, and Gaussian proposals whose
+standard deviation is $8\%$ of the box width in each coordinate. The run takes
+about two seconds.
+
+The optimizer returns the layout $(x_c,y_c,s)=(2.81,\,2.07,\,1.37)$ with
+predicted efficiency $\hat\eta=0.00192$. Because the surrogate is only an
+approximation, we back-validate this layout with the full model. The true
+efficiency is $0.00194$, so the surrogate errs by $1.20\%$. We compare against
+a default centered layout $(x_c,y_c,s)=(4.0,\,2.0,\,1.0)$, the natural
+place-the-device-in-the-middle choice, which gives an efficiency of $0.00170$.
+The optimized layout therefore raises efficiency by $14.3\%$ over that weak
+baseline. The gain comes from moving the device upwind of the waiting zone and
+raising its strength, so a larger share of the cooled plume passes over the
+passengers.
+
+A stronger baseline is the best of the $120$ LHS samples, which already reaches
+$\eta=0.00194$. The annealed layout ties this value, so against a random search
+the optimizer gains essentially nothing; the $14.3\%$ improvement is specific
+to the centered baseline and overstates the optimizer's practical value.
+
+% ============================================================================
+% SECTION 6 : MODEL APPLICATION TO TWO DISTINCT VENUES (REQUIREMENT 3)
+% ============================================================================
+\section{Model Application to Two Distinct Venues (Requirement 3)}
+
+Requirement~3 asks us to run the model on at least two venues that differ in
+climate or cooling technology. We choose two venues that differ in both, which
+puts the framework under its strongest test. The humid Dhoby Ghaut bus shelter
+in Singapore has a wet-bulb temperature close to the air temperature, so
+evaporative cooling has almost no headroom. The dry-hot Cartuja Qanat sunken
+plaza in Seville has a large wet-bulb depression, so evaporative cooling has
+large theoretical potential. The best device should therefore shift between the
+two venues. A model fitted to one climate could not reveal this shift.
+
+\begin{table}[H]
+\centering
+\caption{Climate parameters of the two venues. These are illustrative design-day
+values used to exercise the model under Requirement~3, not measurements from a
+specific day.}
+\label{tab:venueparams}
+\begin{tabular}{@{}lccccc@{}}
+\toprule
+\textbf{Venue} & $T_{\infty}$ ($^\circ$C) & RH (\%) & $q_{\infty}$ (g/kg) & $T_{wb}$ ($^\circ$C) & $\Delta T_{\max}$ ($^\circ$C) \\
+\midrule
+Dhoby Ghaut (humid) & 32 & 85 & 26.1 & 29.8 & 2.2 \\
+Cartuja Qanat (dry-hot) & 40 & 20 & 9.8 & 22.7 & 17.3 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Venue 1: Humid Dhoby Ghaut Bus Shelter}
+
+Dhoby Ghaut is a busy transit node in central Singapore. We model an open-sided
+bus shelter there on a hot, humid day with an air temperature of $32\,^\circ$C
+and a relative humidity of $85\%$. The specific humidity is $26.1$~g/kg. Under
+Assumption~4 the maximum cooling an ideal evaporative cooler can deliver is the
+wet-bulb depression,
+
+\begin{equation}
+\Delta T_{\max} = T_{\infty} - T_{wb},
+\label{eq:depression}
+\end{equation}
+
+which here is only $2.2\,^\circ$C, because the wet-bulb temperature of
+$29.8\,^\circ$C sits close to the air temperature. The evaporative coolers are
+therefore capped near $2.2\,^\circ$C rather than at their rated $5$ or $8\,^\circ$C.
+The moisture they add also raises the humidity penalty in
+Eq.~\eqref{eq:theta}, which trims the perceived cooling a little further.
+
+Table~\ref{tab:venues} lists the results. The fan achieves a perceived cooling
+of $0.34\,^\circ$C from wind chill alone and removes $16\%$ of the ambient
+discomfort. The evaporative coolers still deliver useful cooling, $1.69\,^\circ$C
+and $2.06\,^\circ$C, because the wet-bulb depression of $2.2\,^\circ$C, not the
+device rating, is the binding limit; they remove $80\%$ and $89\%$ of the
+discomfort. On efficiency none of the three devices is impressive. The standard
+cooler and the fan are nearly tied at $\eta=0.36$ and $0.35$, while the large
+cooler falls to $0.19$ because it spends ten times the fan's power to remove
+only marginally more discomfort than the standard cooler.
+
+\subsection{Venue 2: Dry-Hot Cartuja Qanat \'Agora Plaza}
+
+The Cartuja Qanat is a sunken open-air plaza in Seville, Spain, designed around
+bioclimatic cooling. We model it on a dry, hot summer afternoon with an air
+temperature of $40\,^\circ$C and a relative humidity of $20\%$. The specific
+humidity is only $9.8$~g/kg, and the wet-bulb temperature is $22.7\,^\circ$C,
+so the wet-bulb depression is $17.3\,^\circ$C. Evaporative cooling now has a
+large headroom, and the device ranking reverses.
+
+The large evaporative cooler reaches its rated $8\,^\circ$C cap, delivering
+$8.25\,^\circ$C of perceived cooling and removing $93\%$ of the ambient
+discomfort. The standard cooler reaches its $5\,^\circ$C cap at $4.25\,^\circ$C
+and removes $62\%$, while the fan still delivers only $0.34\,^\circ$C and
+removes just $6\%$ of a much larger ambient discomfort. On efficiency the
+standard cooler is the best at $\eta=3.75$, more than twice the fan's $1.66$.
+The large cooler removes the most discomfort, but its extra $4\,^\circ$C of
+cooling buys only $31$ more percentage points of removal while using about twice
+the standard cooler's power, so its efficiency of $2.70$ sits between them.
+
+\subsection{Cross-Venue Comparison}
+
+Figure~\ref{fig:venues} compares the two venues, and Table~\ref{tab:venues}
+collects the numbers. The ranking shifts exactly as the wet-bulb depression
+predicts. In humid Singapore all three devices earn low efficiency, because the
+evaporative coolers fight a tiny $2.2\,^\circ$C headroom and the fan's wind
+chill is weak; the standard cooler and the fan are nearly tied. In dry-hot
+Seville the evaporative coolers dominate, and the fan is nearly irrelevant.
+This reversal is the point of a general framework: no single device is best
+everywhere, and a city must choose according to its local climate.
+
+The comparison also separates efficiency from comfort. In Seville the standard
+cooler is the most efficient, but the large cooler removes almost all the
+discomfort. A city that cares only about energy would pick the standard cooler,
+while a city that must protect waiting passengers from extreme heat would pick
+the large cooler. The fan also shows that efficiency depends on the ambient
+discomfort level, not only on humidity: its score rises from $0.35$ to $1.66$
+($\times10^{-3}$) because $D_0$ is $13$ times larger in Seville ($4.84$ against
+$0.36$), so the same wind-chill cooling removes more discomfort there. The
+effectiveness score $C_i$ of Section~4.4 is designed to make this trade-off
+explicit.
+%% BLOCKED(B2): need the six criterion values for the C_i TOPSIS table, in
+%% particular installation/operation cost per device and a safety index (slip
+%% and evacuation risk); also confirm the waiting-experience definition.
+%% Efficiency, comfort, and energy are available from the model run.
+
+\begin{table}[H]
+\centering
+\caption{Cooling outcomes for the three devices in the two venues. $\Delta
+T_{\mathrm{cap}}$ is the effective cooling cap, the smaller of the rated
+capacity and the wet-bulb depression, and does not apply to the fan. Removed
+($\%$) is $B/(D_0\tau N)\times100$, the fraction of ambient discomfort removed.
+Efficiency $\eta=B/E$ has units of person-seconds per joule and is reported
+scaled by $10^{-3}$.}
+\label{tab:venues}
+\begin{tabular}{@{}llcccc@{}}
+\toprule
+\textbf{Venue} & \textbf{Device} & $\Delta T_{\mathrm{cap}}$ ($^\circ$C) & $\Delta\bar\theta$ ($^\circ$C) & \textbf{Removed} (\%) & $\eta$ ($10^{-3}$) \\
+\midrule
+\multirow{3}{*}{Dhoby Ghaut} & Fan & -- & 0.34 & 16 & 0.35 \\
+ & Std.\ evap.\ cooler & 2.2 & 1.69 & 80 & 0.36 \\
+ & Large evap.\ cooler & 2.2 & 2.06 & 89 & 0.19 \\
+\addlinespace
+\multirow{3}{*}{Cartuja Qanat} & Fan & -- & 0.34 & 6 & 1.66 \\
+ & Std.\ evap.\ cooler & 5.0 & 4.25 & 62 & 3.75 \\
+ & Large evap.\ cooler & 8.0 & 8.25 & 93 & 2.70 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.90\textwidth]{fig6_venue_comparison.pdf}
+\caption{Comparison across the two venues of (a) achieved perceived-temperature
+reduction and (b) cooling efficiency for the fan, the standard evaporative
+cooler, and the large evaporative cooler. The evaporative coolers pull ahead
+only in the dry-hot venue, where the wet-bulb depression is large.}
+\label{fig:venues}
+\end{figure}
+
+\subsection{Revision for a Semi-Open Rail-Station Waiting Area (Requirement 2b)}
+
+Requirement~2b asks us to revise the model for a semi-open rail-station waiting
+area. A rail platform differs from a bus shelter in three ways. The waiting
+domain is larger and multi-zone, the passenger density varies strongly with the
+arrival schedule, and passengers move between the platform and the gates instead
+of standing in one fixed area. The single fixed zone of Section~3 therefore
+understates how far a large cooler's plume must reach and how the benefit per
+person changes through the day.
+
+The revision keeps the field model of Eqs.~\eqref{eq:temp}--\eqref{eq:hum}
+unchanged, but replaces the fixed crowd with a time-varying density
+$\rho(x,y,t)$ over a set of waiting zones $\Omega_w$. The benefit in
+Eq.~\eqref{eq:benefit} becomes
+$B=\int_0^{\tau}\!\iint_{\Omega_w}\rho\,(D_0-D)\,dA\,dt$, and the energy cost is
+unchanged. This change is necessary because a rail station spreads its
+passengers across a much larger area than a bus shelter, so a cooler judged
+efficient on a small fixed zone may score poorly once its plume must cover the
+whole platform. The revision makes the model applicable to the semi-open public
+spaces named in Requirement~2, and it reduces to the bus-stop model when
+$\Omega_w$ is the single waiting zone and $\rho$ is constant.
+
+% ============================================================================
+% APPENDIX A : NUMERICAL STABILITY CONDITION
+% ============================================================================
+\section*{Appendix A: Numerical Stability Condition}
+
+The explicit Euler time-stepping scheme used to solve
+Eqs.~\eqref{eq:temp}--\eqref{eq:hum} must satisfy the
+Courant--Friedrichs--Lewy (CFL) condition,
+
+\begin{equation}
+\Delta t\left(\frac{|u_x|}{\Delta x}+\frac{|u_y|}{\Delta y}
++\frac{2\kappa_T}{\Delta x^2}+\frac{2\kappa_q}{\Delta y^2}\right) \le C,
+\label{eq:cfl}
+\end{equation}
+
+with $C=0.5$ in this work. This condition bounds the time step $\Delta t$ so
+that the explicit update does not overshoot the distance a signal travels in one
+step, which keeps the scheme numerically stable.
 
 \end{document}
