@@ -217,7 +217,7 @@ that the remaining problem stays solvable and reproducible. We group the
 assumptions into three sets: physical and climate, device and energy, and
 pedestrian and crowd.
 
-Of the eight assumptions, Assumptions~3, 4, and 7 are critical, because the
+Of the five assumptions retained here, Assumptions~3, 4, and 7 are critical, because the
 conclusions depend on them, and each is tested in Section~6. The remainder are
 supporting simplifications.
 
@@ -226,21 +226,14 @@ supporting simplifications.
 Physical-climate assumptions define the computational domain and background
 environmental conditions for our PDE solver.
 
-\textbf{Assumption 1:} The venue is modeled as a two-dimensional horizontal
-plane. We neglect vertical stratification of temperature and humidity.
-\textit{Justification:} Passengers stand or sit in a thin layer near the ground.
-The horizontal spread of the cooling plume is much larger than the vertical
-mixing height. A two-dimensional field keeps the solver fast enough for repeated
-evaluation inside the optimizer. This simplification also drops the gravitational
-sinking of cold, dense plume air, a trade-off we accept because the waiting layer
-is thin and horizontal spread dominates.
+\textbf{Assumption 1: We model the occupied area as a two-dimensional horizontal
+plane, neglecting vertical variations in temperature and humidity.} Passengers
+occupy a shallow layer near the ground, and cooling spreads predominantly
+horizontally across this layer, making a two-dimensional representation appropriate.
 
-\textbf{Assumption 2:} The outdoor temperature, humidity, and background wind
-remain constant during one simulation. \textit{Justification:} Each simulation
-covers a short waiting window of a few minutes. Ambient weather changes slowly
-over such a span, so a steady background is accurate. Short-lived wind gusts are
-not resolved as time-varying flow; they are folded into the constant effective
-diffusivity that represents unresolved turbulent mixing.
+\textbf{Assumption 2: Ambient temperature, humidity, and background wind remain
+constant during each simulation.} Each simulation covers only a few minutes of
+waiting time, over which these conditions are treated as approximately steady.
 
 \textbf{Assumption 3:} The wind field is prescribed rather than solved from the
 momentum equations. Turbulent mixing enters through a single, spatially uniform
@@ -253,8 +246,7 @@ the sensitivity of the results to this parameter in Section~6.
 
 \subsection{Cooling Device and Energy Assumptions}
 
-Device-and-energy assumptions fix how the fan and the evaporative cooler act on
-the flow and how their energy use is counted.
+The following assumption specifies the evaporative cooler's ideal performance.
 
 \textbf{Assumption 4:} The evaporative cooler is ideal. It adds a cooling sink to
 the temperature field and a moisture source to the humidity field, coupled along
@@ -270,42 +262,16 @@ the outlet condition physically consistent in every climate we test. Real cooler
 fall short of this bound, so the case $\varepsilon<1$ can be explored in the
 sensitivity analysis of Section~6.
 
-\textbf{Assumption 5:} A fan changes only the local air speed. It adds no
-temperature or humidity source. \textit{Justification:} A fan has no refrigerant
-and no water. Its benefit comes from wind chill on the skin, which raises
-perceived comfort without changing the air state.
-
-\textbf{Assumption 6:} Each device draws its rated power whenever it runs, so
-energy use is $E=P\,t$, where $E$ is energy (J), $P$ is power (W), and $t$ is
-operating time (s). \textit{Justification:} The devices run at a fixed
-setting in our comparison. Part-load behavior is outside the scope of the cooling
-efficiency metric of Requirement~1.
-
 \subsection{Pedestrian and Crowd Assumptions}
 
 Pedestrian-crowd assumptions define how waiting passengers move through the field
 and how their comfort is scored.
 
-\textbf{Assumption 7:} A passenger follows one of two movement modes. A
-task-locked agent stays at a fixed waiting position, while a free-waiting agent
-steps locally toward the most comfortable nearby cell, restricted to a small
-local neighborhood around its original position. Agents read the temperature and
-humidity field but do not change it, so we ignore body heat, wakes, and
-obstruction of the plume. \textit{Justification:} People who wait for a specific
-bus or spot stay put, while others drift toward comfort. Two modes capture both
-behaviors without a full social-force model. The one-way coupling removes the
-need to resolve two-way plume-obstacle-body interactions, which keeps the
-computation cost low enough for repeated optimizer evaluation. This refinement is
-deferred to the limitations section.
-
-\textbf{Assumption 8:} A passenger's discomfort follows a perceived-temperature
-index that combines air temperature, humidity, and wind speed. All comparisons
-use a fixed waiting horizon, and the venues operate at moderate crowd density, so
-congestion is neglected. \textit{Justification:} People sense a combination of
-these variables rather than dry-bulb temperature alone, so the index is more
-faithful than dry-bulb temperature. A fixed horizon keeps every layout comparable
-on the same time basis. The venues operate below dense-crowd conditions, so
-congestion is a secondary effect.
+\textbf{Assumption 7: Passengers either remain at fixed waiting positions or move
+toward more comfortable locations within a limited nearby area. Their presence
+does not alter the temperature, humidity, or airflow fields.} These two behaviors
+represent passengers constrained by queues or boarding positions and those with
+flexibility to reposition while waiting.
 
 % ============================================================================
 % SECTION 3 : INTEGRATED PDE-AGENT MODELLING FRAMEWORK
@@ -373,9 +339,9 @@ u_x(x,y) = U_0\left(1-\beta\frac{x}{L_x}\right)
 Here $U_0$ is the wind speed at the open edge and $U_{\mathrm{jet}}$ the peak
 added jet speed (both m/s); $\beta$ is the dimensionless sheltering coefficient.
 The domain depth $L_x$, device coordinates $(x_c,y_c)$, and Gaussian jet-width
-parameter $\sigma_{\mathrm{jet}}$ are measured in metres. A fan changes only
-this velocity field, so it enters the model through $\mathbf{u}$ and through the
-wind-chill term in Section~3.3.
+parameter $\sigma_{\mathrm{jet}}$ are measured in metres. We represent a fan
+through its contribution to this velocity field, with no temperature or moisture
+source. Its comfort effect enters through the wind-chill term in Section~3.3.
 
 An evaporative cooler changes the air state directly. It adds a localized heat
 sink to the temperature field and a moisture source to the humidity field:
@@ -427,7 +393,8 @@ dashed waiting zone, while the background wind weakens with penetration depth.}
 
 \subsection{Dual-Mode Pedestrian Agent Model}
 
-Pedestrians read the local field and respond to it. We represent each passenger
+We model moderate crowd density and neglect congestion. Pedestrians read the
+local field and respond to it. We represent each passenger
 as an agent indexed by $i$, with position vector $\mathbf{p}_i(t)$ (m).
 Two modes cover the behaviors seen
 in a waiting space. A task-locked agent must stay at a fixed position, such as a
@@ -540,7 +507,8 @@ ambient and cooled perceived temperatures of the bus-stop demonstration.}
 \end{figure}
 
 Let $D_0$ be baseline discomfort without cooling, $N$ the number of passengers,
-and $\tau$ the common evaluation horizon (s). The total benefit $B$
+and $\tau$ the common evaluation horizon (s), held fixed across layout comparisons.
+The total benefit $B$
 (person-seconds of discomfort reduction) is
 
 \begin{equation}
@@ -549,7 +517,9 @@ B = \sum_{i=1}^{N}\int_{0}^{\tau}
 \label{eq:benefit}
 \end{equation}
 
-The energy cost is the sum of each device's power times its operating time,
+Each device operates at a fixed rated power while switched on; part-load
+behavior is outside this comparison. The energy cost is the sum of each device's
+power times its operating time,
 
 \begin{equation}
 E = \sum_{k} P_k\,t_k.
