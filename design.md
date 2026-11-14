@@ -18,7 +18,7 @@ Geometry/weather/equipment → feasible boundary inputs → airflow/temperature/
 
 ## Section 3 preview and writing decisions
 
-**Current state — 2026-11-14, John / general-chat agent.** John requested a separate compiled Section 3 proposal, explicitly **not replacement of the draft**. Two local iterations were produced from manuscript commit `f7c2389`; the latest is an **8-page Section 3-only preview**, versus 7 pages in the first iteration. It has not been merged into `main.tex`, pushed as an artifact, or synchronized to Overleaf. John's request to store details authorizes this handoff record, not adoption of the preview or its illustrative parameters.
+**Current state — 2026-11-14, John / general-chat agent.** John requested a separate compiled Section 3 proposal, explicitly **not replacement of the draft**, and subsequently requested correction of the preview's identified physical/pagination issues. Revision 3 is now a **7-page Section 3-only preview**, down from revision 2's 8 pages, retaining 11 pt body text and 1-inch margins. It is based on manuscript commit `f7c2389`, with the previous preview saved for comparison. It has not replaced `main.tex`, been pushed as an artifact, or synchronized to Overleaf. Proposed physics/behavior refinements are implemented only in the preview, not adopted by the team or its production evaluator.
 
 ### Accepted explanation and figure direction
 
@@ -32,11 +32,13 @@ Geometry/weather/equipment → feasible boundary inputs → airflow/temperature/
 
 ### Latest preview content and bounded checks
 
-Section 3.1 now introduces fields over space/time, places the derivative/transport table before both PDEs, explains prescribed airflow versus Navier–Stokes, and explains source signs and heat–moisture coupling. Seven compact local tables cover transport, device parameters, occupants, comfort, benefit/energy, entropy weights and TOPSIS. Later sections retain the existing model but have definitions moved before equations and clearer interpretation around equation groups. The latest iteration also clarifies entropy normalization/degenerate cases and benefit/cost directions in TOPSIS; these prose clarifications are part of the unaccepted preview.
+Section 3.1 introduces fields over space/time, defines derivative/transport terms before the PDEs, explains prescribed airflow versus Navier–Stokes, and describes source signs, heat–moisture coupling and the new saturation cap. Six compact local tables cover transport, device/source parameters, occupants, comfort, benefit/energy and combined entropy/TOPSIS notation. Repeated algebra narration is shortened; equation purpose and interpretation remain.
 
-There are **five figures: one original photograph and 11 generated diagram/plot panels**. The generated panels are: grid, wind and transport schematic (3); temperature and specific humidity at 15 s and 90 s (4); stationary and locally moving occupant illustrations (2); discomfort function and accumulated-benefit curve (2). The movement arrow is explicitly schematic, not a simulated trajectory. Original manuscript numerical claims such as an 83% waiting-zone reduction are not carried over as results of the new demonstration.
+There are **five figures: one original photograph and 11 generated diagram/plot panels**: grid/wind/transport (3), temperature/humidity at 15 and 90 s (4), stationary/mobile occupant illustrations (2), discomfort/benefit (2). The movement arrow remains schematic, not a simulated trajectory. Original manuscript claims such as 83% waiting-zone reduction are not treated as results of this demonstration.
 
-Verification: Tectonic compilation completed without warnings after layout iteration; all eight pages were visually checked and extracted text contains no unresolved `??` references. A script confirms **all 15 display-equation environments are byte-for-byte identical to preview iteration 1**. That comparison does not assert byte identity to every equation in the original manuscript, whose Section 3.1 source notation was compacted in iteration 1. Git checks confirmed the tracked manuscript and project documents were unchanged during preview generation. No numerical convergence study, site calibration, full agent optimization or independent scientific validation was performed.
+Revision 3 contains **16 display equations**, not the earlier 15-equation unchanged set: the saturation source step is new; nominal source strengths are distinguished from state/time-dependent actual rates; the agent step has a separate time increment and permits staying; and the no-device baseline is indexed by person/time. The comparison assumes all N occupants are present throughout the common horizon, with matching weather, population and behavior rules; mobile counterfactual paths may differ. The local coldest-cell rule is explicitly for hot conditions; overcooling-aware movement requires minimizing discomfort instead. Unsupported wording that quadratic penalties are widely adopted was removed. These are proposed clarifications, not production-code changes.
+
+Verification: Tectonic compiled without warnings; all seven final pages were visually checked and text/reference consistency inspected. No-device and fan-only cases leave temperature/humidity uniform. Saturated-air and extreme-source checks stop further evaporation while preserving the approximate heat balance; humid and strong-source field runs activate the limiter. Inflow/outflow/lateral scalar checks pass. Halving time step changes final temperature by at most 0.00001144°C; halving grid spacing (with time step quartered) changes final temperature by at most 0.037205°C and illustrated stationary benefit by -0.96250%. This is **two-grid sensitivity**, not established convergence, site calibration, a complete agent simulation or independent scientific validation. Tracked manuscript remains unchanged.
 
 ### Local artifacts and reproduction
 
@@ -44,30 +46,36 @@ All preview material is local under `/Users/fengyue.john.zhu/Desktop/himcm/outpu
 
 | File | Role |
 |---|---|
-| `section3-preview.pdf`, `section3-preview.tex` | Latest 8-page compiled preview and standalone source |
-| `section3-preview-v1.pdf`, `section3-preview-v1.tex` | Previous 7-page preview; source is the fixed base used by `iterate.py` |
-| `build_preview.py` | Generates reproducible illustrative physical fields and scientific figures |
+| `section3-preview.pdf`, `section3-preview.tex` | Latest revision 3, 7-page compiled preview and standalone source |
+| `section3-preview-v1.pdf/.tex`, `section3-preview-v2.pdf/.tex` | Prior previews; saved v2 is the fixed base for the current builder |
+| `build_preview.py`; `physics_demo.py`; `check_physics.py` | Current figure builder, saturation-limited illustrative solver and physical/numerical checks |
 | `assemble.py` | Builds iteration 1 from the local manuscript; **running this alone overwrites the latest preview source** |
-| `iterate.py` | Applies iteration 2 to saved v1 source and checks all 15 displayed equations unchanged |
+| `revise_preview.py` | Current revision 3 text builder using saved v2 source |
+| `iterate.py`; `build_preview-v2.py` | Historical iteration 2 builders, retained for comparison |
 | `setup`, `fields`, `agents`, `benefit` (`.pdf`/`.png`) | Generated figures and raster previews |
-| `illustrative_fields.npz`, `simulation-checks.json` | Numerical demonstration data and limited stability/finiteness checks |
+| `illustrative_fields.npz`, `simulation-checks.json`, `physics-checks.json` | Current demonstration arrays and bounded physical/sensitivity checks |
 | `verified-front-photo.jpg`, `verified-front-photo-source.txt` | Unmodified source photo, watermark intact, and provenance |
-| `iteration-final-1.png` through `iteration-final-8.png` | Current page renders; earlier `final-*.png` belong to iteration 1 |
-| `review-notes.md`, `package-info.md`, `section3-preview.txt` | Local scope/rebuild notes, inventory and extracted PDF text |
+| `revised-final-1.png` through `revised-final-7.png` | Current page renders; `iteration-*`, `final-*`, `revision3-*`, `contact-*` are historical |
+| `review-notes.md`, `package-info.md`, `section3-preview.txt`, `update_handoff.py` | Local scope/rebuild notes, inventory, extracted PDF text and one-off record-update script (do not rerun against later records) |
 
-Rebuild the current text using the preview folder's `.venv/bin/python iterate.py`, then run `tectonic section3-preview.tex` **from that folder**. Rebuild figures separately with `.venv/bin/python build_preview.py`. To recreate iteration 1 from the repository root, run its `assemble.py`; then reapply `iterate.py` before compiling. The private Python environment contains NumPy, Matplotlib and Pillow. Generated assets and environments are not committed.
+Rebuild from the preview folder: `.venv/bin/python build_preview.py`, `.venv/bin/python check_physics.py`, `.venv/bin/python revise_preview.py`, then `tectonic section3-preview.tex`. `revise_preview.py` uses saved v2 as a fixed base. **Older `assemble.py` and `iterate.py` recreate older text and overwrite the current source if run alone**; they are not the current rebuild route. The private Python environment contains NumPy, Matplotlib and Pillow. Generated assets and environments remain uncommitted.
 
 Photograph: [Land Transport Guru article](https://landtransportguru.net/airbitat-oasis-smart-bus-stop/), [original 2018 image](https://landtransportguru.net/web/wp-content/uploads/2018/03/Airbitat-Oasis-Smart-Bus-Stop-1.jpg). Credit **Land Transport Guru**; an individual photographer was not identified. The complete original is 2048 × 1365 pixels and 715,010 bytes. The actual historical Airbitat plant is context only; the example's standalone device does not reconstruct that plant. RT+Q photos were investigated but are not used, so do not credit Masano Kawana for the chosen image.
 
-### Illustrative computation and unresolved issues
+### Illustrative computation, proposed corrections and remaining limits
 
 The demonstration uses a hypothetical 9 × 3 m domain, device at (1.5, 1.5) m and waiting rectangle x=3–8 m, y=0.5–2.5 m. Inputs: ambient 36°C and specific humidity 0.012 kg/kg; `U0=0.25 m/s`, jet amplitude 0.8 m/s, sheltering coefficient 0.3, both source/jet widths 0.45 m, cooling amplitude 1°C/s, both effective diffusivities 0.08 m²/s, `cp=1005 J/(kg K)` and `Lv=2,450,000 J/kg`. Grid spacing is 0.15 m in both directions and time step 0.04 s, run to 90 s. The combined explicit stability sum is approximately 0.846; finite-field checks pass. These are explanatory choices, **not adopted site measurements, equipment benchmarks or calibrated parameters**.
 
 Comfort illustration: `alpha_w=2 °C/(m/s)`, `alpha_h=800 °C/(kg/kg)`, reference humidity 0.012 kg/kg, comfort band 26–30°C, cold/hot scales 2/4°C. The benefit trace samples a stationary occupant at (4.5, 1.5) m against ambient wind without a device. It does not validate safety, comfort thresholds or moving-agent behavior.
 
-Two physical issues remain explicit: (1) zero normal temperature/humidity gradients impose zero **diffusive** flux, not impermeability; the draft's three-solid-wall interpretation conflicts with prescribed through-flow unless boundary treatment is reconciled; (2) `Aq=AT cp/Lv` links sensible cooling to moisture addition but does not itself enforce saturation or the wet-bulb limit. No silent physics fix was made. Full-paper page count after integration is unknown; 8 pages refers only to this preview.
+The two flagged physical issues have been addressed in the preview as follows:
 
-**Next action:** John reviews the latest preview. Refine wording/layout as requested; obtain explicit authorization before replacing manuscript Section 3 or publishing its assets. Coordinate physical boundary/wet-bulb decisions with the model work separately, and retain the same illustrative venue if Sections 4–5 are subsequently revised.
+- **Boundary interpretation:** left edge ambient inflow; right edge open outflow with zero normal scalar gradient; lateral edges have `uy=0` and zero normal scalar gradients as an approximate symmetry boundary. These are computational truncations, **not three solid walls**. Real walls, lateral exchange or crosswind need another boundary treatment. This resolves the description/through-flow conflict without claiming the prescribed 2D velocity is a mass-conserving 3D fluid solution.
+- **Saturation-limited source:** after transport/mixing, solve `cp*Tad + Lv*qsat(Tad) = cp*T* + Lv*q*`, then apply `deltaT = min(AT*g*dt, max(T* - Tad, 0))`, `Tnew = T* - deltaT`, `qnew = q* + cp/Lv*deltaT`. This preserves the model's constant-property heat balance and prevents the source passing saturation. It is an approximate adiabatic saturation limit, **not an exact psychrometric wet-bulb calculation** or proof that a real outlet operates ideally. Saturation at 101325 Pa uses the ASHRAE liquid-water expression documented in [PsychroLib](https://psychrometrics.github.io/psychrolib/_modules/psychrolib.html), converting humidity ratio W to specific humidity q=W/(1+W). [PNNL's direct evaporative cooling guide](https://basc.pnnl.gov/resource-guides/evaporative-cooling-systems?existing_homes=602) supports the humidity/evaporation limitation; accessed 2026-11-14.
+
+The mild demo does not activate the source cap, so its earlier field is retained: Tmin 34.78113°C, qmax 0.012499987 kg/kg, stationary benefit 32.69174 person-seconds. Humid (`q0=0.99*qsat(36°C)`) and strong-source (`AT=100°C/s`, deliberately nonphysical stress input) checks activate the cap. The source approximation does not include condensation for supersaturated incoming mixtures; such inputs are rejected. Remaining limits: uncalibrated device/comfort coefficients, no independently validated airflow/collision prediction, no computed mobile-agent trajectory or optimizer run, and no demonstration that the complete paper fits 25 pages. Entropy/TOPSIS normalization and optimizer-reference conventions still need alignment with teammate implementation; the revision does not change that implementation.
+
+**Next action:** John reviews revision 3 and the team checks the proposed physical/behavior changes against its implementation. Obtain explicit authorization before replacing manuscript Section 3 or publishing preview assets. Preserve the same running venue for subsequent Sections 4–5 work. Site-performance claims require calibration; full-paper pagination must be checked after authorized integration.
 
 ## Selected venue reconstruction plan
 
