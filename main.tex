@@ -219,28 +219,15 @@ horizontally across this layer, making a two-dimensional representation appropri
 constant during each simulation.} Each simulation covers only a few minutes of
 waiting time, over which these conditions are treated as approximately steady.
 
-\textbf{Assumption 3:} The wind field is prescribed rather than solved from the
-momentum equations. Turbulent mixing enters through a single, spatially uniform
-effective diffusivity. \textit{Justification:} Solving the full Navier--Stokes
-equations in three dimensions would be too costly. The dominant transport in a
-semi-open space is advection by the prescribed wind plus turbulent diffusion,
-which the effective diffusivity captures. In reality, turbulence varies near
-walls and inside the jet, so a uniform diffusivity is an approximation. We test
-the sensitivity of the results to this parameter in Section~6.
+\textbf{Assumption 3: We obtain the airflow field by superimposing ambient wind
+and fan contributions and approximate turbulent mixing using a spatially uniform
+effective diffusivity.} This simplifies calculation; interactions between air
+currents are assumed to have only a minor effect on cooling predictions.
 
-\textbf{Assumption 4:} The evaporative cooler is ideal. It adds a cooling sink to
-the temperature field and a moisture source to the humidity field, coupled along
-the adiabatic wet-bulb line by Eq.~\eqref{eq:aq}. Its outlet cannot cool below
-the ambient wet-bulb temperature, so we set its saturation effectiveness to
-$\varepsilon=1$.
-\textit{Justification:} The sink and source reflect the physical operation of the
-device, which removes sensible heat and adds water vapor to the discharged air.
-The adiabatic coupling fixes the correct amount of added moisture per degree of
-cooling. The wet-bulb bound is the thermodynamic limit of evaporative cooling,
-and $\varepsilon=1$ means the outlet reaches this ideal bound exactly. This keeps
-the outlet condition physically consistent in every climate we test. Real coolers
-fall short of this bound, so the case $\varepsilon<1$ can be explored in the
-sensitivity analysis of Section~6.
+\textbf{Assumption 4: Evaporative coolers operate ideally, reaching the maximum
+cooling achievable by direct evaporation under the given inlet conditions.} We
+assume sufficient water supply and effective air--water contact, providing an
+upper-bound benchmark for comparing cooling potential across climates.
 
 \textbf{Assumption 7: Passengers either remain at fixed waiting positions or move
 toward more comfortable locations within a limited nearby area. Their presence
