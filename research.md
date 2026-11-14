@@ -72,6 +72,8 @@ At 20,000 m³/h and a 5 K drop, this requires about **49 L/h evaporation**, or 3
 
 ### Cost boundary and proposed use
 
+**Current scope update — John, 2026-11-14:** use standalone direct-discharge devices and remove ducts from the current comparison. Therefore duct cost is zero because no ducts are installed, not because their cost is negligible. The broader cost discussion below remains background for other architectures. [Portacool's manufacturer setup guide](https://www.portacool.com/resources/portacool-blog/setting-up-portacool-coolsync-guide/) describes self-contained portable evaporative equipment ready to use without installation; the [Verdex V6425](https://www.verdex.com.au/portable-evaporative-cooler) is another portable wet-pad example. These establish architecture availability, not an exact match to all contest data. Original Problem B p. 2 specifies A: up to 3°C perceived cooling/0.25 kW/hr; B: up to 5°C air cooling/1.2 kW/hr; C: up to 8°C air cooling/2.5 kW/hr. Its p. 4 definition is water-soaked pads plus a fan and does not require ducts. Preserve the printed energy units and declare the working interpretation as kW electrical input (kWh per operating hour). The 250 W Fenne and 1,200 W Verdex references match numerical power only; no exact standalone class-C power/effect match is verified. The MET MANN duct-capable reference is not the selected class-C architecture. Earlier chat installation allowances are provisional and must not be carried over as researched standalone prices.
+
 Proposed installed cost per configuration:
 
 `C_initial = equipment + chosen controls/mounts + electrical work + water/drains + ducts/outlets + delivery/tax + installation labor`.

@@ -258,6 +258,8 @@ Unselected options; required bus devices remain fan and two wet-pad coolers. Spe
 
 ## Optional duct network and installation model
 
+**Superseded for current scope — John, 2026-11-14:** use standalone direct-discharge fans and wet-pad coolers; omit ducts entirely. The historical proposal below is not part of the current model. A cooler and its discharge opening are one physical unit, so outlet positions cannot be optimized independently of device placement. Keep footprint, intake/discharge clearance, service access and utility availability as placement constraints. Keep the original A/B/C benchmark effects/power; commercial references do not replace them without an explicit, labeled comparison.
+
 Discussion recorded 2026-11-07, John / general-chat agent. **Accepted conceptual clarification:** temperatures are stored at nodes; each segment has inlet/outlet temperatures, airflow and heat-transfer properties. John acknowledged this representation. Network optimization and specific loss assumptions remain proposals, not mandatory core features. Algebra/unit checks only; no site calibration, pressure solution or independent validation. Applies to ducted options, not automatically to the problem's standalone devices.
 
 ### Construction and routing
