@@ -16,6 +16,59 @@ For each component record: owner and requirement; input units, coordinates, time
 
 Geometry/weather/equipment → feasible boundary inputs → airflow/temperature/moisture and radiant conditions → people/benefit → verification → optional search. All interfaces remain proposed; use common units and scenarios and agree changes before another component relies on them. Geometry/performance, solver/closure, comfort mapping and screening coefficients remain unresolved; no named lane assignments or independent validation implied.
 
+## Section 3 preview and writing decisions
+
+**Current state — 2026-11-14, John / general-chat agent.** John requested a separate compiled Section 3 proposal, explicitly **not replacement of the draft**. Two local iterations were produced from manuscript commit `f7c2389`; the latest is an **8-page Section 3-only preview**, versus 7 pages in the first iteration. It has not been merged into `main.tex`, pushed as an artifact, or synchronized to Overleaf. John's request to store details authorizes this handoff record, not adoption of the preview or its illustrative parameters.
+
+### Accepted explanation and figure direction
+
+- Revise conservatively and imitate the existing paper's language. Section 3.1 can be substantially rewritten because its physical explanation was unclear; preserve clear passages elsewhere. Retain equations unless a separate modeling decision is made.
+- Explain both **why an equation is needed** and **what relationship it expresses**. Include essential context, such as application at every spatial point and time, rather than merely translating symbols. Do not repeat a rigid purpose/table/equation/description template mechanically: smooth reading is the goal.
+- Put compact **local symbol tables before the relevant equations or related equation group**. Include meaningful compound terms such as `partial T/partial t`, `u dot grad T` and their humidity counterparts when useful. Define new symbols once and retain units. This is John's newer preference, superseding the earlier no-tables approach for this preview; it does not reinstate a large global notation section.
+- Preferred transport explanation: temperature and humidity vary across the venue and over time; the continuous fields assign conditions to each location, while the numerical model approximates them on a grid. The equations balance local rates of change plus transport by airflow against changes caused by mixing and the device. Sources represent local cooling/moisture addition, **not external wind**; ambient and device airflow belong in `u`.
+- Use one running shelter example across Sections **3–5**, while keeping prose model-independent (venue, device, occupants). Identify the bus shelter in captions. Only Section 3 has been previewed so far; no revised Sections 4–5 are delivered.
+- Use relatively many explanatory panels with consistent geometry, device markers and waiting-area outlines. Show the grid, wind, temperature and humidity, then occupant behavior and benefit. Synchronize field times and retain common scales when comparing the same variable.
+- Include an **original photograph from the front showing the entire shelter**, not a close-up, rear view, synthetic image or cropped partial structure. The chosen image is a near-front/front-side view with both ends visible, not a perfectly orthogonal elevation.
+
+### Latest preview content and bounded checks
+
+Section 3.1 now introduces fields over space/time, places the derivative/transport table before both PDEs, explains prescribed airflow versus Navier–Stokes, and explains source signs and heat–moisture coupling. Seven compact local tables cover transport, device parameters, occupants, comfort, benefit/energy, entropy weights and TOPSIS. Later sections retain the existing model but have definitions moved before equations and clearer interpretation around equation groups. The latest iteration also clarifies entropy normalization/degenerate cases and benefit/cost directions in TOPSIS; these prose clarifications are part of the unaccepted preview.
+
+There are **five figures: one original photograph and 11 generated diagram/plot panels**. The generated panels are: grid, wind and transport schematic (3); temperature and specific humidity at 15 s and 90 s (4); stationary and locally moving occupant illustrations (2); discomfort function and accumulated-benefit curve (2). The movement arrow is explicitly schematic, not a simulated trajectory. Original manuscript numerical claims such as an 83% waiting-zone reduction are not carried over as results of the new demonstration.
+
+Verification: Tectonic compilation completed without warnings after layout iteration; all eight pages were visually checked and extracted text contains no unresolved `??` references. A script confirms **all 15 display-equation environments are byte-for-byte identical to preview iteration 1**. That comparison does not assert byte identity to every equation in the original manuscript, whose Section 3.1 source notation was compacted in iteration 1. Git checks confirmed the tracked manuscript and project documents were unchanged during preview generation. No numerical convergence study, site calibration, full agent optimization or independent scientific validation was performed.
+
+### Local artifacts and reproduction
+
+All preview material is local under `/Users/fengyue.john.zhu/Desktop/himcm/output/pdf/section3-preview/` (untracked; do not blanket-stage `output/`). Teammates on other machines cannot retrieve these files from GitHub merely because this record is published.
+
+| File | Role |
+|---|---|
+| `section3-preview.pdf`, `section3-preview.tex` | Latest 8-page compiled preview and standalone source |
+| `section3-preview-v1.pdf`, `section3-preview-v1.tex` | Previous 7-page preview; source is the fixed base used by `iterate.py` |
+| `build_preview.py` | Generates reproducible illustrative physical fields and scientific figures |
+| `assemble.py` | Builds iteration 1 from the local manuscript; **running this alone overwrites the latest preview source** |
+| `iterate.py` | Applies iteration 2 to saved v1 source and checks all 15 displayed equations unchanged |
+| `setup`, `fields`, `agents`, `benefit` (`.pdf`/`.png`) | Generated figures and raster previews |
+| `illustrative_fields.npz`, `simulation-checks.json` | Numerical demonstration data and limited stability/finiteness checks |
+| `verified-front-photo.jpg`, `verified-front-photo-source.txt` | Unmodified source photo, watermark intact, and provenance |
+| `iteration-final-1.png` through `iteration-final-8.png` | Current page renders; earlier `final-*.png` belong to iteration 1 |
+| `review-notes.md`, `package-info.md`, `section3-preview.txt` | Local scope/rebuild notes, inventory and extracted PDF text |
+
+Rebuild the current text using the preview folder's `.venv/bin/python iterate.py`, then run `tectonic section3-preview.tex` **from that folder**. Rebuild figures separately with `.venv/bin/python build_preview.py`. To recreate iteration 1 from the repository root, run its `assemble.py`; then reapply `iterate.py` before compiling. The private Python environment contains NumPy, Matplotlib and Pillow. Generated assets and environments are not committed.
+
+Photograph: [Land Transport Guru article](https://landtransportguru.net/airbitat-oasis-smart-bus-stop/), [original 2018 image](https://landtransportguru.net/web/wp-content/uploads/2018/03/Airbitat-Oasis-Smart-Bus-Stop-1.jpg). Credit **Land Transport Guru**; an individual photographer was not identified. The complete original is 2048 × 1365 pixels and 715,010 bytes. The actual historical Airbitat plant is context only; the example's standalone device does not reconstruct that plant. RT+Q photos were investigated but are not used, so do not credit Masano Kawana for the chosen image.
+
+### Illustrative computation and unresolved issues
+
+The demonstration uses a hypothetical 9 × 3 m domain, device at (1.5, 1.5) m and waiting rectangle x=3–8 m, y=0.5–2.5 m. Inputs: ambient 36°C and specific humidity 0.012 kg/kg; `U0=0.25 m/s`, jet amplitude 0.8 m/s, sheltering coefficient 0.3, both source/jet widths 0.45 m, cooling amplitude 1°C/s, both effective diffusivities 0.08 m²/s, `cp=1005 J/(kg K)` and `Lv=2,450,000 J/kg`. Grid spacing is 0.15 m in both directions and time step 0.04 s, run to 90 s. The combined explicit stability sum is approximately 0.846; finite-field checks pass. These are explanatory choices, **not adopted site measurements, equipment benchmarks or calibrated parameters**.
+
+Comfort illustration: `alpha_w=2 °C/(m/s)`, `alpha_h=800 °C/(kg/kg)`, reference humidity 0.012 kg/kg, comfort band 26–30°C, cold/hot scales 2/4°C. The benefit trace samples a stationary occupant at (4.5, 1.5) m against ambient wind without a device. It does not validate safety, comfort thresholds or moving-agent behavior.
+
+Two physical issues remain explicit: (1) zero normal temperature/humidity gradients impose zero **diffusive** flux, not impermeability; the draft's three-solid-wall interpretation conflicts with prescribed through-flow unless boundary treatment is reconciled; (2) `Aq=AT cp/Lv` links sensible cooling to moisture addition but does not itself enforce saturation or the wet-bulb limit. No silent physics fix was made. Full-paper page count after integration is unknown; 8 pages refers only to this preview.
+
+**Next action:** John reviews the latest preview. Refine wording/layout as requested; obtain explicit authorization before replacing manuscript Section 3 or publishing its assets. Coordinate physical boundary/wet-bulb decisions with the model work separately, and retain the same illustrative venue if Sections 4–5 are subsequently revised.
+
 ## Selected venue reconstruction plan
 
 John accepted Dhoby Ghaut Airbitat shelter, Expo MRT elevated EWL platform, Japan National Stadium and Cartuja Qanat Ágora on 2026-11-09. The following is the general-chat agent's **proposed** minimal reconstruction and handoff, based on the [four-venue evidence dossier](research.md#selected-four-venue-evidence-dossier). Selecting a real venue does not adopt every dimension, equipment claim or operating assumption. No model geometry is implemented by this research update.
