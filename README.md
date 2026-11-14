@@ -1,17 +1,17 @@
 # HiMCM 2026 — Team 18105
 
-Problem B: **Air Conditioning the Environment: Modeling Energy Waste in Public Cooling**. Updated 2026-11-09.
+Problem B: **Air Conditioning the Environment: Modeling Energy Waste in Public Cooling**. Updated 2026-11-14.
 
 ## Workspace and records
 
-All collaboration uses the **main branch** of [YeeJiangBIGZ/18105](https://github.com/YeeJiangBIGZ/18105), synchronized with the local HiMCM workspace. Do not create separate branches. Current work is planning, decisions and research; this does not authorize changing the manuscript or implementing the model yet.
+All collaboration uses the **main branch** of [YeeJiangBIGZ/18105](https://github.com/YeeJiangBIGZ/18105), synchronized with the local HiMCM workspace. Do not create separate branches. The general-chat scope is planning, decisions and research unless John authorizes a specific manuscript or implementation task. On 2026-11-14, John authorized removing the manuscript's notation tables, defining symbols at first use, and publishing that edit; this is not blanket authorization for other manuscript changes.
 
 - [agent.md](agent.md): agent workflow, synchronization and collaboration rules.
 - [README.md](README.md): agreed scope, current decisions, requirements and next action.
 - [design.md](design.md): equations, candidate objectives, configuration choices and unresolved modeling assumptions.
 - [research.md](research.md): source evidence, venue precedents and limitations.
 - [Original problem](2026_HiMCM_Problem_B.pdf): authoritative requirements.
-- [main.tex](main.tex): teammate's manuscript; currently the initial Overleaf skeleton.
+- [main.tex](main.tex): Yee's November 13 draft, with the authorized notation consolidation described below.
 
 Keep these four Markdown records consolidated. Other project artifacts such as the PDF, manuscript, data or code may exist when needed; this is not a four-file cap. `package-info.md` is a local-only, Git-ignored inventory. Record agreed decisions on GitHub as well as locally, and check teammate changes before editing. GitHub delivery alone does not establish Overleaf synchronization.
 
@@ -25,7 +25,7 @@ Use the four lanes in [agent.md](agent.md#four-work-lanes); no personal assignme
 
 | Task | Human / agent | File and section | Starting main SHA | State | Deliverable / checks / handoff |
 |---|---|---|---|---|---|
-| Move manuscript notation to first use | John / general-chat agent | main.tex notation section, equation explanations, contents and affected references; README task record | 589acb7 | claimed | John authorized this manuscript edit on 2026-11-14: remove notation tables, define symbols locally, and distinguish annealing temperature. Preserve model choices and reported results; check source consistency and publish on main. |
+| Move manuscript notation to first use | John / general-chat agent | main.tex notation section, equation explanations, contents and affected references; README task record | 589acb7 | done | Removed both notation tables and their section; added local symbol/unit definitions; updated contents and affected section references; renamed annealing temperature to distinguish it from air temperature. Source checks: 29 unique/resolving labels, balanced environments/braces, all 21 display equations preserved except that rename, clean diff. PDF/page count unverified: no local LaTeX compiler; existing workflow_optimized.pdf and fig4_fields.png missing. Next: restore assets and compile in the team's LaTeX environment; Overleaf synchronization unverified. |
 | Research cooling equipment | John / general-chat agent | [Equipment evidence](research.md#cooling-equipment-matched-to-problem-b); [parameter handoff](design.md#equipment-parameter-handoff) | 2211fc7 | done | Official table reread; manufacturer dimensions, installation/manuals, prices and resource inputs compared. A/B power references found; exact C total input unverified. B flow/water/temperature consistency checked; proposed estimates remain unadopted. |
 | Research four selected venues | John / general-chat agent | [Evidence dossier](research.md#selected-four-venue-evidence-dossier); [reconstruction plan](design.md#selected-venue-reconstruction-plan) | 57f5b48 | done | Primary-source findings, access limits, geometry conflicts, weather routes and remaining inputs recorded; documentation checked and published. No numerical validation or complete weather dataset. Next: resolve bus geometry and acquire a matched weather sample; Expo roof dimensions need reconciliation. |
 | Research Santa 2025 search methods | John / general-chat agent | README; research.md Santa evidence and concise contribution workflow | e14c410 | done | Official task and first/second-place methods checked at stated access levels. Symmetry/tiling plus annealing transfer proposed; rigid footprint packing and global/polynomial guarantees do not transfer. No code run or adoption. |
