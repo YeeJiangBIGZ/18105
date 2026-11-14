@@ -129,9 +129,6 @@ simulated annealing, TOPSIS, evaporative cooling, multi-criteria evaluation
 \tocsub{1.3\quad Overall Framework}
 
 \tocsec{2\quad Assumptions and Justification}
-\tocsub{2.1\quad Physical and Climate Assumptions}
-\tocsub{2.2\quad Cooling Device and Energy Assumptions}
-\tocsub{2.3\quad Pedestrian and Crowd Assumptions}
 
 \tocsec{3\quad Integrated PDE-Agent Modelling Framework}
 \tocsub{3.1\quad Governing Advection-Diffusion PDE}
@@ -210,21 +207,8 @@ the high-fidelity PDE-Agent simulation.
 % ============================================================================
 \section{Assumptions and Justification}
 
-A cooling model of a semi-open venue must balance physical detail against the
-cost of solving a transient field many times inside an optimizer. We state the
-assumptions that define this balance here. Each assumption narrows the model so
-that the remaining problem stays solvable and reproducible. We group the
-assumptions into three sets: physical and climate, device and energy, and
-pedestrian and crowd.
-
-Of the five assumptions retained here, Assumptions~3, 4, and 7 are critical, because the
-conclusions depend on them, and each is tested in Section~6. The remainder are
-supporting simplifications.
-
-\subsection{Physical and Climate Assumptions}
-
-Physical-climate assumptions define the computational domain and background
-environmental conditions for our PDE solver.
+The following assumptions define the physical environment and passenger behavior
+represented in our model.
 
 \textbf{Assumption 1: We model the occupied area as a two-dimensional horizontal
 plane, neglecting vertical variations in temperature and humidity.} Passengers
@@ -244,10 +228,6 @@ which the effective diffusivity captures. In reality, turbulence varies near
 walls and inside the jet, so a uniform diffusivity is an approximation. We test
 the sensitivity of the results to this parameter in Section~6.
 
-\subsection{Cooling Device and Energy Assumptions}
-
-The following assumption specifies the evaporative cooler's ideal performance.
-
 \textbf{Assumption 4:} The evaporative cooler is ideal. It adds a cooling sink to
 the temperature field and a moisture source to the humidity field, coupled along
 the adiabatic wet-bulb line by Eq.~\eqref{eq:aq}. Its outlet cannot cool below
@@ -261,11 +241,6 @@ and $\varepsilon=1$ means the outlet reaches this ideal bound exactly. This keep
 the outlet condition physically consistent in every climate we test. Real coolers
 fall short of this bound, so the case $\varepsilon<1$ can be explored in the
 sensitivity analysis of Section~6.
-
-\subsection{Pedestrian and Crowd Assumptions}
-
-Pedestrian-crowd assumptions define how waiting passengers move through the field
-and how their comfort is scored.
 
 \textbf{Assumption 7: Passengers either remain at fixed waiting positions or move
 toward more comfortable locations within a limited nearby area. Their presence
